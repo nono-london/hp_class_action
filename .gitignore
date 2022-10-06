@@ -1,0 +1,11 @@
+.idea
+.venv
+venv
+/hp_class_action/app_config_secret.py
+*.log
+build
+dist
+.pytest_cache
+
+
+
