@@ -131,6 +131,8 @@ for i in range(0, offset_pages):
         page_source = get_web_page(url_to_open=base_url)
         if page_source is None:
             max_tries -= 1
+        else:
+            break
         sleep(randint(1, 10))
 
     if page_source is None:
