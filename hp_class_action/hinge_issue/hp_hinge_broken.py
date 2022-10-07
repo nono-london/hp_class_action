@@ -15,7 +15,7 @@ def get_web_page(url_to_open: str) -> str:
         page_content = requests.get(url=url_to_open, headers=headers, timeout=10).text
     except ConnectionError as ex:
         print(f'Error while connecting:\n{ex}')
-        exit(0)
+
     return page_content
 
 
@@ -24,11 +24,9 @@ def get_page_rows(page_source: str) -> [Element]:
     # lxml examples
     lxml_str = fromstring(page_source)
     results_number: int = int(lxml_str.xpath(xpath_value)[0].text.strip().split(" ")[0].replace(",", "").strip())
-    print(results_number)
-
     xpath_value = "// div[@data-lia-message-uid]"
     page_rows: [Element] = lxml_str.xpath(xpath_value)
-    print(len(page_rows))
+    print(f'Found {len(page_rows)} posts.')
     return page_rows
 
 
@@ -126,7 +124,12 @@ for i in range(0, offset_pages):
     collapse_discussion=true&search_type=thread&search_page_size={results_per_page}"""
 
     page_source = get_web_page(url_to_open=base_url)
+    if page_source is None:
+        continue
     page_rows = get_page_rows(page_source=page_source)
+    if page_source is None or len(page_rows)==0:
+        continue
+
     temp_df: pd.DataFrame = webscrap_data(page_rows=page_rows)
     result_df = pd.concat([result_df, temp_df], ignore_index=True, )
 
