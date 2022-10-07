@@ -13,7 +13,7 @@ from requests.exceptions import ConnectionError
 def get_web_page(url_to_open: str) -> str:
     headers: dict = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"}
-    page_content: str = Union[None, str]
+    page_content: Union[None, str] = None
     try:
         page_content = requests.get(url=url_to_open, headers=headers, timeout=10).text
     except ConnectionError as ex:
