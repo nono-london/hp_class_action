@@ -1,10 +1,13 @@
 from datetime import datetime, timezone
+from random import randint
+from time import sleep
 from typing import Union
 from urllib.parse import urljoin
 
 import pandas as pd
 import requests
 from lxml.html import fromstring, Element
+from requests.exceptions import ConnectionError
 
 
 def get_web_page(url_to_open: str) -> str:
@@ -115,24 +118,33 @@ def webscrap_data(page_rows: [Element]) -> pd.DataFrame:
 
 result_df = pd.DataFrame()
 results_per_page: int = 50
-offset_pages: int = int(2000 / 50) + 2
+offset_pages: int = int(2000 / 50) + 10
 
 for i in range(0, offset_pages):
     base_url = f"""https://h30434.www3.hp.com/t5/forums/searchpage/tab/message?filter=location&q=broken%20hinge&advanced=true&
     location=category:Notebook&sort_by=-topicPostDate&
     page={i}&
     collapse_discussion=true&search_type=thread&search_page_size={results_per_page}"""
+    max_tries: int = 5
+    page_source = None
+    while max_tries > 0:
+        page_source = get_web_page(url_to_open=base_url)
+        if page_source is None:
+            max_tries -= 1
+        sleep(randint(1, 10))
 
-    page_source = get_web_page(url_to_open=base_url)
     if page_source is None:
+        print(f'Page Source is None for url:\n{base_url}')
         continue
     page_rows = get_page_rows(page_source=page_source)
-    if page_source is None or len(page_rows)==0:
+    if page_source is None or len(page_rows) == 0:
+        print(f'No posts found for url:\n{base_url}')
         continue
 
     temp_df: pd.DataFrame = webscrap_data(page_rows=page_rows)
     result_df = pd.concat([result_df, temp_df], ignore_index=True, )
 
+result_df.drop_duplicates(subset=['post_id'], inplace=True)
 print(result_df)
 result_df.to_csv(path_or_buf='hp_hinges_issues.csv',
                  sep=',',
