@@ -1,8 +1,8 @@
 import mysql.connector
 from mysql.connector.errors import (ProgrammingError, IntegrityError)
 
-from hp_class_action.app_config_secret import (MYSQL_USER_NAME, MYSQL_DATABASE_NAME,
-                                               MYSQL_URL, MYSQL_PORT,
+from hp_class_action.app_config_secret import (MYSQL_USERNAME, MYSQL_DATABASE_NAME,
+                                               MYSQL_HOST_URL, MYSQL_PORT,
                                                MYSQL_PASSWORD)
 
 _TABLE_NAME: str = "hp_forum_issues"
@@ -38,9 +38,9 @@ def create_table():
 def get_connection():
     # https://dev.mysql.com/doc/connector-python/en/connector-python-connectargs.html
     db_conn = mysql.connector.connect(
-        user=MYSQL_USER_NAME,
+        user=MYSQL_USERNAME,
         password=MYSQL_PASSWORD,
-        host=MYSQL_URL,
+        host=MYSQL_HOST_URL,
         database=MYSQL_DATABASE_NAME,
         port=MYSQL_PORT
     )

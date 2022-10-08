@@ -5,10 +5,10 @@ html5lib
 bs4
 lxml
 # Selenium Libs
-selenium
-pywin32
+#selenium
+#pywin32
 # python -m pip install pywin32
-webdriver_manager
+#webdriver_manager
 
 # proxy_helpers libs
 mysql-connector-python
