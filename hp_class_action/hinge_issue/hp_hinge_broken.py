@@ -106,7 +106,7 @@ def webscrap_data(page_rows: [Element]) -> pd.DataFrame:
         my_tags = get_tags(page_row=page_row, message_id=my_post_id)
         my_summary = get_post_summary(page_row=page_row, message_id=my_post_id)
 
-        results.append({'post_id': my_post_id,
+        results.append({'hp_post_id': my_post_id,
                         'post_datetime': my_post_datetime,
                         'username': my_username,
                         'post_url': my_post_url,
