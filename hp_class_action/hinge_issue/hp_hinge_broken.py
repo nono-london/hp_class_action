@@ -9,6 +9,8 @@ import requests
 from lxml.html import fromstring, Element
 from requests.exceptions import ConnectionError
 
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', None)
 
 def get_web_page(url_to_open: str) -> str:
     headers: dict = {
