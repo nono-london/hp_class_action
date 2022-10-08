@@ -23,11 +23,7 @@ def upload_data(data_df:pd.DataFrame):
             ) 
     """
 
-
     for index, row in data_df.iterrows():
-        print(row['post_tags'])
-        print(json.dumps(row['post_tags']))
-
         execute_query(sql_query=sql_query,
                       variables=(row['hp_post_id'], row['post_datetime'], row['username'],
                                  row['post_url'], json.dumps(row['post_tags']), row['post_summary']

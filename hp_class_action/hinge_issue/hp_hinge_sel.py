@@ -5,31 +5,17 @@ from typing import Union
 from urllib.parse import urljoin
 
 import pandas as pd
-import requests
+from selenium_helpers.chrome_libs.new_libs.chrome_class import ChromeHandler, By
 from lxml.html import fromstring, Element
 from requests.exceptions import ConnectionError
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 
+
 hp_cookies = None
 
 
-def get_web_page(url_to_open: str) -> str:
-    global hp_cookies
-    headers: dict = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"}
-    page_content: Union[None, str] = None
-
-    try:
-        response = requests.get(url=url_to_open, headers=headers, timeout=10, cookies=hp_cookies)
-        page_content = response.text
-        hp_cookies = response.cookies
-
-    except ConnectionError as ex:
-        print(f'Error while connecting:\n{ex}')
-
-    return page_content
 
 
 def get_page_rows(page_source: str) -> [Element]:
@@ -130,23 +116,17 @@ result_df = pd.DataFrame()
 results_per_page: int = 50
 offset_pages: int = int(2000 / 50) + 10
 max_tries: int = 5
+chrome_driver = ChromeHandler()
+
 # https://h30434.www3.hp.com/t5/forums/searchpage/tab/message?filter=location&q=broken%20hinge&advanced=true&location=category:Notebook&page=4&sort_by=-topicPostDate&collapse_discussion=true&search_type=thread&search_page_size=50
-for i in range(1, offset_pages):
-    print(f'Getting page: {i}')
-    if i == 1:
-        base_url = f"https://h30434.www3.hp.com/t5/forums/searchpage/tab/message?filter=location&q=broken%20hinge&advanced=true&location=category:Notebook&" \
-                   f"sort_by=-topicPostDate&collapse_discussion=true&search_type=thread&search_page_size={results_per_page}"
-    else:
-        base_url = f"""https://h30434.www3.hp.com/t5/forums/searchpage/tab/message/page/{i}?advanced=true&collapse_discussion=true&filter=location&
-        location=category:Notebook&q=broken hinge&search_page_size={results_per_page}&search_type=thread&sort_by=-topicPostDate"""
-    page_source = None
-    while max_tries > 0:
-        page_source = get_web_page(url_to_open=base_url)
-        if page_source is None:
-            max_tries -= 1
-        else:
-            break
-        sleep(randint(1, 10))
+
+
+base_url = f"https://h30434.www3.hp.com/t5/forums/searchpage/tab/message?filter=location&q=broken%20hinge&advanced=true&location=category:Notebook&" \
+               f"sort_by=-topicPostDate&collapse_discussion=true&search_type=thread&search_page_size={results_per_page}"
+
+page_source = chrome_driver.navigate_url(url=base_url).page_source
+
+while True:
 
     if page_source is None:
         print(f'Page Source is None for url:\n{base_url}')
@@ -156,18 +136,20 @@ for i in range(1, offset_pages):
     if page_source is None or len(page_rows) == 0:
         print(f'No posts found for url:\n{base_url}')
         continue
-    try:
-        temp_df: pd.DataFrame = webscrap_data(page_rows=page_rows)
-    except Exception as ex:
-        print(f'Error while webscrapping data:\n{ex}')
-        print(f'Last URL used:\n{base_url}')
-        break
+
+    temp_df: pd.DataFrame = webscrap_data(page_rows=page_rows)
     result_df = pd.concat([result_df, temp_df], ignore_index=True, )
     print(f'Dataframe size is: {len(result_df)}')
 
-# result_df.drop_duplicates(subset=['post_id'], inplace=True)
+    # click next page:
+    xpath_value = "// span[@class='lia-paging-page-link']"
+    next_element = chrome_driver.browser.find_element(by= By.XPATH, value=xpath_value)
+    next_element.click()
+    sleep(3)
+
+    # result_df.drop_duplicates(subset=['post_id'], inplace=True)
 print(result_df)
 result_df.to_csv(path_or_buf='hp_hinges_issues.csv',
-                 sep=',',
-                 index=False
-                 )
+             sep=',',
+             index=False
+             )
