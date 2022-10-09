@@ -59,7 +59,29 @@ def chart_monthly_claims():
     plt.show()
 
 
+def chart_yearly_claims():
+    """Charts yearly claims"""
+    sql_query: str = """
+                SELECT STR_TO_DATE( CONCAT_WS('-',YEAR(post_datetime), 1,1),'%Y-%m-%d') AS "Claim Year"
+                , COUNT(*) "Yearly Claims"
+                FROM hp_trial.hp_forum_issues
+                GROUP BY YEAR(post_datetime)
+                ORDER BY post_datetime
+        """
+    result_df = pd.read_sql(con=get_connection(),
+                            sql=sql_query)
+
+    result_df.set_index("Claim Year", inplace=True)
+    # https://pandas.pydata.org/pandas-docs/version/0.13/visualization.html
+    result_df = result_df.iloc[:, :]
+    print(result_df)
+    result_df.plot()
+    plt.show()
+
+
 if __name__ == '__main__':
+    chart_yearly_claims()
+    exit(0)
     my_result_df = read_local_data()
     upload_data(my_result_df)
     chart_monthly_claims()
