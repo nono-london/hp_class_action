@@ -7,4 +7,5 @@
 # Heroku setup
 ## basic setup
 * create runtime.txt file in root folder
+find all supported Python version on:https://devcenter.heroku.com/articles/python-support
   * put python version: python-3.9
