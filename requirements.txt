@@ -10,6 +10,12 @@ lxml
 # python -m pip install pywin32
 #webdriver_manager
 
+#Heroku
+flask
+gunicorn
+
+
+
 # proxy_helpers libs
 mysql-connector-python
 #\\thinkcentre\F_usb_buffalo\Python\own_wheels\proxy_helpers-0.0.0.9-py3-none-any.whl
