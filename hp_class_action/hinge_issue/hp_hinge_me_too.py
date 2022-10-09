@@ -13,6 +13,8 @@ BASE_URL: str = "https://h30434.www3.hp.com/t5/ratings/ratingdetailpage/message-
 
 
 hp_cookies = None
+
+
 def get_web_page(url_to_open: str) -> Union[None, str]:
     global hp_cookies
     headers: dict = {
@@ -34,7 +36,8 @@ def get_web_page(url_to_open: str) -> Union[None, str]:
 
 def get_post_ids() -> Union[list, None]:
     sql_str = """SELECT hp_post_id FROM hp_forum_issues
-                ORDER BY post_datetime DESC    
+                ORDER BY post_datetime DESC
+                WHERE post_full IS NULL OR me_too IS NULL    
     """
     results = fetch_query(sql_query=sql_str)
     if results is None or len(results) == 0:
@@ -58,9 +61,6 @@ def get_full_post(page_source: str):
 
 
 def get_metoos(page_source: str) -> Union[None, list]:
-    # xpath_value = "// div[@class='lia-user-name']"
-    # lxml_str = fromstring(page_source)
-    # metoo_elements: [Element] = lxml_str.xpath(xpath_value)
     page_soup = bs(page_source, 'lxml')
     metoo_elements: [Element] = page_soup.find('div', attrs={'class': 'UserListBlock'}).find_all('div', attrs={
         'class': 'lia-user-attributes'})
@@ -87,6 +87,7 @@ def update_mdb_with_me_too(metoo_json: str, post_id: int):
     sql_query = """UPDATE hp_forum_issues
     SET me_too=%s
     WHERE hp_post_id=%s
+    
     """
     execute_query(sql_query=sql_query, variables=(metoo_json, post_id))
 
