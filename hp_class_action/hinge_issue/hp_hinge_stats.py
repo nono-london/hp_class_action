@@ -1,6 +1,7 @@
 import pandas as pd
 import json
-from hp_class_action.hp_database.hp_forum_issue import execute_query
+import matplotlib.pyplot as plt
+from hp_class_action.hp_database.hp_forum_issue import execute_query, get_connection
 from hp_class_action.app_config import get_project_download_path
 from pathlib import Path
 
@@ -38,6 +39,27 @@ def upload_data(data_df: pd.DataFrame):
                       )
 
 
+def chart_monthly_claims():
+    """Charts monthly claims without last month"""
+    sql_query: str = """
+                SELECT STR_TO_DATE( CONCAT_WS('-',YEAR(post_datetime), MONTH(post_datetime),1),'%Y-%m-%d') AS "Claim Month"
+                , COUNT(*) "Monthly Claims"
+                FROM hp_trial.hp_forum_issues
+                GROUP BY YEAR(post_datetime), MONTH(post_datetime)
+                ORDER BY post_datetime
+        """
+    result_df = pd.read_sql(con=get_connection(),
+                            sql=sql_query)
+
+    result_df.set_index("Claim Month", inplace=True)
+    # https://pandas.pydata.org/pandas-docs/version/0.13/visualization.html
+    result_df = result_df.iloc[:-1, :]
+    print(result_df)
+    result_df.plot()
+    plt.show()
+
+
 if __name__ == '__main__':
     my_result_df = read_local_data()
     upload_data(my_result_df)
+    chart_monthly_claims()
