@@ -21,7 +21,7 @@ LOCAL_FILE_NAME: str = str(Path().joinpath(get_project_download_path(), 'hp_hing
 BASE_URL: str = f"https://h30434.www3.hp.com"
 
 
-def get_web_page(url_to_open: str) -> str:
+def get_web_page(url_to_open: str) -> Union[None,str]:
     global hp_cookies
     headers: dict = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"}
@@ -29,6 +29,8 @@ def get_web_page(url_to_open: str) -> str:
 
     try:
         response = requests.get(url=url_to_open, headers=headers, timeout=10, cookies=hp_cookies)
+        if response.url!=url_to_open:
+            return None
         page_content = response.text
         hp_cookies = response.cookies
 
