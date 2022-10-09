@@ -1,6 +1,6 @@
 import mysql.connector
 from mysql.connector.errors import (ProgrammingError, IntegrityError)
-
+from typing import Union
 from hp_class_action.app_config_secret import (MYSQL_USERNAME, MYSQL_DATABASE_NAME,
                                                MYSQL_HOST_URL, MYSQL_PORT,
                                                MYSQL_PASSWORD, PA_MYSQL_PORT,
@@ -38,7 +38,8 @@ def create_table():
                 post_url TEXT NOT NULL,
                 post_tags JSON NOT NULL,
                 post_summary TEXT NOT NULL,
-                post_full TEXT NULL
+                post_full TEXT NULL,
+                me_too JSON
                 );
            
             """
@@ -73,6 +74,7 @@ def execute_query(sql_query: str, variables: tuple = None) -> bool:
     try:
         result = db_cursor.execute(operation=sql_query,
                                    params=variables)
+
         print(f'Execute query result: {_TABLE_NAME}: {result}')
     except ProgrammingError as ex:
         print(f'Sql Error: {ex.__class__.__name__}')
@@ -89,5 +91,33 @@ def execute_query(sql_query: str, variables: tuple = None) -> bool:
     return True
 
 
+def fetch_query(sql_query: str, variables: tuple = None) -> Union[list, None]:
+    """Return SELECT query results as a list oof dicts"""
+
+    db_conn = get_connection()
+    db_cursor = db_conn.cursor(dictionary=True)
+    try:
+        db_cursor.execute(operation=sql_query,
+                          params=variables)
+        results: list = db_cursor.fetchall()
+        print(db_cursor.warnings)
+        print(db_cursor.get_attributes())
+    except ProgrammingError as ex:
+        print(f'Sql Error: {ex.__class__.__name__}')
+        print(ex)
+        return None
+    except IntegrityError as ex:
+        print(f'Integrity Error (Duplicate key?): {ex.__class__.__name__}')
+        print(ex)
+        return None
+    finally:
+        db_cursor.close()
+        db_conn.close()
+    return results
+
+
 if __name__ == '__main__':
+    sql_str = """SELECT * FROM hp_forum_issues LIMIT 2"""
+    print(fetch_query(sql_query=sql_str))
+    exit(0)
     create_table()
