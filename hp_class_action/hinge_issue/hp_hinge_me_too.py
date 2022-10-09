@@ -1,14 +1,34 @@
-from typing import Union
 import json
+from datetime import datetime
+from typing import Union
+
+import requests
 from bs4 import BeautifulSoup as bs
 from bs4 import element
 from lxml.html import Element
-from datetime import datetime
-from hp_class_action.hinge_issue.hp_hinge_broken import get_web_page
+
 from hp_class_action.hp_database.hp_forum_issue import execute_query, fetch_query
 
-
 BASE_URL: str = "https://h30434.www3.hp.com/t5/ratings/ratingdetailpage/message-uid/8499984/rating-system/forum_topic_metoo/page/1#userlist"
+
+
+def get_web_page(url_to_open: str) -> Union[None, str]:
+    global hp_cookies
+    headers: dict = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"}
+    page_content: Union[None, str] = None
+
+    try:
+        response = requests.get(url=url_to_open, headers=headers, timeout=10, cookies=hp_cookies)
+        if response.url != url_to_open:
+            return None
+        page_content = response.text
+        hp_cookies = response.cookies
+
+    except ConnectionError as ex:
+        print(f'Error while connecting:\n{ex}')
+
+    return page_content
 
 
 def get_post_ids() -> Union[list, None]:

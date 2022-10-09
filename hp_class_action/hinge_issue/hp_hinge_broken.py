@@ -29,8 +29,6 @@ def get_web_page(url_to_open: str) -> Union[None,str]:
 
     try:
         response = requests.get(url=url_to_open, headers=headers, timeout=10, cookies=hp_cookies)
-        if response.url!=url_to_open:
-            return None
         page_content = response.text
         hp_cookies = response.cookies
 
