@@ -100,8 +100,7 @@ def fetch_query(sql_query: str, variables: tuple = None) -> Union[list, None]:
         db_cursor.execute(operation=sql_query,
                           params=variables)
         results: list = db_cursor.fetchall()
-        print(db_cursor.warnings)
-        print(db_cursor.get_attributes())
+
     except ProgrammingError as ex:
         print(f'Sql Error: {ex.__class__.__name__}')
         print(ex)
