@@ -1,13 +1,16 @@
 import pandas as pd
 import json
 from hp_class_action.hp_database.hp_forum_issue import execute_query
+from hp_class_action.app_config import get_project_download_path
+from pathlib import Path
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
+LOCAL_FILE_NAME: str = str(Path().joinpath(get_project_download_path(), 'hp_hinges_issues.csv'))
 
 
 def read_local_data():
-    result_df = pd.read_csv('hp_hinges_issues.csv',
+    result_df = pd.read_csv(LOCAL_FILE_NAME,
                             sep=',',
                             parse_dates=['post_datetime'])
     print(result_df.drop_duplicates(subset=['hp_post_id', 'post_datetime'],
