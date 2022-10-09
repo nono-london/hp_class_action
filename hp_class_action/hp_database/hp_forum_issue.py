@@ -3,12 +3,13 @@ from mysql.connector.errors import (ProgrammingError, IntegrityError)
 
 from hp_class_action.app_config_secret import (MYSQL_USERNAME, MYSQL_DATABASE_NAME,
                                                MYSQL_HOST_URL, MYSQL_PORT,
-                                               MYSQL_PASSWORD,
-                                               PA_MYSQL_USERNAME,PA_MYSQL_PASSWORD,
+                                               MYSQL_PASSWORD, PA_MYSQL_PORT,
+                                               PA_MYSQL_USERNAME, PA_MYSQL_PASSWORD,
                                                PA_MYSQL_HOST_URL, PA_MYSQL_DATABASE_NAME)
 
 import sys
-if sys.platform=='win32':
+
+if sys.platform == 'win32':
     HOST_URL = MYSQL_HOST_URL
     PORT = MYSQL_PORT
     DATABASE_NAME = MYSQL_DATABASE_NAME
@@ -16,12 +17,14 @@ if sys.platform=='win32':
     PASSWORD = MYSQL_PASSWORD
 else:
     HOST_URL = PA_MYSQL_HOST_URL
-    PORT =
+    PORT = PA_MYSQL_PORT
     DATABASE_NAME = PA_MYSQL_DATABASE_NAME
     USERNAME = PA_MYSQL_USERNAME
     PASSWORD = PA_MYSQL_PASSWORD
 
-    _TABLE_NAME: str = "hp_forum_issues"
+_TABLE_NAME: str = "hp_forum_issues"
+
+
 def create_table():
     sql_query: str = f"""
             CREATE TABLE IF NOT EXISTS {_TABLE_NAME} 
