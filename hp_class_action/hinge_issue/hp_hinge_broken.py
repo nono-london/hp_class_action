@@ -3,16 +3,19 @@ from random import randint
 from time import sleep
 from typing import Union
 from urllib.parse import urljoin
-
+from pathlib import Path
 import pandas as pd
 import requests
 from lxml.html import fromstring, Element
 from requests.exceptions import ConnectionError
-
+from hp_class_action.app_config import get_project_download_path
+from hp_class_action.hinge_issue.hp_hinge_stats import upload_data
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 
 hp_cookies = None
+LOCAL_FILE_NAME: str = str(Path(get_project_download_path(), 'hp_hinges_issues.csv'))
+BASE_URL: str = f"https://h30434.www3.hp.com"
 
 
 def get_web_page(url_to_open: str) -> str:
@@ -33,10 +36,9 @@ def get_web_page(url_to_open: str) -> str:
 
 
 def get_page_rows(page_source: str) -> [Element]:
-    xpath_value = "// div[@class='search-result-count']"
-    # lxml examples
+    # xpath_value = "// div[@class='search-result-count']"
     lxml_str = fromstring(page_source)
-    results_number: int = int(lxml_str.xpath(xpath_value)[0].text.strip().split(" ")[0].replace(",", "").strip())
+    # results_number: int = int(lxml_str.xpath(xpath_value)[0].text.strip().split(" ")[0].replace(",", "").strip())
     xpath_value = "// div[@data-lia-message-uid]"
     page_rows: [Element] = lxml_str.xpath(xpath_value)
     print(f'Found {len(page_rows)} posts.')
@@ -48,7 +50,7 @@ def get_post_url(page_row: Element, message_id: int) -> str:
     xpath_value = f"// div[@data-lia-message-uid={message_id}] //*[@class='page-link lia-link-navigation lia-custom-event']"
     href_element: Element = page_row.xpath(xpath_value)[0]
     href = href_element.get('href')
-    href = urljoin(base=base_url, url=href)
+    href = urljoin(base=BASE_URL, url=href)
     return href
 
 
@@ -75,8 +77,8 @@ def get_posted_datetime(page_row: Element, message_id: int) -> datetime:
                     posted_on_str.split(" ")[-1].strip()
     posted_on_str = posted_on_str.replace('\u200e', '')
     posted_on: datetime = datetime.strptime(posted_on_str, "%m-%d-%Y %I:%M %p")
-    LOCAL_TIMEZONE = datetime.now(timezone.utc).astimezone().tzinfo
-    posted_on = posted_on.replace(tzinfo=LOCAL_TIMEZONE)
+    local_timezone = datetime.now(timezone.utc).astimezone().tzinfo
+    posted_on = posted_on.replace(tzinfo=local_timezone)
     return posted_on
 
 
@@ -126,48 +128,64 @@ def webscrap_data(page_rows: [Element]) -> pd.DataFrame:
     return result_df
 
 
-result_df = pd.DataFrame()
-results_per_page: int = 50
-offset_pages: int = int(2000 / 50) + 10
-max_tries: int = 5
-# https://h30434.www3.hp.com/t5/forums/searchpage/tab/message?filter=location&q=broken%20hinge&advanced=true&location=category:Notebook&page=4&sort_by=-topicPostDate&collapse_discussion=true&search_type=thread&search_page_size=50
-for i in range(1, offset_pages):
-    print(f'Getting page: {i}')
-    if i == 1:
-        base_url = f"https://h30434.www3.hp.com/t5/forums/searchpage/tab/message?filter=location&q=broken%20hinge&advanced=true&location=category:Notebook&" \
-                   f"sort_by=-topicPostDate&collapse_discussion=true&search_type=thread&search_page_size={results_per_page}"
-    else:
-        base_url = f"""https://h30434.www3.hp.com/t5/forums/searchpage/tab/message/page/{i}?advanced=true&collapse_discussion=true&filter=location&
-        location=category:Notebook&q=broken hinge&search_page_size={results_per_page}&search_type=thread&sort_by=-topicPostDate"""
-    page_source = None
-    while max_tries > 0:
-        page_source = get_web_page(url_to_open=base_url)
-        if page_source is None:
-            max_tries -= 1
+def get_batch_data():
+    result_df = pd.DataFrame()
+    results_per_page: int = 50
+    offset_pages: int = int(2000 / 50) + 10
+    max_tries: int = 5
+    # https://h30434.www3.hp.com/t5/forums/searchpage/tab/message?filter=location&q=broken%20hinge&advanced=true&location=category:Notebook&page=4&sort_by=-topicPostDate&collapse_discussion=true&search_type=thread&search_page_size=50
+    for i in range(1, offset_pages):
+        print(f'Getting page: {i}')
+        if i == 1:
+            base_url = f"https://h30434.www3.hp.com/t5/forums/searchpage/tab/message?filter=location&q=broken%20hinge&advanced=true&location=category:Notebook&" \
+                       f"sort_by=-topicPostDate&collapse_discussion=true&search_type=thread&search_page_size={results_per_page}"
         else:
+            base_url = f"""https://h30434.www3.hp.com/t5/forums/searchpage/tab/message/page/{i}?advanced=true&collapse_discussion=true&filter=location&
+            location=category:Notebook&q=broken hinge&search_page_size={results_per_page}&search_type=thread&sort_by=-topicPostDate"""
+        page_source = None
+        while max_tries > 0:
+            page_source = get_web_page(url_to_open=base_url)
+            if page_source is None:
+                max_tries -= 1
+            else:
+                break
+            sleep(randint(1, 10))
+
+        if page_source is None:
+            print(f'Page Source is None for url:\n{base_url}')
+            continue
+
+        page_rows = get_page_rows(page_source=page_source)
+        if page_source is None or len(page_rows) == 0:
+            print(f'No posts found for url:\n{base_url}')
+            continue
+        try:
+            temp_df: pd.DataFrame = webscrap_data(page_rows=page_rows)
+        except Exception as ex:
+            print(f'Error while webscrapping data:\n{ex}')
+            print(f'Last URL used:\n{base_url}')
             break
-        sleep(randint(1, 10))
+        result_df = pd.concat([result_df, temp_df], ignore_index=True, )
+        print(f'Dataframe size is: {len(result_df)}')
 
-    if page_source is None:
-        print(f'Page Source is None for url:\n{base_url}')
-        continue
+    # Upload to MySQL
+    upload_data(data_df=result_df)
 
-    page_rows = get_page_rows(page_source=page_source)
-    if page_source is None or len(page_rows) == 0:
-        print(f'No posts found for url:\n{base_url}')
-        continue
-    try:
-        temp_df: pd.DataFrame = webscrap_data(page_rows=page_rows)
-    except Exception as ex:
-        print(f'Error while webscrapping data:\n{ex}')
-        print(f'Last URL used:\n{base_url}')
-        break
-    result_df = pd.concat([result_df, temp_df], ignore_index=True, )
-    print(f'Dataframe size is: {len(result_df)}')
+    # Save data locally
+    if Path(LOCAL_FILE_NAME).exists():
+        temp_df = pd.read_csv(filepath_or_buffer=LOCAL_FILE_NAME,
+                              sep=',',
+                              date_parser=['post_datetime'])
+    else:
+        temp_df = pd.DataFrame()
+    result_df = pd.concat([temp_df, result_df], ignore_index=True, )
+    result_df.drop_duplicates(subset=['post_id'], inplace=True, keep='first')
+    print(result_df)
+    result_df.to_csv(path_or_buf=LOCAL_FILE_NAME,
+                     sep=',',
+                     index=False
+                     )
 
-# result_df.drop_duplicates(subset=['post_id'], inplace=True)
-print(result_df)
-result_df.to_csv(path_or_buf='hp_hinges_issues.csv',
-                 sep=',',
-                 index=False
-                 )
+
+if __name__ == '__main__':
+    get_batch_data()
