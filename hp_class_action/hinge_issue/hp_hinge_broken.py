@@ -10,11 +10,12 @@ from lxml.html import fromstring, Element
 from requests.exceptions import ConnectionError
 from hp_class_action.app_config import get_project_download_path
 from hp_class_action.hinge_issue.hp_hinge_stats import upload_data
+
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 
 hp_cookies = None
-LOCAL_FILE_NAME: str = str(Path(get_project_download_path(), 'hp_hinges_issues.csv'))
+LOCAL_FILE_NAME: str = str(Path().joinpath(get_project_download_path(), 'hp_hinges_issues.csv'))
 BASE_URL: str = f"https://h30434.www3.hp.com"
 
 
@@ -179,7 +180,7 @@ def get_batch_data():
     else:
         temp_df = pd.DataFrame()
     result_df = pd.concat([temp_df, result_df], ignore_index=True, )
-    result_df.drop_duplicates(subset=['post_id'], inplace=True, keep='first')
+    result_df.drop_duplicates(subset=['hp_post_id'], inplace=True, keep='first')
     print(result_df)
     result_df.to_csv(path_or_buf=LOCAL_FILE_NAME,
                      sep=',',
