@@ -1,17 +1,21 @@
 import pandas as pd
 import json
 from hp_class_action.hp_database.hp_forum_issue import execute_query
+
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 
-result_df = pd.read_csv('hp_hinges_issues.csv',
-                        sep=',',
-                        parse_dates=['post_datetime'])
-print(result_df.drop_duplicates(subset=['hp_post_id', 'post_datetime'],
-                                keep='first'))
+
+def read_local_data():
+    result_df = pd.read_csv('hp_hinges_issues.csv',
+                            sep=',',
+                            parse_dates=['post_datetime'])
+    print(result_df.drop_duplicates(subset=['hp_post_id', 'post_datetime'],
+                                    keep='first'))
+    return result_df
 
 
-def upload_data(data_df:pd.DataFrame):
+def upload_data(data_df: pd.DataFrame):
     sql_query = """
         INSERT INTO hp_forum_issues (
             hp_post_id, post_datetime, username,
@@ -31,4 +35,6 @@ def upload_data(data_df:pd.DataFrame):
                       )
 
 
-upload_data(result_df)
+if __name__ == '__main__':
+    my_result_df = read_local_data()
+    upload_data(my_result_df)

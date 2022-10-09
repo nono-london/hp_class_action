@@ -1,13 +1,13 @@
-import sys
-
 import mysql.connector
 from mysql.connector.errors import (ProgrammingError, IntegrityError)
 
 from hp_class_action.app_config_secret import (MYSQL_USERNAME, MYSQL_DATABASE_NAME,
                                                MYSQL_HOST_URL, MYSQL_PORT,
-                                               MYSQL_PASSWORD,
-                                               PA_MYSQL_USERNAME, PA_MYSQL_PASSWORD, PA_MYSQL_PORT,
+                                               MYSQL_PASSWORD, PA_MYSQL_PORT,
+                                               PA_MYSQL_USERNAME, PA_MYSQL_PASSWORD,
                                                PA_MYSQL_HOST_URL, PA_MYSQL_DATABASE_NAME)
+
+import sys
 
 if sys.platform == 'win32':
     HOST_URL = MYSQL_HOST_URL
@@ -55,11 +55,11 @@ def create_table():
 def get_connection():
     # https://dev.mysql.com/doc/connector-python/en/connector-python-connectargs.html
     db_conn = mysql.connector.connect(
-        user=USERNAME,
-        password=PASSWORD,
-        host=HOST_URL,
+        user=MYSQL_USERNAME,
+        password=MYSQL_PASSWORD,
+        host=MYSQL_HOST_URL,
         database=DATABASE_NAME,
-        port=PORT
+        port=MYSQL_PORT
     )
     print(f'Connected to MySQl: {db_conn.is_connected()}')
     return db_conn

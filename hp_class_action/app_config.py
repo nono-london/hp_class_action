@@ -7,7 +7,7 @@ from typing import Union
 
 def get_project_root_path() -> str:
     # https://stackoverflow.com/questions/5137497/find-the-current-directory-and-files-directory
-    root_dir = Path(__file__).cwd().resolve().parent
+    root_dir = Path(__file__).resolve().parent.parent
     return str(root_dir)
 
 
@@ -18,9 +18,9 @@ def get_project_root_path() -> str:
 
 def get_project_download_path() -> str:
     # https://stackoverflow.com/questions/25389095/python-get-path-of-root-project-structure/40227116
-    download_folder_path = Path(get_project_root_path(), "hp_class_action", "downloads")
+    download_folder_path = Path(get_project_root_path(),"hp_class_action", "downloads")
     if not download_folder_path.exists():
-        download_folder_path.mkdir()
+        download_folder_path.mkdir(parents=True)
     return str(download_folder_path)
 
 
