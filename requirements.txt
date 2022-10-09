@@ -17,9 +17,9 @@ mysql-connector-python
 # requirements for setup
 # https://medium.com/analytics-vidhya/how-to-create-a-python-library-7d5aea80cc3f
 # https://docs.python.org/3.7/distutils/setupscript.html
-twine
-setuptools
-wheel
+#twine
+#setuptools
+#wheel
 
 # commands for setup
 # python setup.py bdist_wheel
@@ -28,8 +28,8 @@ wheel
 
 # test commands:
 # python setup.py pytest
-pytest
-pytest-runner
+# pytest
+# pytest-runner
 
 
 # python.exe -m pip install --upgrade pip
