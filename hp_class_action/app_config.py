@@ -2,7 +2,7 @@ import sys
 from pathlib import PurePath, Path
 from typing import Union
 
-from selenium_helpers.app_config_secret import SELENIUM_URL as _SELENIUM_URL
+#from selenium_helpers.app_config_secret import SELENIUM_URL as _SELENIUM_URL
 
 
 def get_project_root_path() -> str:
@@ -11,9 +11,9 @@ def get_project_root_path() -> str:
     return str(root_dir)
 
 
-def get_backup_selenium_folder() -> str:
-    root_dir = PurePath(f"//{_SELENIUM_URL}/F_usb_buffalo/Python/selenium_drivers")
-    return str(root_dir)
+# def get_backup_selenium_folder() -> str:
+#     root_dir = PurePath(f"//{_SELENIUM_URL}/F_usb_buffalo/Python/selenium_drivers")
+#     return str(root_dir)
 
 
 def get_project_download_path() -> str:
@@ -24,16 +24,16 @@ def get_project_download_path() -> str:
     return str(download_folder_path)
 
 
-def get_selenium_folder_path() -> Union[None, str]:
-    # https://stackoverflow.com/questions/25389095/python-get-path-of-root-project-structure/40227116
-    chrome_windows_name: str = "chromedriver.exe"
-
-    if Path(get_project_download_path(), chrome_windows_name).is_file():
-        return str(get_project_download_path())
-    elif Path(get_backup_selenium_folder(), chrome_windows_name).is_file():
-        return str(get_backup_selenium_folder())
-    else:
-        return None
+# def get_selenium_folder_path() -> Union[None, str]:
+#     # https://stackoverflow.com/questions/25389095/python-get-path-of-root-project-structure/40227116
+#     chrome_windows_name: str = "chromedriver.exe"
+#
+#     if Path(get_project_download_path(), chrome_windows_name).is_file():
+#         return str(get_project_download_path())
+#     elif Path(get_backup_selenium_folder(), chrome_windows_name).is_file():
+#         return str(get_backup_selenium_folder())
+#     else:
+#         return None
 
 
 def pack_python_libs_in_path():
@@ -66,6 +66,6 @@ if __name__ == '__main__':
     print(get_project_root_path())
 
     print(get_project_download_path())
-    print(get_selenium_folder_path())
-    print(get_backup_selenium_folder())
+    # print(get_selenium_folder_path())
+    # print(get_backup_selenium_folder())
     pack_python_libs_in_path()
