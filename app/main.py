@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def home_view():
-    return "<h1>Welcome HP Trial Web Information</h1>"
+    return "<h1>Welcome HP Forum Information Checker</h1>"
 
 
 if __name__ == '__main__':
