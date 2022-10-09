@@ -12,6 +12,7 @@ from hp_class_action.hp_database.hp_forum_issue import execute_query, fetch_quer
 BASE_URL: str = "https://h30434.www3.hp.com/t5/ratings/ratingdetailpage/message-uid/8499984/rating-system/forum_topic_metoo/page/1#userlist"
 
 
+hp_cookies = None
 def get_web_page(url_to_open: str) -> Union[None, str]:
     global hp_cookies
     headers: dict = {
