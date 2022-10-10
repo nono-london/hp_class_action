@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import pandas as pd
 
 from hp_class_action.app_config import get_project_download_path
@@ -81,10 +82,36 @@ def all_claims():
     return clean_df
 
 
-def chart_results():
+def chart_claim_hidden_claims():
     result_df: pd.DataFrame = all_claims()
     print(result_df)
 
+    # count record by True/False
+    year_claim_df = result_df.groupby([
+        result_df['post_datetime'].dt.year,
+        result_df['claimed']]
+    ).count()
+    # calculate percent
+    year_claim_df['percent'] = year_claim_df['username'].groupby(level=0).transform(lambda x: (x / x.sum()).round(5))
+    # get rid of uncenessary columns
+    year_claim_df = year_claim_df[['percent']]
+    year_claim_df.reset_index(drop=False, inplace=True)
+    print(year_claim_df)
+
+    year_claim_df['claimed_pct'] = year_claim_df.loc[year_claim_df['claimed'] == True, 'percent']
+    year_claim_df['unclaimed_pct'] = year_claim_df.loc[year_claim_df['claimed'] == False, 'percent']
+    print(year_claim_df)
+    print(type(year_claim_df))
+
+    year_claim_df.pivot('post_datetime',
+                        'claimed',
+                        'percent').rename(columns={True: 'claimed_pct',
+                                                   False: 'unclaimed_pct'}
+                                          ).plot.bar(stacked=True, color=['red', 'blue'])
+    plt.show()
+
+    # ax = result_df.plot.hist(x=result_df['post_datetime'], )
+
 
 if __name__ == '__main__':
-    chart_results()
+    chart_claim_hidden_claims()

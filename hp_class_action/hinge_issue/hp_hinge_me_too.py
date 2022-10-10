@@ -105,6 +105,8 @@ def update_mdb_with_full_post(full_post: str, post_id: int):
 def update_summary_metoo():
     """Update mdb with full summary and me too users' s names"""
     post_ids: list = get_post_ids()
+    if post_ids is None or len(post_ids)==0:
+        exit('No data to update')
     max_metoo_pages: int = 100
     for post_id in post_ids:
         metoos: [dict] = []
@@ -136,5 +138,4 @@ def update_summary_metoo():
 
 if __name__ == '__main__':
     update_summary_metoo()
-    exit(0)
-    print(get_post_ids())
+
