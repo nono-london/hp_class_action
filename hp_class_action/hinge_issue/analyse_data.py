@@ -3,6 +3,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pandas as pd
+import matplotlib.ticker as mtick
 
 from hp_class_action.app_config import get_project_download_path
 from hp_class_action.hp_database.hp_forum_issue import (fetch_query)
@@ -84,7 +85,6 @@ def all_claims():
 
 def chart_claim_hidden_claims():
     result_df: pd.DataFrame = all_claims()
-    print(result_df)
 
     # count record by True/False
     year_claim_df = result_df.groupby([
@@ -96,21 +96,20 @@ def chart_claim_hidden_claims():
     # get rid of uncenessary columns
     year_claim_df = year_claim_df[['percent']]
     year_claim_df.reset_index(drop=False, inplace=True)
-    print(year_claim_df)
 
     year_claim_df['claimed_pct'] = year_claim_df.loc[year_claim_df['claimed'] == True, 'percent']
     year_claim_df['unclaimed_pct'] = year_claim_df.loc[year_claim_df['claimed'] == False, 'percent']
+    year_claim_df.fillna(0, inplace=True)
     print(year_claim_df)
-    print(type(year_claim_df))
 
-    year_claim_df.pivot('post_datetime',
-                        'claimed',
-                        'percent').rename(columns={True: 'claimed_pct',
-                                                   False: 'unclaimed_pct'}
-                                          ).plot.bar(stacked=True, color=['red', 'blue'])
+    ax = year_claim_df.pivot('post_datetime',
+                             'claimed',
+                             'percent').rename(columns={True: 'public forum',
+                                                        False: 'private message'}
+                                               ).plot.bar(stacked=True, color=['orange', 'turquoise'])
+    ax.yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
+
     plt.show()
-
-    # ax = result_df.plot.hist(x=result_df['post_datetime'], )
 
 
 if __name__ == '__main__':
