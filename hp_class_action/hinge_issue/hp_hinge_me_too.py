@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 from typing import Union
+from requests.exceptions import ConnectionError
 
 import requests
 from bs4 import BeautifulSoup as bs
@@ -10,7 +11,6 @@ from lxml.html import Element
 from hp_class_action.hp_database.hp_forum_issue import execute_query, fetch_query
 
 BASE_URL: str = "https://h30434.www3.hp.com/t5/ratings/ratingdetailpage/message-uid/8499984/rating-system/forum_topic_metoo/page/1#userlist"
-
 
 hp_cookies = None
 
@@ -34,11 +34,17 @@ def get_web_page(url_to_open: str) -> Union[None, str]:
     return page_content
 
 
-def get_post_ids() -> Union[list, None]:
-    sql_str = """SELECT hp_post_id FROM hp_forum_issues
-                ORDER BY post_datetime DESC
-                WHERE post_full IS NULL OR me_too IS NULL    
-    """
+def get_post_ids(force_update: bool = False) -> Union[list, None]:
+    if force_update:
+        sql_str = """SELECT hp_post_id FROM hp_forum_issues
+                    ORDER BY post_datetime DESC
+                   """
+    else:
+        sql_str = """SELECT hp_post_id FROM hp_forum_issues
+                    WHERE post_full IS NULL
+                    ORDER BY post_datetime DESC
+
+                """
     results = fetch_query(sql_query=sql_str)
     if results is None or len(results) == 0:
         return None
@@ -102,10 +108,10 @@ def update_mdb_with_full_post(full_post: str, post_id: int):
     execute_query(sql_query=sql_query, variables=(full_post, post_id))
 
 
-def update_summary_metoo():
+def update_summary_metoo(force_update: bool = False):
     """Update mdb with full summary and me too users' s names"""
-    post_ids: list = get_post_ids()
-    if post_ids is None or len(post_ids)==0:
+    post_ids: list = get_post_ids(force_update=force_update)
+    if (post_ids is None or len(post_ids) == 0):
         exit('No data to update')
     max_metoo_pages: int = 100
     for post_id in post_ids:
@@ -137,5 +143,4 @@ def update_summary_metoo():
 
 
 if __name__ == '__main__':
-    update_summary_metoo()
-
+    update_summary_metoo(force_update=False,)

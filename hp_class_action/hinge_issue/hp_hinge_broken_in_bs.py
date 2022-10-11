@@ -39,12 +39,9 @@ def get_web_page(url_to_open: str) -> Union[None, str]:
 
 
 def get_page_rows(page_source: str) -> [Element]:
-    # xpath_value = "// div[@class='search-result-count']"
-    lxml_str = fromstring(page_source)
-    # results_number: int = int(lxml_str.xpath(xpath_value)[0].text.strip().split(" ")[0].replace(",", "").strip())
-    xpath_value = "// div[@data-lia-message-uid]"
-    page_rows: [Element] = lxml_str.xpath(xpath_value)
-    print(f'Found {len(page_rows)} posts.')
+    page_soup = bs(page_source, 'lxml')
+    page_rows = page_soup.find_all('data-lia-message-uid',)
+
     return page_rows
 
 
@@ -87,7 +84,6 @@ def get_posted_datetime(page_row: Element, message_id: int) -> datetime:
 
 def get_tags(page_row: Element, message_id: int) -> [str]:
     """Return the Tags attached to the post"""
-    # xpath_value = "// div[@class='TagList lia-component-tags lia-component-message-view-widget-tags-list'] / @id[contains(.,'tagsList')]"
     xpath_value = f'// div[@data-lia-message-uid={message_id}] // div[contains(@id,"tagsList")] / ul[@aria-label="Tags" and @role="list"]/li '
 
     tag_elements: [Element] = page_row.xpath(xpath_value)
@@ -159,6 +155,8 @@ def get_batch_data():
             continue
 
         page_rows = get_page_rows(page_source=page_source)
+        exit(0)
+
         if page_source is None or len(page_rows) == 0:
             print(f'No posts found for url:\n{base_url}')
             continue
