@@ -89,23 +89,33 @@ def extract_metoo_data(metoo_element: element) -> dict:
 
 
 def update_mdb_with_me_too(metoo_json: str, post_id: int):
-    """"""
+    """Update me_too column if a bigger size is found: ie more users complained"""
     sql_query = """UPDATE hp_forum_issues
-    SET me_too=%s
+    SET me_too= CASE
+                        WHEN JSON_STORAGE_SIZE(%s) > JSON_STORAGE_SIZE(me_too)
+                        THEN %s
+                        ELSE me_too
+                    END
+                
     WHERE hp_post_id=%s
     
     """
-    execute_query(sql_query=sql_query, variables=(metoo_json, post_id))
+    execute_query(sql_query=sql_query, variables=(metoo_json,metoo_json, post_id))
 
 
 def update_mdb_with_full_post(full_post: str, post_id: int):
     """"""
-    sql_query = """UPDATE hp_forum_issues
-    SET post_full=%s
+    sql_query = """
+    UPDATE hp_forum_issues
+    SET post_full= CASE 
+                WHEN LENGTH(%s) > LENGTH(post_full)
+                    THEN %s
+                    ELSE post_full
+                END
     WHERE hp_post_id=%s
     
     """
-    execute_query(sql_query=sql_query, variables=(full_post, post_id))
+    execute_query(sql_query=sql_query, variables=(full_post,full_post, post_id))
 
 
 def update_summary_metoo(force_update: bool = False):
@@ -143,4 +153,4 @@ def update_summary_metoo(force_update: bool = False):
 
 
 if __name__ == '__main__':
-    update_summary_metoo(force_update=False,)
+    update_summary_metoo(force_update=True,)
