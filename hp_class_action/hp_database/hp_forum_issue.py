@@ -8,8 +8,9 @@ from hp_class_action.app_config_secret import (MYSQL_USERNAME, MYSQL_DATABASE_NA
                                                PA_MYSQL_HOST_URL, PA_MYSQL_DATABASE_NAME)
 
 import sys
+import platform
 
-if sys.platform == 'win32':
+if sys.platform == 'win32' or platform.node()=="wings":
     HOST_URL = MYSQL_HOST_URL
     PORT = MYSQL_PORT
     DATABASE_NAME = MYSQL_DATABASE_NAME
