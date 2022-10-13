@@ -5,6 +5,11 @@ matplotlib
 html5lib
 bs4
 lxml
+# aiohttp
+aiohttp
+
+
+
 # Selenium Libs
 #selenium
 #pywin32
