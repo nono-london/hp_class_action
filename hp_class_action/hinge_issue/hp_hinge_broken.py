@@ -143,8 +143,8 @@ def get_batch_data():
             base_url = f"https://h30434.www3.hp.com/t5/forums/searchpage/tab/message?filter=location&q=broken%20hinge&advanced=true&location=category:Notebook&" \
                        f"sort_by=-topicPostDate&collapse_discussion=true&search_type=thread&search_page_size={results_per_page}"
         else:
-            base_url = f"""https://h30434.www3.hp.com/t5/forums/searchpage/tab/message/page/{i}?advanced=true&collapse_discussion=true&filter=location&
-            location=category:Notebook&q=broken hinge&search_page_size={results_per_page}&search_type=thread&sort_by=-topicPostDate"""
+            base_url = f"""https://h30434.www3.hp.com/t5/forums/searchpage/tab/message?filter=location&q=broken%20hinge&advanced=true&location=category:Notebook&page={i}&
+            sort_by=-topicPostDate&collapse_discussion=true&search_type=thread&search_page_size={results_per_page}"""
         page_source = None
         while max_tries > 0:
             page_source = get_web_page(url_to_open=base_url)
