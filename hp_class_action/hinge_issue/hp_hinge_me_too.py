@@ -1,12 +1,12 @@
 import json
 from datetime import datetime
 from typing import Union
-from requests.exceptions import ConnectionError
 
 import requests
 from bs4 import BeautifulSoup as bs
 from bs4 import element
 from lxml.html import Element
+from requests.exceptions import ConnectionError
 
 from hp_class_action.hp_database.hp_forum_issue import execute_query, fetch_query
 
@@ -15,21 +15,23 @@ BASE_URL: str = "https://h30434.www3.hp.com/t5/ratings/ratingdetailpage/message-
 hp_cookies = None
 
 
-def get_web_page(url_to_open: str) -> Union[None, str]:
+def get_web_page(url_to_open: str, max_tries: int = 10) -> Union[None, str]:
     global hp_cookies
     headers: dict = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"}
     page_content: Union[None, str] = None
-
-    try:
-        response = requests.get(url=url_to_open, headers=headers, timeout=10, cookies=hp_cookies)
-        if response.url != url_to_open:
-            return None
-        page_content = response.text
-        hp_cookies = response.cookies
-
-    except ConnectionError as ex:
-        print(f'Error while connecting:\n{ex}')
+    max_tries: int = max_tries
+    while max_tries > 0:
+        try:
+            response = requests.get(url=url_to_open, headers=headers, timeout=10, cookies=hp_cookies)
+            if response.url != url_to_open:
+                return None
+            page_content = response.text
+            hp_cookies = response.cookies
+            break
+        except ConnectionError as ex:
+            print(f'Error while connecting:\n{ex}')
+            max_tries -= 1
 
     return page_content
 
@@ -100,7 +102,7 @@ def update_mdb_with_me_too(metoo_json: str, post_id: int):
     WHERE hp_post_id=%s
     
     """
-    execute_query(sql_query=sql_query, variables=(metoo_json,metoo_json, post_id))
+    execute_query(sql_query=sql_query, variables=(metoo_json, metoo_json, post_id))
 
 
 def update_mdb_with_full_post(full_post: str, post_id: int):
@@ -115,7 +117,7 @@ def update_mdb_with_full_post(full_post: str, post_id: int):
     WHERE hp_post_id=%s
     
     """
-    execute_query(sql_query=sql_query, variables=(full_post,full_post, post_id))
+    execute_query(sql_query=sql_query, variables=(full_post, full_post, post_id))
 
 
 def update_summary_metoo(force_update: bool = False):
@@ -153,4 +155,4 @@ def update_summary_metoo(force_update: bool = False):
 
 
 if __name__ == '__main__':
-    update_summary_metoo(force_update=True,)
+    update_summary_metoo(force_update=True, )
