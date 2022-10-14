@@ -110,7 +110,6 @@ def update_mdb_with_full_post(full_post: str, post_id: int):
     SET post_full= CASE 
                         WHEN post_full is NULL OR LENGTH(%s) > LENGTH(post_full) 
                             THEN %s
-                        
                         ELSE post_full
                     END
     WHERE hp_post_id=%s
