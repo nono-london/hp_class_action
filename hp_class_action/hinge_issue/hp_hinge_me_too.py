@@ -115,7 +115,7 @@ def update_mdb_with_full_post(full_post: str, post_id: int):
     WHERE hp_post_id=%s
     
     """
-    execute_query(sql_query=sql_query, variables=(full_post,full_post,full_post, post_id))
+    execute_query(sql_query=sql_query, variables=(full_post,full_post, post_id))
 
 
 def update_summary_metoo(force_update: bool = False):
