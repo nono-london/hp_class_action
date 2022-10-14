@@ -1,8 +1,8 @@
 import sys
-from pathlib import PurePath, Path
-from typing import Union
+from pathlib import Path
 
-#from selenium_helpers.app_config_secret import SELENIUM_URL as _SELENIUM_URL
+
+# from selenium_helpers.app_config_secret import SELENIUM_URL as _SELENIUM_URL
 
 
 def get_project_root_path() -> str:
@@ -18,7 +18,7 @@ def get_project_root_path() -> str:
 
 def get_project_download_path() -> str:
     # https://stackoverflow.com/questions/25389095/python-get-path-of-root-project-structure/40227116
-    download_folder_path = Path(get_project_root_path(),"hp_class_action", "downloads")
+    download_folder_path = Path(get_project_root_path(), "hp_class_action", "downloads")
     if not download_folder_path.exists():
         download_folder_path.mkdir(parents=True)
     return str(download_folder_path)
