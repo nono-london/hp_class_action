@@ -30,7 +30,7 @@ mysql-connector-python
 # https://medium.com/analytics-vidhya/how-to-create-a-python-library-7d5aea80cc3f
 # https://docs.python.org/3.7/distutils/setupscript.html
 #twine
-#setuptools
+setuptools
 #wheel
 
 # commands for setup
@@ -40,8 +40,8 @@ mysql-connector-python
 
 # test commands:
 # python setup.py pytest
-# pytest
-# pytest-runner
+pytest
+pytest-runner
 
 
 # python.exe -m pip install --upgrade pip

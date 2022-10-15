@@ -10,7 +10,7 @@ def test_connection():
     print(f'is mdb connected: {conn.is_connected()}')
 
 
-def fetch_data():
+def test_fetch_data():
     sql_query = """
     SELECT *
     FROM hp_forum_issues
@@ -21,4 +21,4 @@ def fetch_data():
 
 if __name__ == '__main__':
     test_connection()
-    fetch_data()
+    test_fetch_data()
