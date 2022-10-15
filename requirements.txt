@@ -12,13 +12,13 @@ aiohttp
 
 # Selenium Libs
 #selenium
-#pywin32
-# python -m pip install pywin32
-#webdriver_manager
+pywin32; sys_platform == 'Windows'
+webdriver_manager
 
 #Heroku
 flask
-gunicorn
+gunicorn; sys_platform == 'linux'
+
 
 
 
