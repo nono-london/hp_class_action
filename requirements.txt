@@ -12,7 +12,7 @@ aiohttp
 
 # Selenium Libs
 #selenium
-pywin32; sys_platform == 'Windows'
+pywin32; sys_platform == 'win32'
 webdriver_manager
 
 #Heroku
