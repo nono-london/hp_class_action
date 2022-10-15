@@ -24,11 +24,14 @@ class UserPost:
         self.base_url: str = 'https://h30434.www3.hp.com/t5/forums/searchpage/'
         self.user_post_element: Tag = user_post_element
 
-        self.post_datetime: Union[datetime, None] = None
+
+        # hp_users
         self.hp_user_id: Union[int, None] = None
         self.username: Union[str, None] = None
         self.user_profile_url: Union[str, None] = None
 
+        # hp forums
+        self.post_datetime: Union[datetime, None] = None
         self.post_id: Union[int, None] = None
         self.post_url: Union[str, None] = None
 
