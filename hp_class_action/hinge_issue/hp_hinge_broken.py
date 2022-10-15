@@ -9,7 +9,7 @@ import pandas as pd
 import requests
 from lxml.html import fromstring, Element
 from requests.exceptions import ConnectionError
-from bs4 import BeautifulSoup as bs
+
 from hp_class_action.app_config import get_project_download_path
 from hp_class_action.hinge_issue.hp_hinge_stats import upload_data
 
