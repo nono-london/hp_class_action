@@ -21,5 +21,8 @@ def compare_users_with_old_data():
     print(f'Old usernames size: {len(old_usernames)}')
     print(f'New usernames size: {len(new_usernames)}')
 
+    deleted_usernames = list(set(old_usernames)-set(new_usernames))
+    print(f'Deleted usernames size: {len(deleted_usernames)}')
+
 if __name__ == '__main__':
     compare_users_with_old_data()
