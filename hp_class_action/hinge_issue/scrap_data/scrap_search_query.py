@@ -1,10 +1,12 @@
 from urllib.parse import urljoin
-
+import json
 import pandas as pd
 from bs4 import BeautifulSoup as bs
 from bs4.element import Tag
 
 from hp_class_action.hinge_issue.scrap_data.web_requests import get_web_page
+from hp_class_action.hp_database.hp_forum_issue_bis import (execute_query,
+                                                            fetch_query)
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
@@ -24,7 +26,6 @@ class UserPost:
         self.base_url: str = 'https://h30434.www3.hp.com/t5/forums/searchpage/'
         self.user_post_element: Tag = user_post_element
 
-
         # hp_users
         self.hp_user_id: Union[int, None] = None
         self.username: Union[str, None] = None
@@ -42,6 +43,8 @@ class UserPost:
     def _text_cleaner(bs4_text: str):
         return bs4_text.replace('\u200e', '').replace('\n', '').replace('\t', '').strip()
 
+    def __str__(self):
+        return f"username:{self.username}, hp_user_id:{self.hp_user_id}: {self.post_tags}"
     def _get_user_id_name_profile_url(self):
         username_elements = self.user_post_element.select('span[class*="UserName"]')
         self.username = self._text_cleaner(username_elements[0].text)
@@ -71,10 +74,59 @@ class UserPost:
 
     def _get_post_tags(self):
         tag_elements = self.user_post_element.select('div[id*="tagsList"][class*="TagList"]')
+        if len(tag_elements)==0:
+            self.post_tags=None
+            return
         tag_elements = tag_elements[0].find('ul').find_all('li')
+
         for tag_element in tag_elements:
             if self._text_cleaner(tag_element.text) != "Tags:":
                 self.post_tags.append(self._text_cleaner(tag_element.text))
+
+    def _upload_to_mdb(self):
+        # Insert user
+        sql_query = """
+                INSERT IGNORE INTO hp_users(
+                        hp_user_id, username, user_profile_url)
+                    VALUES (%s, %s, %s)
+            """
+        sql_variables = (self.hp_user_id, self.username, self.user_profile_url)
+        execute_query(sql_query=sql_query,
+                      variables=sql_variables)
+
+        # select newly inserted user_id
+        sql_query = """
+                    SELECT user_id
+                    FROM hp_users
+                    WHERE hp_user_id=%s
+        """
+        sql_variables = (self.hp_user_id,)
+        hp_user_id = fetch_query(sql_query=sql_query,
+                                 variables=sql_variables)
+
+        user_id = hp_user_id[0]['user_id']
+        # Insert data in forum table
+        sql_query = """
+                    INSERT IGNORE INTO forum_posts(
+                                    user_id, hp_post_id, post_datetime, post_url, post_summary,
+                                    post_tags)
+                                VALUES(
+                                        %s, %s, %s, %s, %s, 
+                                        %s
+                                        )
+
+                    
+        """
+        json_post_tags = json.dumps(self.post_tags)
+        sql_variables = (user_id, self.hp_user_id, self.post_datetime, self.post_url, self.post_summary,
+                         json_post_tags)
+        execute_query(sql_query=sql_query,
+                      variables=sql_variables)
+
+
+
+
+
 
     def get_info_from_tag(self):
         self._get_post_datetime()
@@ -82,6 +134,7 @@ class UserPost:
         self._get_post_id_url()
         self._get_post_summary()
         self._get_post_tags()
+        self._upload_to_mdb()
 
 
 def webscrap_query_search():
@@ -108,9 +161,8 @@ def webscrap_query_search():
         for user_post_tag in user_post_tags:
             user_post = UserPost(user_post_element=user_post_tag)
             user_post.get_info_from_tag()
-            print(user_post.post_datetime)
-            print(user_post.username)
-            print(user_post.username)
+            print("-"*100)
+            print(user_post)
 
 
 if __name__ == '__main__':

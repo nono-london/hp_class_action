@@ -1,14 +1,15 @@
-import mysql.connector
-from mysql.connector.errors import (ProgrammingError, IntegrityError)
+import platform
+import sys
 from typing import Union
+
+import mysql.connector
+from mysql.connector.errors import (ProgrammingError)
+
 from hp_class_action.app_config_secret import (MYSQL_USERNAME, MYSQL_DATABASE_NAME,
                                                MYSQL_HOST_URL, MYSQL_PORT,
                                                MYSQL_PASSWORD, PA_MYSQL_PORT,
                                                PA_MYSQL_USERNAME, PA_MYSQL_PASSWORD,
                                                PA_MYSQL_HOST_URL, PA_MYSQL_DATABASE_NAME)
-
-import sys
-import platform
 
 if sys.platform == 'win32' or platform.node() == "wings":
     HOST_URL = MYSQL_HOST_URL
@@ -23,9 +24,9 @@ else:
     USERNAME = PA_MYSQL_USERNAME
     PASSWORD = PA_MYSQL_PASSWORD
 
-
 _TABLE_HP_USERS: str = "hp_users"
 _TABLE_REPORTED_ISSUES: str = "forum_posts"
+
 
 def create_table_hp_users():
     sql_query: str = f"""
@@ -48,7 +49,6 @@ def create_table_hp_users():
             """
 
     execute_query(sql_query=sql_query)
-
 
 
 def create_table_reported_issues():
@@ -94,7 +94,7 @@ def get_connection():
         database=DATABASE_NAME,
         port=MYSQL_PORT
     )
-    print(f'Connected to MySQl: {db_conn.is_connected()}')
+
     return db_conn
 
 
@@ -104,18 +104,14 @@ def execute_query(sql_query: str, variables: tuple = None) -> bool:
     db_conn = get_connection()
     db_cursor = db_conn.cursor()
     try:
-        result = db_cursor.execute(operation=sql_query,
-                                   params=variables)
+        db_cursor.execute(operation=sql_query,
+                          params=variables)
 
-        print(f'Execute query result: {result}')
     except ProgrammingError as ex:
         print(f'Sql Error: {ex.__class__.__name__}')
         print(ex)
         return False
-    except IntegrityError as ex:
-        print(f'Integrity Error (Duplicate key?): {ex.__class__.__name__}')
-        print(ex)
-        return False
+
     finally:
         db_cursor.close()
         db_conn.commit()
@@ -137,10 +133,7 @@ def fetch_query(sql_query: str, variables: tuple = None) -> Union[list, None]:
         print(f'Sql Error: {ex.__class__.__name__}')
         print(ex)
         return None
-    except IntegrityError as ex:
-        print(f'Integrity Error (Duplicate key?): {ex.__class__.__name__}')
-        print(ex)
-        return None
+
     finally:
         db_cursor.close()
         db_conn.close()
