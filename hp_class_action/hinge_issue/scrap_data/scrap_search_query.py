@@ -28,9 +28,13 @@ def webscrap_query_search(max_pages: int = 50):
         if i == 1:
             base_url = f"https://h30434.www3.hp.com/t5/forums/searchpage/tab/message?filter=location&q=broken%20hinge&advanced=true&location=category:Notebook&" \
                        f"sort_by=-topicPostDate&collapse_discussion=true&search_type=thread&search_page_size={results_per_page}"
+            # base_url = f"https://h30434.www3.hp.com/t5/forums/searchpage/tab/message?filter=location&q=broken%20hinge&advanced=true&location=category:Notebook&" \
+            #            f"sort_by=score&collapse_discussion=true&search_type=thread&search_page_size=50"
         else:
             base_url = f"""https://h30434.www3.hp.com/t5/forums/searchpage/tab/message?filter=location&q=broken%20hinge&advanced=true&location=category:Notebook&page={i}&
             sort_by=-topicPostDate&collapse_discussion=true&search_type=thread&search_page_size={results_per_page}"""
+            # base_url = f"https://h30434.www3.hp.com/t5/forums/searchpage/tab/message?filter=location&q=broken%20hinge&advanced=true&location=category:Notebook&page={i}&" \
+            #            f"sort_by=score&collapse_discussion=true&search_type=thread&search_page_size={results_per_page}"
         page_source = get_web_page(url_to_open=base_url,
                                    max_tries=10,
                                    timeout=10,
