@@ -64,18 +64,19 @@ def upload_old_mdb_posts_to_new_mdb():
         and upload it to new mdb
         if post has been deleted, related usernames are stored in csv file
     """
-    sql_query_old_usernames = """
-        SELECT username, post_url
-        FROM hp_trial.hp_forum_issues
-        ORDER BY username 
+    missing_posts_sql = """
+        SELECT a.hp_post_id,a.username, a.post_url
+        FROM hp_trial.hp_forum_issues a LEFT JOIN forum_posts b 
+            ON a.hp_post_id=b.hp_post_id
+            WHERE b.hp_post_id IS NULL
         """
-    old_usernames = fetch_query(sql_query=sql_query_old_usernames)
+    missing_posts = fetch_query(sql_query=missing_posts_sql)
 
-    print(f'Old usernames size: {len(old_usernames)}')
+    print(f'Old usernames size: {len(missing_posts)}')
 
     # get url from old mdb
     deleted_users = []
-    for user_post in old_usernames:
+    for user_post in missing_posts:
         post_url = user_post['post_url']
         user_post_element = get_web_page(url_to_open=post_url,
                                          max_tries=10,
