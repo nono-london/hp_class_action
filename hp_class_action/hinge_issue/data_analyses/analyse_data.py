@@ -10,15 +10,16 @@ from hp_class_action.hp_database.hp_forum_issue import (fetch_query)
 
 pd.set_option('display.max_columns', None)
 # pd.set_option('display.max_rows', None)
-LOCAL_FILE_NAME: str = str(Path().joinpath(get_project_download_path(), 'hp_hinges_issues.csv'))
+# LOCAL_FILE_NAME: str = str(Path().joinpath(get_project_download_path(), 'hp_hinges_issues.csv'))
 
 
 def get_mdb_dataset() -> list:
     """Get relevant data from mdb"""
     sql_query: str = """
-            SELECT hp_post_id, post_datetime, username, me_too, post_url
-            FROM hp_forum_issues
-            ORDER BY post_datetime DESC
+            SELECT a.hp_post_id, a.post_datetime, b.username, a.me_too, a.post_url
+            FROM forum_posts a INNER JOIN hp_users b
+                    ON a.user_id=b.user_id
+            ORDER BY a.post_datetime DESC
             
         """
     results: list = fetch_query(sql_query=sql_query)

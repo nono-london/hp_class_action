@@ -5,6 +5,7 @@ from typing import Union
 from bs4 import BeautifulSoup as bs
 from bs4 import element
 from lxml.html import Element
+
 from hp_class_action.hinge_issue.scrap_data.web_requests import get_web_page
 from hp_class_action.hp_database.hp_forum_issue import (execute_query,
                                                         fetch_query)
@@ -12,7 +13,6 @@ from hp_class_action.hp_database.hp_forum_issue import (execute_query,
 BASE_URL: str = "https://h30434.www3.hp.com/t5/ratings/ratingdetailpage/message-uid/8499984/rating-system/forum_topic_metoo/page/1#userlist"
 
 hp_cookies = None
-
 
 
 def get_post_ids(force_update: bool = False) -> Union[list, None]:
@@ -46,14 +46,13 @@ def get_metoos(page_source: str) -> Union[None, list]:
     page_soup = bs(page_source, 'lxml')
     try:
         metoo_elements: [Element] = page_soup.find('div', attrs={'class': 'UserListBlock'}).find_all('div', attrs={
-        'class': 'lia-user-attributes'})
+            'class': 'lia-user-attributes'})
         return metoo_elements
     except AttributeError as ex:
         return None
     except Exception as ex:
         print(f"get_metoos error:{ex.__class__.__name__}")
         exit(ex)
-
 
 
 def extract_metoo_data(metoo_element: element) -> dict:
