@@ -22,7 +22,7 @@ def get_post_ids(force_update: bool = False) -> Union[list, None]:
                    """
     else:
         sql_str = """SELECT hp_post_id FROM forum_posts
-                    WHERE post_full IS NULL OR me_too SI NULL
+                    WHERE post_full IS NULL OR me_too IS NULL
                     ORDER BY post_datetime DESC
 
                 """
@@ -138,4 +138,4 @@ def update_summary_metoo(force_update: bool = False):
 
 
 if __name__ == '__main__':
-    update_summary_metoo(force_update=True, )
+    update_summary_metoo(force_update=False, )
