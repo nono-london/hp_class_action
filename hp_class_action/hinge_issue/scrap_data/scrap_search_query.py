@@ -45,7 +45,9 @@ class UserPost:
         return bs4_text.replace('\u200e', '').replace('\n', '').replace('\t', '').strip()
 
     def __str__(self):
-        return f"username:{self.username}, hp_user_id:{self.hp_user_id}: {self.post_tags}"
+
+        return_str =f"username:{self.username}, hp_user_id:{self.hp_user_id}: {self.post_tags}\n{self.post_full}"
+        return return_str
     def _get_user_id_name_profile_url(self):
         username_elements = self.user_post_element.select('span[class*="UserName"]')
         self.username = self._text_cleaner(username_elements[0].text)
@@ -129,6 +131,8 @@ class UserPost:
                                         %s, 
                                         %s 
                                         )
+                        ON DUPLICATE KEY
+                        UPDATE post_full=VALUES(post_full)
 
                     
         """

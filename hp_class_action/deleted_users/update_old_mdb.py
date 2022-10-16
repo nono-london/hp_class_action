@@ -1,7 +1,9 @@
+from bs4 import BeautifulSoup as bs
+
 from hp_class_action.hinge_issue.scrap_data.scrap_search_query import UserPost
 from hp_class_action.hinge_issue.scrap_data.web_requests import get_web_page
 from hp_class_action.hp_database.hp_forum_issue_bis import (fetch_query)
-from bs4 import BeautifulSoup as bs
+
 
 def compare_users_with_old_data():
     """compare usrnames between table: hp_forum_issues(old) and hp_posts(new)"""
@@ -50,6 +52,7 @@ def compare_users_with_old_data():
 
         print(user_post_element)
 
+
 def update_old_data():
     """compare usrnames between table: hp_forum_issues(old) and hp_posts(new)"""
     sql_query_old_usernames = """
@@ -60,7 +63,6 @@ def update_old_data():
     old_usernames = fetch_query(sql_query=sql_query_old_usernames)
 
     print(f'Old usernames size: {len(old_usernames)}')
-
 
     # get url from old mdb
 
@@ -76,10 +78,8 @@ def update_old_data():
 
         user_post = UserPost(user_post_element=web_soup)
         user_post.get_info_from_tag()
-        print('-'*100)
+        print('-' * 100)
         print(user_post)
-
-
 
 
 if __name__ == '__main__':
