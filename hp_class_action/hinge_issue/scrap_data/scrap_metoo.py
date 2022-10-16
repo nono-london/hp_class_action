@@ -74,7 +74,7 @@ def update_mdb_with_me_too(metoo_json: str, post_id: int):
     """Update me_too column if a bigger size is found: ie more users complained"""
     sql_query = """UPDATE forum_posts
     SET me_too= CASE
-                        WHEN JSON_STORAGE_SIZE(%s) > JSON_STORAGE_SIZE(me_too)
+                        WHEN me_too IS NULL OR JSON_STORAGE_SIZE(%s) > JSON_STORAGE_SIZE(me_too)
                         THEN %s
                         ELSE me_too
                     END
