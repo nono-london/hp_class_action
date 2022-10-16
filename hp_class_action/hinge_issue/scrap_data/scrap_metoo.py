@@ -47,11 +47,13 @@ def get_metoos(page_source: str) -> Union[None, list]:
     try:
         metoo_elements: [Element] = page_soup.find('div', attrs={'class': 'UserListBlock'}).find_all('div', attrs={
         'class': 'lia-user-attributes'})
+        return metoo_elements
     except AttributeError as ex:
         return None
+    except Exception as ex:
         print(f"get_metoos error:{ex.__class__.__name__}")
         exit(ex)
-    return metoo_elements
+
 
 
 def extract_metoo_data(metoo_element: element) -> dict:

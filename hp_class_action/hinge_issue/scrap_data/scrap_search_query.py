@@ -47,4 +47,4 @@ def webscrap_query_search(max_pages: int = 50):
 
 
 if __name__ == '__main__':
-    webscrap_query_search(max_pages=10)
+    webscrap_query_search(max_pages=100)
