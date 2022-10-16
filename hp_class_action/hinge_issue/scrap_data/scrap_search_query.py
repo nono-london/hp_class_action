@@ -37,6 +37,7 @@ class UserPost:
         self.post_url: Union[str, None] = None
 
         self.post_summary: Union[str, None] = None
+        self.post_full: Union[str, None] = None
         self.post_tags: list = []
 
     @staticmethod
@@ -54,9 +55,12 @@ class UserPost:
 
     def _get_post_id_url(self):
         self.post_id = int(self.user_post_element.get("data-lia-message-uid"))
-        self.post_url = self.user_post_element.find('a', attrs={
-            'class': "page-link lia-link-navigation lia-custom-event"}).get('href')
-        self.post_url = urljoin(self.base_url, self.post_url)
+        post_url = self.user_post_element.find('a', attrs={
+            'class': "page-link lia-link-navigation lia-custom-event"})
+        if post_url is not None:
+            self.post_url = post_url.get('href')
+            self.post_url = urljoin(self.base_url, self.post_url)
+
 
     def _get_post_datetime(self):
         posted_on_element = self.user_post_element.find('span', attrs={'class': 'DateTime'})
@@ -70,7 +74,15 @@ class UserPost:
 
     def _get_post_summary(self):
         post_summary_element = self.user_post_element.find('div', attrs={'class': 'lia-truncated-body-container'})
-        self.post_summary = self._text_cleaner(post_summary_element.text)
+        if post_summary_element is not None:
+            self.post_summary = self._text_cleaner(post_summary_element.text)
+
+    def _get_full_post(self):
+        full_post_element = self.user_post_element.find('div', attrs={'class': "lia-message-body-content"})
+        if full_post_element is not None:
+            self.post_full = self._text_cleaner(full_post_element.text)
+
+
 
     def _get_post_tags(self):
         tag_elements = self.user_post_element.select('div[id*="tagsList"][class*="TagList"]')
@@ -109,16 +121,20 @@ class UserPost:
         sql_query = """
                     INSERT IGNORE INTO forum_posts(
                                     user_id, hp_post_id, post_datetime, post_url, post_summary,
-                                    post_tags)
+                                    post_full,
+                                    post_tags
+                                    )
                                 VALUES(
                                         %s, %s, %s, %s, %s, 
-                                        %s
+                                        %s, 
+                                        %s 
                                         )
 
                     
         """
         json_post_tags = json.dumps(self.post_tags)
         sql_variables = (user_id, self.hp_user_id, self.post_datetime, self.post_url, self.post_summary,
+                         self.post_full,
                          json_post_tags)
         execute_query(sql_query=sql_query,
                       variables=sql_variables)
@@ -133,8 +149,11 @@ class UserPost:
         self._get_user_id_name_profile_url()
         self._get_post_id_url()
         self._get_post_summary()
+        self._get_full_post()
         self._get_post_tags()
+
         self._upload_to_mdb()
+
 
 
 def webscrap_query_search():
