@@ -22,7 +22,7 @@ def get_post_ids(force_update: bool = False) -> Union[list, None]:
                    """
     else:
         sql_str = """SELECT hp_post_id FROM forum_posts
-                    WHERE post_full IS NULL
+                    WHERE post_full IS NULL OR me_too SI NULL
                     ORDER BY post_datetime DESC
 
                 """

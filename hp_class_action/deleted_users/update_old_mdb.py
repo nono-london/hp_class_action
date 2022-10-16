@@ -93,6 +93,9 @@ def upload_old_mdb_posts_to_new_mdb():
         user_post.get_info_from_tag()
         print('-' * 100)
         print(user_post)
+
+    if len(deleted_users) == 0:
+        return
     deleted_users_df = pd.DataFrame(deleted_users)
     deleted_users_df['update_datetime'] = datetime.utcnow()
 
@@ -108,4 +111,3 @@ if __name__ == '__main__':
     exit(0)
     compare_users_with_old_data()
     exit(0)
-
