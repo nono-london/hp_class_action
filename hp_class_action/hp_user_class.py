@@ -19,7 +19,7 @@ class UserPost:
 
         # hp forums
         self.post_datetime: Union[datetime, None] = None
-        self.post_id: Union[int, None] = None
+        self.hp_post_id: Union[int, None] = None
         self.post_url: Union[str, None] = None
 
         self.post_summary: Union[str, None] = None
@@ -43,7 +43,7 @@ class UserPost:
         self.hp_user_id = int(self.user_profile_url.split('/')[-1])
 
     def _get_post_id_url(self):
-        self.post_id = int(self.user_post_element.get("data-lia-message-uid"))
+        self.hp_post_id = int(self.user_post_element.get("data-lia-message-uid"))
         post_url = self.user_post_element.find('a', attrs={
             'class': "page-link lia-link-navigation lia-custom-event"})
         if post_url is not None:
@@ -115,13 +115,14 @@ class UserPost:
                                         %s, 
                                         %s 
                                         )
-                        ON DUPLICATE KEY
-                        UPDATE post_full=VALUES(post_full)
+                        ON DUPLICATE KEY UPDATE 
+                            post_full=VALUES(post_full),
+                            hp_post_id=VALUES(hp_post_id)
 
 
         """
         json_post_tags = json.dumps(self.post_tags)
-        sql_variables = (user_id, self.hp_user_id, self.post_datetime, self.post_url, self.post_summary,
+        sql_variables = (user_id, self.hp_post_id, self.post_datetime, self.post_url, self.post_summary,
                          self.post_full,
                          json_post_tags)
         execute_query(sql_query=sql_query,

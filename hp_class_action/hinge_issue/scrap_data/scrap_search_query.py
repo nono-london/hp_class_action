@@ -16,9 +16,11 @@ def get_user_posts(page_source: str) -> list:
     return user_posts_elements
 
 
-def webscrap_query_search():
+def webscrap_query_search(max_pages: int = 50):
+    # number of displayed user posts per web page
     results_per_page: int = 50
-    offset_pages: int = int(2000 / 50) + 10
+    # number of pages to query (there is a maximum of 2000 results per search)
+    offset_pages: int = min(int(2000 / results_per_page) + 10, max_pages)
 
     # https://h30434.www3.hp.com/t5/forums/searchpage/tab/message?filter=location&q=broken%20hinge&advanced=true&location=category:Notebook&page=4&sort_by=-topicPostDate&collapse_discussion=true&search_type=thread&search_page_size=50
     for i in range(1, offset_pages):
@@ -45,4 +47,4 @@ def webscrap_query_search():
 
 
 if __name__ == '__main__':
-    webscrap_query_search()
+    webscrap_query_search(max_pages=10)
