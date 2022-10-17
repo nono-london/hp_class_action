@@ -13,16 +13,18 @@ pd.set_option('display.max_columns', None)
 # LOCAL_FILE_NAME: str = str(Path().joinpath(get_project_download_path(), 'hp_hinges_issues.csv'))
 
 
-def get_mdb_dataset() -> list:
+def get_mdb_dataset(from_year:int=2018) -> list:
     """Get relevant data from mdb"""
     sql_query: str = """
             SELECT a.hp_post_id, a.post_datetime, b.username, a.me_too, a.post_url
             FROM forum_posts a INNER JOIN hp_users b
                     ON a.user_id=b.user_id
+            WHERE a.post_datetime >= MAKEDATE(%s, 1)
             ORDER BY a.post_datetime DESC
             
         """
-    results: list = fetch_query(sql_query=sql_query)
+    results: list = fetch_query(sql_query=sql_query,
+                                variables=(from_year,))
     for row_dict in results:
         if row_dict['me_too'] is not None:
             row_dict['me_too'] = json.loads(row_dict['me_too'])
@@ -49,9 +51,9 @@ def clean_metoo_user_details(me_to_user_details: list) -> pd.DataFrame:
     return user_detail_df
 
 
-def all_claims():
+def all_claims(from_year:int=2018):
     """Returns a df with claims from post id and from people who had same issue"""
-    mdb_results = get_mdb_dataset()
+    mdb_results = get_mdb_dataset(from_year=from_year)
     mdb_df: pd.DataFrame = pd.DataFrame(mdb_results)
     # mdb_df['claimed'] = True
     metoo_user_details: [dict] = [x['me_too'] for x in mdb_results if x['me_too'] is not None]
@@ -84,8 +86,8 @@ def all_claims():
     return clean_df
 
 
-def chart_claim_hidden_claims():
-    result_df: pd.DataFrame = all_claims()
+def chart_claim_hidden_claims(from_year:int=2018):
+    result_df: pd.DataFrame = all_claims(from_year=from_year)
 
     # count record by True/False
     year_claim_df = result_df.groupby([
@@ -114,4 +116,4 @@ def chart_claim_hidden_claims():
 
 
 if __name__ == '__main__':
-    chart_claim_hidden_claims()
+    chart_claim_hidden_claims(from_year=2017)

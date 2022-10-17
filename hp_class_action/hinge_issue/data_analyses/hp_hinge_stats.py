@@ -17,8 +17,7 @@ def chart_monthly_claims(from_year: int = 2018):
                             MONTH(post_datetime),1),'%Y-%m-%d') AS "Claimed Month"
                 , COUNT(*) "Monthly Claims"
                 FROM forum_posts
-                WHERE post_datetime>= STR_TO_DATE( 
-                        CONCAT_WS('-', %s, 1, 1),'%Y-%m-%d')
+                WHERE post_datetime >= MAKEDATE(%s, 1)
                 GROUP BY YEAR(post_datetime), MONTH(post_datetime)
                 ORDER BY post_datetime
         """
@@ -42,8 +41,7 @@ def chart_yearly_claims(from_year: int = 2018):
                         AS "Claimed Year"
                 , COUNT(*) "Yearly Claims"
                 FROM forum_posts
-                WHERE post_datetime>= STR_TO_DATE( 
-                        CONCAT_WS('-', %s, 1, 1),'%Y-%m-%d')
+                WHERE post_datetime >= MAKEDATE(%s, 1)
                 GROUP BY YEAR(post_datetime)
                 ORDER BY post_datetime
         """
@@ -67,8 +65,7 @@ def all_claims(from_year: int = 2018):
             SELECT b.username, a.hp_post_id, a.post_datetime, a.me_too
             FROM forum_posts a INNER JOIN hp_users b 
                 ON a.user_id=b.user_id
-            WHERE a.post_datetime>=STR_TO_DATE( 
-                        CONCAT_WS('-', %s, 1, 1),'%Y-%m-%d')
+            WHERE a.post_datetime >= MAKEDATE(%s, 1)
             ORDER BY a.post_datetime DESC
         """
     results: list = fetch_query(sql_query=sql_query,
