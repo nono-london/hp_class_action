@@ -1,10 +1,12 @@
-from urllib.parse import urljoin
 import json
-from bs4.element import Tag
-from typing import Union
 from datetime import datetime, timezone
-from hp_class_action.hp_database.hp_forum_issue_bis import (execute_query,
-                                                            fetch_query)
+from typing import Union
+from urllib.parse import urljoin
+
+from bs4.element import Tag
+
+from hp_class_action.hp_database.mdb_handlers import (execute_query,
+                                                      fetch_query)
 
 
 class UserPost:

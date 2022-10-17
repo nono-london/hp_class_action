@@ -3,8 +3,8 @@ import json
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from hp_class_action.hp_database.hp_forum_issue import (get_connection,
-                                                        fetch_query)
+from hp_class_action.hp_database.mdb_handlers import (get_connection,
+                                                      fetch_query)
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)

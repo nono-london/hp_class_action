@@ -1,5 +1,4 @@
-from hp_class_action.hp_database.hp_forum_issue_bis import (fetch_query)
-from hp_class_action.hinge_issue.scrap_data.web_requests import (get_web_page)
+from hp_class_action.hp_database.mdb_handlers import (fetch_query)
 
 
 def compare_users_with_old_data():
@@ -23,7 +22,7 @@ def compare_users_with_old_data():
     print(f'Old usernames size: {len(old_usernames)}')
     print(f'New usernames size: {len(new_usernames)}')
 
-    deleted_usernames = list(set(old_usernames)-set(new_usernames))
+    deleted_usernames = list(set(old_usernames) - set(new_usernames))
     print(f'Deleted usernames size: {len(deleted_usernames)}')
 
     # check if deleted users are in new database=> then logic problem
@@ -33,7 +32,7 @@ def compare_users_with_old_data():
     for deleted_user in deleted_usernames:
         fetch_result = fetch_query(sql_query=sql_query,
                                    variables=(deleted_user,))
-        if len(fetch_result)>0:
+        if len(fetch_result) > 0:
             tested_users.append(fetch_result, )
 
     print(f'Logic problem size:{len(tested_users)}')
@@ -46,7 +45,6 @@ def compare_users_with_old_data():
         print(fetch_deleted_posts)
 
     print(len(deleted_usernames))
-
 
 
 if __name__ == '__main__':

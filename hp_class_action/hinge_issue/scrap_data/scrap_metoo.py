@@ -7,8 +7,8 @@ from bs4 import element
 from lxml.html import Element
 
 from hp_class_action.hinge_issue.scrap_data.web_requests import get_web_page
-from hp_class_action.hp_database.hp_forum_issue import (execute_query,
-                                                        fetch_query)
+from hp_class_action.hp_database.mdb_handlers import (execute_query,
+                                                      fetch_query)
 
 BASE_URL: str = "https://h30434.www3.hp.com/t5/ratings/ratingdetailpage/message-uid/8499984/rating-system/forum_topic_metoo/page/1#userlist"
 

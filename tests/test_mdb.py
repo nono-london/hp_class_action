@@ -1,4 +1,4 @@
-from hp_class_action.hp_database.hp_forum_issue import (fetch_query,
+from hp_class_action.hp_database.mdb_handlers import (fetch_query,
                                                         get_connection)
 
 

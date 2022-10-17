@@ -1,14 +1,14 @@
 import json
-from pathlib import Path
 
 import matplotlib.pyplot as plt
-import pandas as pd
 import matplotlib.ticker as mtick
+import pandas as pd
 
-from hp_class_action.app_config import get_project_download_path
-from hp_class_action.hp_database.hp_forum_issue import (fetch_query)
+from hp_class_action.hp_database.mdb_handlers import (fetch_query)
 
 pd.set_option('display.max_columns', None)
+
+
 # pd.set_option('display.max_rows', None)
 # LOCAL_FILE_NAME: str = str(Path().joinpath(get_project_download_path(), 'hp_hinges_issues.csv'))
 

@@ -1,6 +1,7 @@
 from typing import Union
-from requests.exceptions import ConnectionError
+
 import requests
+from requests.exceptions import ConnectionError
 
 BASE_URL: str = "https://h30434.www3.hp.com/t5/ratings/ratingdetailpage/message-uid/8499984/rating-system/forum_topic_metoo/page/1#userlist"
 
@@ -38,4 +39,4 @@ def get_web_page(url_to_open: str,
 
 if __name__ == '__main__':
     print(get_web_page(url_to_open=BASE_URL,
-                 max_tries=10))
+                       max_tries=10))

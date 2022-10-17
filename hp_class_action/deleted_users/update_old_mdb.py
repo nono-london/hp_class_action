@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup as bs
 from hp_class_action.app_config import get_project_download_path
 from hp_class_action.hinge_issue.scrap_data.scrap_search_query import UserPost
 from hp_class_action.hinge_issue.scrap_data.web_requests import get_web_page
-from hp_class_action.hp_database.hp_forum_issue_bis import (fetch_query)
+from hp_class_action.hp_database.mdb_handlers import (fetch_query)
 
 
 def compare_users_with_old_data():
