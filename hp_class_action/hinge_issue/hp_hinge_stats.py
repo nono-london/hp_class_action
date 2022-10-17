@@ -1,29 +1,29 @@
 import json
-from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from hp_class_action.app_config import get_project_download_path
-from hp_class_action.hp_database.hp_forum_issue import (execute_query, get_connection,
+from hp_class_action.hp_database.hp_forum_issue import (get_connection,
                                                         fetch_query)
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 
+
 def chart_monthly_claims():
     """Charts monthly claims without last month"""
     sql_query: str = """
-                SELECT STR_TO_DATE( CONCAT_WS('-',YEAR(post_datetime), MONTH(post_datetime),1),'%Y-%m-%d') AS "Claim Month"
+                SELECT STR_TO_DATE( CONCAT_WS('-',YEAR(post_datetime), 
+                            MONTH(post_datetime),1),'%Y-%m-%d') AS "Claimed Month"
                 , COUNT(*) "Monthly Claims"
-                FROM hp_trial.hp_forum_issues
+                FROM forum_posts
                 GROUP BY YEAR(post_datetime), MONTH(post_datetime)
                 ORDER BY post_datetime
         """
     result_df = pd.read_sql(con=get_connection(),
                             sql=sql_query)
 
-    result_df.set_index("Claim Month", inplace=True)
+    result_df.set_index("Claimed Month", inplace=True)
     # https://pandas.pydata.org/pandas-docs/version/0.13/visualization.html
     result_df = result_df.iloc[:-1, :]
     print(result_df)
@@ -34,16 +34,17 @@ def chart_monthly_claims():
 def chart_yearly_claims():
     """Charts yearly claims"""
     sql_query: str = """
-                SELECT STR_TO_DATE( CONCAT_WS('-',YEAR(post_datetime), 1,1),'%Y-%m-%d') AS "Claim Year"
+                SELECT STR_TO_DATE( CONCAT_WS('-',YEAR(post_datetime), 1,1),'%Y-%m-%d') 
+                        AS "Claimed Year"
                 , COUNT(*) "Yearly Claims"
-                FROM hp_trial.hp_forum_issues
+                FROM forum_posts
                 GROUP BY YEAR(post_datetime)
                 ORDER BY post_datetime
         """
-    result_df = pd.read_sql(con=get_connection(),
-                            sql=sql_query)
+    result_df: pd.DataFrame = pd.read_sql(con=get_connection(),
+                                          sql=sql_query)
 
-    result_df.set_index("Claim Year", inplace=True)
+    result_df.set_index("Claimed Year", inplace=True)
     # https://pandas.pydata.org/pandas-docs/version/0.13/visualization.html
     result_df = result_df.iloc[:, :]
     print(result_df)
@@ -55,19 +56,19 @@ def all_claims():
     """Returns a df with claims from post id and from people who had same issue"""
 
     sql_query: str = """
-            SELECT hp_post_id, post_datetime, username, me_too
-            FROM hp_forum_issues
-            ORDER BY post_datetime DESC
-            LIMIT 50
+            SELECT b.username, a.hp_post_id, a.post_datetime, a.me_too
+            FROM forum_posts a INNER JOIN hp_users b 
+                ON a.user_id=b.user_id
+            ORDER BY a.post_datetime DESC
         """
     results: list = fetch_query(sql_query=sql_query)
     for row_dict in results:
         if row_dict['me_too'] is not None:
             row_dict['me_too'] = json.loads(row_dict['me_too'])
 
-    usernames:list = list(set([x['username'] for x in results]))
+    usernames: list = list(set([x['username'] for x in results]))
     # create list of me_too users
-    print('#'*100)
+    print('#' * 100)
     print(f'usernames:{usernames}')
     user_details: [dict] = [x['me_too'] for x in results if x['me_too'] is not None]
     print('#' * 100)
@@ -92,17 +93,14 @@ def all_claims():
     # unclaimed_users with claim_date
     for username in unclaimed_users:
         for row_dict in results:
-            if row_dict['username']==username:
+            if row_dict['username'] == username:
                 print(row_dict['post_datetime'])
-
-
-
-
 
 
 if __name__ == '__main__':
     all_claims()
     exit(0)
+    chart_monthly_claims()
+    exit(0)
     chart_yearly_claims()
     exit(0)
-    chart_monthly_claims()
