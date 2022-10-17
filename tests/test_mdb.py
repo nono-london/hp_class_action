@@ -1,5 +1,5 @@
 from hp_class_action.hp_database.mdb_handlers import (fetch_query,
-                                                        get_connection)
+                                                      get_connection)
 
 
 def test_connection():
