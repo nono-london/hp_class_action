@@ -6,7 +6,7 @@ html5lib
 bs4
 lxml
 # aiohttp
-aiohttp
+
 
 
 
@@ -16,6 +16,7 @@ aiohttp
 #webdriver_manager; sys_platform != 'win32'
 
 #Heroku
+streamlit
 flask
 gunicorn; sys_platform == 'linux'
 
@@ -32,6 +33,12 @@ mysql-connector-python
 #twine
 setuptools
 #wheel
+
+# Commands for Streamlit
+# streamlit run main_st_report.py --server.port 8096
+# https://discuss.streamlit.io/t/are-you-using-html-in-markdown-tell-us-why/96/25
+#, unsafe_allow_html=True
+
 
 # commands for setup
 # python setup.py bdist_wheel
