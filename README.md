@@ -26,3 +26,10 @@ find all supported Python version on:https://devcenter.heroku.com/articles/pytho
 ## Run the app
 * locally in development mode:
   *  flask --app app/main.py --debug run
+
+# Streamlit commands
+## Notes
+Needed to point to the root folder in the PYTHONPATH in order to gain access to all libs
+## Run the app
+* locally in development mode:
+  *  streamlit run app_streamlit/main.py --server.port 8096

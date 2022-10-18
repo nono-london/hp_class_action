@@ -7,9 +7,6 @@ bs4
 lxml
 tqdm
 
-
-
-
 # Selenium Libs
 #selenium
 #pywin32; sys_platform == 'win32'
@@ -25,19 +22,17 @@ gunicorn; sys_platform == 'linux'
 
 # proxy_helpers libs
 mysql-connector-python
-#\\thinkcentre\F_usb_buffalo\Python\own_wheels\proxy_helpers-0.0.0.9-py3-none-any.whl
 
 # requirements for setup
 # https://medium.com/analytics-vidhya/how-to-create-a-python-library-7d5aea80cc3f
 # https://docs.python.org/3.7/distutils/setupscript.html
 #twine
 setuptools
-#wheel
 
 # Commands for Streamlit
 # streamlit run app_streamlit/main.py --server.port 8096
 # https://discuss.streamlit.io/t/are-you-using-html-in-markdown-tell-us-why/96/25
-#, unsafe_allow_html=True
+# unsafe_allow_html=True
 
 
 # commands for setup
