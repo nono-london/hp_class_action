@@ -13,7 +13,7 @@ pd.set_option('display.max_columns', None)
 # LOCAL_FILE_NAME: str = str(Path().joinpath(get_project_download_path(), 'hp_hinges_issues.csv'))
 
 
-def get_mdb_dataset(from_year:int=2018) -> list:
+def get_mdb_dataset(from_year: int = 2018) -> list:
     """Get relevant data from mdb"""
     sql_query: str = """
             SELECT a.hp_post_id, a.post_datetime, b.username, a.me_too, a.post_url
@@ -34,7 +34,7 @@ def get_mdb_dataset(from_year:int=2018) -> list:
 
 def clean_metoo_user_details(me_to_user_details: list) -> pd.DataFrame:
     """Select the oldest time a user has claimed on another chat that he had the same issue"""
-    user_details: [] = []
+    user_details: list = []
     for row_dicts in me_to_user_details:
         for row_dict in row_dicts:
             user_details.append(row_dict)
@@ -51,42 +51,44 @@ def clean_metoo_user_details(me_to_user_details: list) -> pd.DataFrame:
     return user_detail_df
 
 
-def all_claims(from_year:int=2018):
-    """Returns a df with claims from post id and from people who had same issue"""
+def all_claims(from_year: int = 2018):
+    """Returns a df containing claims on forum and claims in private message (me_too)"""
     mdb_results = get_mdb_dataset(from_year=from_year)
     mdb_df: pd.DataFrame = pd.DataFrame(mdb_results)
-    # mdb_df['claimed'] = True
+
     metoo_user_details: [dict] = [x['me_too'] for x in mdb_results if x['me_too'] is not None]
-    meeto_detail_df = clean_metoo_user_details(me_to_user_details=metoo_user_details)
+
+    meeto_df = clean_metoo_user_details(me_to_user_details=metoo_user_details)
 
     # add claimed
     mdb_df['claimed'] = True
-    meeto_detail_df['claimed'] = False
+    meeto_df['claimed'] = False
 
-    result_df = pd.concat([mdb_df[['post_datetime', 'username', 'claimed']],
-                           meeto_detail_df[['post_datetime', 'username', 'claimed']]],
-                          join='outer',
-                          ignore_index=True)
-    clean_df = result_df.drop_duplicates(subset=['username'],
-                                         keep='first',
-                                         inplace=False,
-                                         ignore_index=True,
+    union_df = pd.concat([mdb_df[['post_datetime', 'username', 'claimed']],
+                          meeto_df[['post_datetime', 'username', 'claimed']]],
+                         join='outer',
+                         ignore_index=True)
+    clean_df = union_df.drop_duplicates(subset=['username'],
+                                        keep='first',
+                                        inplace=False,
+                                        ignore_index=True,
 
-                                         )
+                                        )
     clean_df = clean_df.sort_values(by=['post_datetime', 'username'],
                                     ascending=[True, True],
                                     inplace=False,
                                     ignore_index=True)
 
-    print(f'len mdb_df:{len(mdb_df)}')
-    print(f'len metoo_detail_df:{len(meeto_detail_df)}')
-    print(f'len result_df:{len(result_df)}')
-    print(f'len clean_df:{len(clean_df)}')
+    print(f'len mdb_df:     {len(mdb_df):,}')
+    print(f'len metoo_df:   {len(meeto_df):,}')
+    print(f'len union_df:   {len(union_df):,}')
+    print(f'len clean_df:   {len(clean_df):,}')
+    print(f'clean_df:\n{clean_df}')
 
     return clean_df
 
 
-def chart_claim_hidden_claims(from_year:int=2018):
+def chart_claim_hidden_claims(from_year: int = 2018):
     result_df: pd.DataFrame = all_claims(from_year=from_year)
 
     # count record by True/False
@@ -116,4 +118,4 @@ def chart_claim_hidden_claims(from_year:int=2018):
 
 
 if __name__ == '__main__':
-    chart_claim_hidden_claims(from_year=2017)
+    all_claims(from_year=2017)
