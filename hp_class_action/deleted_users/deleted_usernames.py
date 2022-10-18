@@ -1,51 +1,53 @@
+from pathlib import Path
+from typing import Union
+
+import pandas as pd
+from bs4 import BeautifulSoup as bs
+from tqdm import tqdm
+
+from hp_class_action.app_config import get_project_download_path
+from hp_class_action.hinge_issue.scrap_data.web_requests import get_web_page
 from hp_class_action.hp_database.mdb_handlers import (fetch_query)
 
 
-def compare_users_with_old_data():
-    """compare usrnames between table: hp_forum_issues(old) and hp_posts(new)"""
-    sql_query_old_usernames = """
-        SELECT distinct(username)
-        FROM hp_trial.hp_forum_issues
-        ORDER BY username 
-        """
-    old_usernames = fetch_query(sql_query=sql_query_old_usernames)
-    old_usernames = [username['username'] for username in old_usernames]
-
-    sql_query_new_usernames = """
-            SELECT distinct(username)
+def get_user_details_of_posters() -> Union[pd.DataFrame, None]:
+    """Return list of users that have posted their claim on the forum"""
+    sql_query = """
+            SELECT * 
             FROM hp_trial.hp_users
-            ORDER BY username 
+            ORDER BY created_at
             """
-    new_usernames = fetch_query(sql_query=sql_query_new_usernames)
-    new_usernames = [username['username'] for username in new_usernames]
+    results = fetch_query(sql_query=sql_query)
+    if results is None:
+        return None
+    result_df = pd.DataFrame(results)
+    return result_df
 
-    print(f'Old usernames size: {len(old_usernames)}')
-    print(f'New usernames size: {len(new_usernames)}')
 
-    deleted_usernames = list(set(old_usernames) - set(new_usernames))
-    print(f'Deleted usernames size: {len(deleted_usernames)}')
+def check_user_still_exists():
+    mdb_user_df = get_user_details_of_posters()
+    deleted_users: list = []
+    # check user profile url still exist
+    for index, row in tqdm(mdb_user_df.iterrows(), total=mdb_user_df.shape[0]):
+        page_source = get_web_page(url_to_open=row['user_profile_url'],
+                                   check_response_url=False)
+        web_soup = bs(page_source, 'lxml')
+        username_element = web_soup.find('div', attrs={'class': 'lia-user-names'})
+        if username_element is None:
+            deleted_users.append(row)
 
-    # check if deleted users are in new database=> then logic problem
-
-    sql_query = """SELECT username FROM hp_users WHERE username=%s"""
-    tested_users = []
-    for deleted_user in deleted_usernames:
-        fetch_result = fetch_query(sql_query=sql_query,
-                                   variables=(deleted_user,))
-        if len(fetch_result) > 0:
-            tested_users.append(fetch_result, )
-
-    print(f'Logic problem size:{len(tested_users)}')
-
-    sql_query = """SELECT post_url FROM hp_forum_issues WHERE username=%s"""
-
-    for deleted_user in deleted_usernames:
-        fetch_deleted_posts = fetch_query(sql_query=sql_query,
-                                          variables=(deleted_user,))
-        print(fetch_deleted_posts)
-
-    print(len(deleted_usernames))
+    if len(deleted_users) > 0:
+        return
+    deleted_user_df = pd.DataFrame(deleted_users)
+    print(f"Found {len(deleted_users)} deleted users:\n"
+          f"{deleted_user_df}")
+    deleted_user_df.to_csv(path_or_buf=Path(get_project_download_path(),
+                                            'deleted_users.csv', ),
+                           index=False, sep=','
+                           )
 
 
 if __name__ == '__main__':
-    compare_users_with_old_data()
+    check_user_still_exists()
+    exit(0)
+    print(get_user_details_of_posters())

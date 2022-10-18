@@ -5,7 +5,7 @@ matplotlib
 html5lib
 bs4
 lxml
-# aiohttp
+tqdm
 
 
 
