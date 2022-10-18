@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup as bs
 from bs4.element import Tag
 
 from hp_class_action.hinge_issue.scrap_data.web_requests import get_web_page
-from hp_class_action.hp_user_class import UserPost
+from hp_class_action.hp_database.hp_user_class import UserPost
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)

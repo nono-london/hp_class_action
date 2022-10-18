@@ -6,9 +6,8 @@ import pandas as pd
 from hp_class_action.app_config import get_project_download_path
 from hp_class_action.hp_database.mdb_handlers import (fetch_query)
 
-_MDB_BACKUP_FULL_PATH: str = str(Path(get_project_download_path(),
-                                      f"mdb_backup.csv")
-                                 )
+_MDB_BACKUP_FULL_PATH: Path = Path(get_project_download_path(),
+                                   f"mdb_backup.csv")
 
 
 def backup_mdb_to_csv() -> datetime:
