@@ -21,9 +21,13 @@ st.subheader("Broken Hinge Reported Problem")
 hinge_btn_1, hinge_btn_2 = st.columns([1,1])
 
 with hinge_btn_1:
-    st.button(label='Webscrap search data', on_click=webscrap_query_search(max_pages=5))
+    st.button(label='Webscrap search data',
+             # on_click=webscrap_query_search(max_pages=5),
+              )
 with hinge_btn_2:
-    st.button(label='Webscrap me_too data', on_click=update_summary_metoo(force_update=False))
+    st.button(label='Webscrap me_too data',
+              # on_click=update_summary_metoo(force_update=False)
+              )
 
 fig_all_claims, _ = chart_claim_hidden_claims(show_chart=False, from_year=FROM_YEAR)
 st.pyplot(fig_all_claims, )
