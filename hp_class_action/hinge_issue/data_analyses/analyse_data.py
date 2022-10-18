@@ -137,7 +137,7 @@ def chart_claim_hidden_claims(from_year: int = 2018):
                              'Yearly Claims',
                              'username').rename(columns={True: 'public forum',
                                                          False: 'private message'}
-                                                ).plot.bar(stacked=True,
+                                                ).plot.bar(stacked=False,
                                                            color=['orange', 'turquoise'],
                                                            )
     ax.yaxis.set_major_formatter(mtick.StrMethodFormatter('{x:,.0f}'))
