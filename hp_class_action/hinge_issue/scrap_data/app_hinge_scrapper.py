@@ -5,7 +5,7 @@ from hp_class_action.hinge_issue.scrap_data.scrap_metoo import update_summary_me
 
 
 def launch_scrapper():
-    webscrap_query_search()
+    webscrap_query_search(max_pages=10)
     update_summary_metoo(force_update=False)
 
 
