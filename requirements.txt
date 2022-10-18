@@ -29,6 +29,9 @@ mysql-connector-python
 #twine
 setuptools
 
+# Commands for Flask
+# flask --app app/main.py --debug run
+
 # Commands for Streamlit
 # streamlit run app_streamlit/main.py --server.port 8096
 # https://discuss.streamlit.io/t/are-you-using-html-in-markdown-tell-us-why/96/25
