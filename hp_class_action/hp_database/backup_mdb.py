@@ -1,5 +1,6 @@
 from datetime import datetime
 from pathlib import Path
+from typing import Union
 
 import pandas as pd
 
@@ -30,5 +31,18 @@ def backup_mdb_to_csv() -> datetime:
     return creation_date
 
 
+def read_csv_backup() -> Union[pd.DataFrame, None]:
+    if not _MDB_BACKUP_FULL_PATH.exists():
+        print(f'Database backup file not found:\n'
+              f'{_MDB_BACKUP_FULL_PATH}')
+        return None
+    result_df = pd.read_csv(filepath_or_buffer=_MDB_BACKUP_FULL_PATH,
+                            sep=',',
+                            date_parser=["created_at", "post_datetime"])
+
+    return result_df
+
+
 if __name__ == '__main__':
     print(backup_mdb_to_csv())
+    print(read_csv_backup())
