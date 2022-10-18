@@ -18,15 +18,17 @@ st.title("HP Class Action")
 st.header("HP Forum")
 
 st.subheader("Broken Hinge Reported Problem")
-hinge_btn_1, hinge_btn_2 = st.columns([1,1])
+hinge_btn_1, hinge_btn_2 = st.columns([1, 1])
 
 with hinge_btn_1:
     st.button(label='Webscrap search data',
-             # on_click=webscrap_query_search(max_pages=5),
+              on_click=webscrap_query_search,
+              args=(5,),
               )
 with hinge_btn_2:
     st.button(label='Webscrap me_too data',
-              # on_click=update_summary_metoo(force_update=False)
+              on_click=update_summary_metoo,
+              args=(False,)
               )
 
 fig_all_claims, _ = chart_claim_hidden_claims(show_chart=False, from_year=FROM_YEAR)
