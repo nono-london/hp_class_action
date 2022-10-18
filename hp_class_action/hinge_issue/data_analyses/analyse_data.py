@@ -79,7 +79,7 @@ def all_claims(from_year:int=2018):
                                     ignore_index=True)
 
     print(f'len mdb_df:{len(mdb_df)}')
-    print(f'len meeto_detail_df:{len(meeto_detail_df)}')
+    print(f'len metoo_detail_df:{len(meeto_detail_df)}')
     print(f'len result_df:{len(result_df)}')
     print(f'len clean_df:{len(clean_df)}')
 
