@@ -11,7 +11,11 @@ from hp_class_action.hinge_issue.data_analyses.histo_claims import (chart_claim_
 
 FROM_YEAR: int = 2017
 
-st.header("HP Class Action")
+st.title("HP Class Action")
+
+st.header("HP Forum")
+
+st.subheader("Broken Hinge Reported Problem")
 
 st.markdown("Number of claims split between private-messaged and forum-ed")
 fig_all_claims, _ = chart_claim_hidden_claims(show_chart=False, from_year=FROM_YEAR)
