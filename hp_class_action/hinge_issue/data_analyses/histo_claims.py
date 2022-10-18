@@ -87,7 +87,8 @@ def all_claims(from_year: int = 2018):
     return clean_df
 
 
-def chart_claim_hidden_claims_as_percent(from_year: int = 2018):
+def chart_claim_hidden_claims_as_percent(from_year: int = 2018,
+                                         show_chart: bool = True):
     result_df: pd.DataFrame = all_claims(from_year=from_year)
 
     # count record by True/False
@@ -113,10 +114,12 @@ def chart_claim_hidden_claims_as_percent(from_year: int = 2018):
                                                ).plot.bar(stacked=True, color=['orange', 'turquoise'])
     ax.yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
 
-    plt.show()
+    if show_chart:
+        plt.show()
 
 
-def chart_claim_hidden_claims(from_year: int = 2018):
+def chart_claim_hidden_claims(from_year: int = 2018,
+                              show_chart: bool = True):
     result_df: pd.DataFrame = all_claims(from_year=from_year)
 
     # count record by True/False
@@ -141,9 +144,12 @@ def chart_claim_hidden_claims(from_year: int = 2018):
                                                            color=['orange', 'turquoise'],
                                                            )
     ax.yaxis.set_major_formatter(mtick.StrMethodFormatter('{x:,.0f}'))
-
-    plt.show()
+    if show_chart:
+        plt.show()
 
 
 if __name__ == '__main__':
-    chart_claim_hidden_claims(from_year=2017)
+    chart_claim_hidden_claims(from_year=2017,
+                              show_chart=True)
+    chart_claim_hidden_claims_as_percent(from_year=2017,
+                                         show_chart=True)
