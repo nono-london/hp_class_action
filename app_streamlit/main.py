@@ -17,7 +17,7 @@ st.header("HP Forum")
 
 st.subheader("Broken Hinge Reported Problem")
 
-st.markdown("Number of claims split between private-messaged and forum-ed")
+st.markdown("Number of claims reported through private-messages and via the forum")
 fig_all_claims, _ = chart_claim_hidden_claims(show_chart=False, from_year=FROM_YEAR)
 st.pyplot(fig_all_claims, )
 
