@@ -13,7 +13,7 @@ _MDB_BACKUP_FULL_PATH: str = str(Path(get_project_download_path(),
 
 def backup_mdb_to_csv() -> datetime:
     """Save a copy of all fields and tables from mdb
-        Returns datetime at which the backup was created
+        Returns datetime at which the backup was last modified
     """
     sql_query: str = """
                     SELECT a.*, b.*
@@ -26,7 +26,7 @@ def backup_mdb_to_csv() -> datetime:
     result_df.to_csv(path_or_buf=_MDB_BACKUP_FULL_PATH,
                      sep=',',
                      index=False)
-    creation_date = Path(_MDB_BACKUP_FULL_PATH).stat().st_ctime
+    creation_date = Path(_MDB_BACKUP_FULL_PATH).stat().st_mtime
     creation_date = datetime.fromtimestamp(creation_date)
     return creation_date
 
