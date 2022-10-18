@@ -82,7 +82,7 @@ def all_claims(from_year: int = 2018):
     print(f'len metoo_df:   {len(meeto_df):,}')
     print(f'len union_df:   {len(union_df):,}')
     print(f'len clean_df:   {len(clean_df):,}')
-    print(f'clean_df:\n{clean_df}')
+    # print(f'clean_df:\n{clean_df}')
 
     return clean_df
 
@@ -105,17 +105,25 @@ def chart_claim_hidden_claims_as_percent(from_year: int = 2018,
     year_claim_df['claimed_pct'] = year_claim_df.loc[year_claim_df['claimed'] == True, 'percent']
     year_claim_df['unclaimed_pct'] = year_claim_df.loc[year_claim_df['claimed'] == False, 'percent']
     year_claim_df.fillna(0, inplace=True)
-    print(year_claim_df)
 
-    ax = year_claim_df.pivot('post_datetime',
-                             'claimed',
-                             'percent').rename(columns={True: 'public forum',
-                                                        False: 'private message'}
-                                               ).plot.bar(stacked=True, color=['orange', 'turquoise'])
-    ax.yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
+    year_claim_df = year_claim_df.pivot('post_datetime',
+                                        'claimed',
+                                        'percent')
+    temp_df = year_claim_df.rename(columns={True: 'public forum',
+                                            False: 'private message'}
+                                   )
+    fig, axes = plt.subplots(1, 1,
+                             # figsize=(9, 9)
+                             )
+
+    temp_df.plot.bar(stacked=True,
+                     color=['orange', 'turquoise'],
+                     ax=axes)
+    axes.yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
 
     if show_chart:
         plt.show()
+    return fig, result_df
 
 
 def chart_claim_hidden_claims(from_year: int = 2018,
@@ -136,20 +144,35 @@ def chart_claim_hidden_claims(from_year: int = 2018,
 
     year_claim_df.rename(columns={'claimed': 'Yearly Claims'},
                          inplace=True)
-    ax = year_claim_df.pivot('post_datetime',
-                             'Yearly Claims',
-                             'username').rename(columns={True: 'public forum',
-                                                         False: 'private message'}
-                                                ).plot.bar(stacked=False,
-                                                           color=['orange', 'turquoise'],
-                                                           )
-    ax.yaxis.set_major_formatter(mtick.StrMethodFormatter('{x:,.0f}'))
+
+    temp_df = year_claim_df.pivot('post_datetime',
+                                  'Yearly Claims',
+                                  'username').rename(columns={True: 'public forum',
+                                                              False: 'private message'}
+                                                     )
+    fig, axes = plt.subplots(1, 1,
+                             # figsize=(9, 9)
+                             )
+    temp_df.plot.bar(stacked=False,
+                     color=['orange', 'turquoise'],
+                     ax=axes
+                     )
+
+    axes.yaxis.set_major_formatter(mtick.StrMethodFormatter('{x:,.0f}'))
+
+    # ax.legend(
+    # loc='upper center', ncol=2,
+    # #    title="Year of Eating"
+    # )
     if show_chart:
         plt.show()
+
+    return fig, result_df
 
 
 if __name__ == '__main__':
     chart_claim_hidden_claims(from_year=2017,
                               show_chart=True)
+    exit(0)
     chart_claim_hidden_claims_as_percent(from_year=2017,
-                                         show_chart=True)
+                                         show_chart=False)

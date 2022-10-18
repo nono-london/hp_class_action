@@ -35,7 +35,7 @@ setuptools
 #wheel
 
 # Commands for Streamlit
-# streamlit run main_st_report.py --server.port 8096
+# streamlit run app_streamlit/main.py --server.port 8096
 # https://discuss.streamlit.io/t/are-you-using-html-in-markdown-tell-us-why/96/25
 #, unsafe_allow_html=True
 
