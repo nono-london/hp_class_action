@@ -10,7 +10,6 @@ pd.set_option('display.max_columns', None)
 
 
 # pd.set_option('display.max_rows', None)
-# LOCAL_FILE_NAME: str = str(Path().joinpath(get_project_download_path(), 'hp_hinges_issues.csv'))
 
 
 def get_mdb_dataset(from_year: int = 2018) -> list:
@@ -88,7 +87,7 @@ def all_claims(from_year: int = 2018):
     return clean_df
 
 
-def chart_claim_hidden_claims(from_year: int = 2018):
+def chart_claim_hidden_claims_as_percent(from_year: int = 2018):
     result_df: pd.DataFrame = all_claims(from_year=from_year)
 
     # count record by True/False
@@ -117,5 +116,34 @@ def chart_claim_hidden_claims(from_year: int = 2018):
     plt.show()
 
 
+def chart_claim_hidden_claims(from_year: int = 2018):
+    result_df: pd.DataFrame = all_claims(from_year=from_year)
+
+    # count record by True/False
+    year_claim_df = result_df['username'].groupby([
+        result_df['post_datetime'].dt.year,
+        result_df['claimed'],
+    ]
+
+    ).agg('count')
+
+    year_claim_df = year_claim_df.reset_index(drop=False, )
+
+    year_claim_df.fillna(0, inplace=True)
+
+    year_claim_df.rename(columns={'claimed': 'Yearly Claims'},
+                         inplace=True)
+    ax = year_claim_df.pivot('post_datetime',
+                             'Yearly Claims',
+                             'username').rename(columns={True: 'public forum',
+                                                         False: 'private message'}
+                                                ).plot.bar(stacked=True,
+                                                           color=['orange', 'turquoise'],
+                                                           )
+    ax.yaxis.set_major_formatter(mtick.StrMethodFormatter('{x:,.0f}'))
+
+    plt.show()
+
+
 if __name__ == '__main__':
-    all_claims(from_year=2017)
+    chart_claim_hidden_claims(from_year=2017)
