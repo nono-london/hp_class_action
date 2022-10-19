@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <meta charset="UTF-8">
-    <title>{{ page_vars['title'] }}</title>
-    <h1>Welcome to the information checker</h1>
+{% extends 'base_bootstrap_css.html' %}
 
-</head>
-<body>
+{% block content %}
+<div class="container p-5 my-5 bg-primary text-white">
+    <div class="jumbotron text-center">
+        <h2> {{ page_vars['h2_text'] }}</h2>
+    </div>
+</div>
 
-</body>
-</html>
+{% endblock %}
