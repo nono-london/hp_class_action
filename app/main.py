@@ -13,9 +13,18 @@ def home_view():
                     defective HP laptops
         """
     carousel_id = "carouselHP"
-    carousel_slides: list = [{'slide_name': 'broken_hinge', 'slide_position': "0", "slide_wait_time":1000},
-                             {'slide_name': 'broken_hinge_screen', 'slide_position': "1", "slide_wait_time":1000},
-                             {'slide_name': 'battery_issue', 'slide_position': "2", "slide_wait_time":1000},
+    carousel_slides: list = [{'slide_name': 'broken_hinge', 'slide_position': "0", "slide_wait_interval": 3000,
+                              'slide_title': 'Broken Hinge', 'slide_h5': 'HP Forum Support',
+                              'slide_p': 'Data gathered from HP users testimonies'
+                              },
+                             {'slide_name': 'broken_hinge_screen', 'slide_position': "1", "slide_wait_interval": 2000,
+                              'slide_title': 'Broken Hinge And Screen', 'slide_h5': 'HP Forum Support',
+                              'slide_p': 'Data gathered from HP users testimonies'
+                              },
+                             {'slide_name': 'battery_issue', 'slide_position': "2", "slide_wait_interval": 2000,
+                              'slide_title': 'Batteries', 'slide_h5': 'HP Forum Support',
+                              'slide_p': 'Data gathered from HP users testimonies'
+                              },
                              ]
 
     return render_template('index.html', page_vars={'title': page_title,
