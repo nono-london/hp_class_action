@@ -1,14 +1,19 @@
 <!--https://getbootstrap.com/docs/5.2/components/carousel/-->
 
-<div id={{ page_vars['carousel_id'] }} class="carousel slide" data-bs-ride="true">
+<div id="{{ page_vars['carousel_id'] }}" class="carousel slide" data-bs-ride="true">
     <div class="carousel-indicators">
-        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
-                aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-                aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
-                aria-label="Slide 3"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide-to="{{ page_vars['carousel_slides'][0]['slide_position'] }}" class="active"
+                aria-current="true" aria-label="{{ page_vars['carousel_slides'][0]['slide_name'] }}"
+        ></button>
+    {% for slide in page_vars['carousel_slides'][1:] %}
+        <button type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide-to="{{ slide['slide_position'] }}"
+                aria-label="{{ slide['slide_name'] }}"
+        ></button>
+    {% endfor %}
     </div>
+
     <div class="carousel-inner">
         <div class="carousel-item active">
             <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400"
