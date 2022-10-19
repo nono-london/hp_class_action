@@ -1,5 +1,10 @@
 {% extends 'base_bootstrap_css.html' %}
 
+{% block js_script_top %}
+    var time = new Date();
+    console.log("Time is:" + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds());
+{% endblock %}
+
 {% block body %}
 <div class="container p-5 my-5 bg-primary text-white">
     <div class="jumbotron text-center">
@@ -12,5 +17,9 @@
 
 </div>
 
+
+{% endblock %}
+
+{% block js_script_bottom %}
 
 {% endblock %}

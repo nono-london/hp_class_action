@@ -36,6 +36,10 @@ source: https://flask.palletsprojects.com/en/1.1.x/patterns/favicon/
 ## flask apps on Heroku
 * https://www.geeksforgeeks.org/deploy-python-flask-app-on-heroku/#:~:text=Deploy%20Python%20Flask%20App%20on%20Heroku%201%20STEP,and%20enter%20the%20sample%20code.%20...%20%C3%89l%C3%A9ments%20suppl%C3%A9mentaires
 
+# Jinja Tutorial
+## useful links
+* https://jinja.palletsprojects.com/en/3.0.x/templates/#include
+* 
 
 # Bootstrap Tutorial
 https://getbootstrap.com/docs/5.2/getting-started/introduction/

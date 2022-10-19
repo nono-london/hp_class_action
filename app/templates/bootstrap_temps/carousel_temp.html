@@ -55,8 +55,17 @@
         <span class="visually-hidden">Next</span>
     </button>
 </div>
-<script>
-$(".carousel-item").on("click", ".link", function({
-    alert("this works!");
-  }));
+
+<script  type="text/javascript">
+    document.write("Hello Javascript!");
+window.addEventListener("load", () => {
+    console.log("This function is executed once the page is fully loaded");
+  });
+const carousel = new bootstrap.Carousel("#{{ page_vars['carousel_id'] }}");
+console.log(carousel);
+const carousel_id = {{ page_vars['carousel_id']|tojson }};
+console.log("Carousel id:" + carousel_id);
+
+
+
 </script>

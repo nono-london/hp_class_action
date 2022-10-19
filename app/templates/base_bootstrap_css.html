@@ -6,12 +6,15 @@
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script>
+        {% block js_script_top %}
 
+        {% endblock %}
+        </script>
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
-
 
         <title>{{ page_vars['title'] }}</title>
     </head>
@@ -19,8 +22,11 @@
             {% block body %}
 
             {% endblock %}
-
-
     </body>
 
 </html>
+<script>
+{% block js_script_bottom %}
+
+{% endblock %}
+</script>
