@@ -9,11 +9,14 @@ app = Flask(__name__,
 def home_view():
     page_title: str = "HP Forums"
     h2_text: str = """
-                    This website aims at gathering information regarding potential 
-                    defective hinges as reported by users of HP laptops
+                    This website aims at gathering information regarding 
+                    defective HP laptops
         """
+    carousel_id = "carousel_1"
     return render_template('index.html', page_vars={'title': page_title,
-                                                    'h2_text': h2_text})
+                                                    'h2_text': h2_text,
+                                                    'carousel_id':carousel_id
+                                                    })
 
 
 if __name__ == '__main__':

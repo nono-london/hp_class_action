@@ -1,10 +1,16 @@
 {% extends 'base_bootstrap_css.html' %}
 
-{% block content %}
+{% block body %}
 <div class="container p-5 my-5 bg-primary text-white">
     <div class="jumbotron text-center">
         <h2> {{ page_vars['h2_text'] }}</h2>
     </div>
 </div>
+<div class="container">
+    {% include 'bootstrap_temps/carousel_temp.html' %}
+    {{ page_vars['carousel_id'] }}
+
+</div>
+
 
 {% endblock %}
