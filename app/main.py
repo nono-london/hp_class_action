@@ -13,9 +13,9 @@ def home_view():
                     defective HP laptops
         """
     carousel_id = "carouselHP"
-    carousel_slides: list = [{'slide_name': 'broken_hinge', 'slide_position': "0"},
-                             {'slide_name': 'broken_hinge_screen', 'slide_position': "1"},
-                             {'slide_name': 'battery_issue', 'slide_position': "2"},
+    carousel_slides: list = [{'slide_name': 'broken_hinge', 'slide_position': "0", "slide_wait_time":1000},
+                             {'slide_name': 'broken_hinge_screen', 'slide_position': "1", "slide_wait_time":1000},
+                             {'slide_name': 'battery_issue', 'slide_position': "2", "slide_wait_time":1000},
                              ]
 
     return render_template('index.html', page_vars={'title': page_title,
