@@ -22,12 +22,15 @@ find all supported Python version on:https://devcenter.heroku.com/articles/pytho
 * https://dev.to/yash_makan/4-best-python-web-app-hosting-services-for-freewith-complete-process-57nb
 * 
 
-# Flask commands
+# Flask
 ## Run the app
 * locally in development mode:
   *  flask --app app/main.py --debug run
+## Tutorial
+* https://python-adv-web-apps.readthedocs.io/en/latest/flask2.html
+* 
 
-# Streamlit commands
+# Streamlit
 ## Notes
 Needed to point to the root folder in the PYTHONPATH in order to gain access to all libs
 ## Run the app
