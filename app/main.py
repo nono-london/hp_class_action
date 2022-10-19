@@ -14,11 +14,11 @@ def home_view():
         """
     carousel_id = "carouselHP"
     carousel_slides: list = [{'slide_name': 'broken_hinge', 'slide_position': "0", "slide_wait_interval": 3000,
-                              'slide_title': 'Broken Hinge', 'slide_h5': 'HP Forum Support',
+                              'slide_title': 'Broken Hinges', 'slide_h5': 'HP Forum Support',
                               'slide_p': 'Data gathered from HP users testimonies'
                               },
                              {'slide_name': 'broken_hinge_screen', 'slide_position': "1", "slide_wait_interval": 2000,
-                              'slide_title': 'Broken Hinge And Screen', 'slide_h5': 'HP Forum Support',
+                              'slide_title': 'Broken Hinges And Screens', 'slide_h5': 'HP Forum Support',
                               'slide_p': 'Data gathered from HP users testimonies'
                               },
                              {'slide_name': 'battery_issue', 'slide_position': "2", "slide_wait_interval": 2000,

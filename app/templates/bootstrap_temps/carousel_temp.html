@@ -34,10 +34,11 @@
                 <rect width="100%" height="100%" fill="#eee"></rect>
                 <text x="50%" y="50%" fill="#bbb" dy=".3em">{{ slide['slide_title'] }}</text>
             </svg>
-
             <div class="carousel-caption d-none d-md-block">
                 <h5>{{ slide['slide_h5'] }}</h5>
                 <p>{{ slide['slide_p'] }}</p>
+
+
             </div>
         </div>
     {% endfor %}
@@ -54,3 +55,8 @@
         <span class="visually-hidden">Next</span>
     </button>
 </div>
+<script>
+$(".carousel-item").on("click", ".link", function({
+    alert("this works!");
+  }));
+</script>
