@@ -12,7 +12,7 @@ def home_view():
                     This website aims at gathering information regarding 
                     defective HP laptops
         """
-    carousel_id = "carousel_1"
+    carousel_id = "carousel_12"
     return render_template('index.html', page_vars={'title': page_title,
                                                     'h2_text': h2_text,
                                                     'carousel_id':carousel_id
