@@ -12,7 +12,7 @@ def home_view():
                     This website aims at gathering information regarding 
                     defective HP laptops
         """
-    carousel_id = "carousel_1"
+    carousel_id = "carouselHP"
     carousel_slides: list = [{'slide_name': 'broken_hinge', 'slide_position': "0"},
                              {'slide_name': 'broken_hinge_screen', 'slide_position': "1"},
                              {'slide_name': 'battery_issue', 'slide_position': "2"},
