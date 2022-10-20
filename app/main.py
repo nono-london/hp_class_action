@@ -36,7 +36,7 @@ def home_view():
 
 @app.route("/hp_issue<issue_type>")
 def hp_issue(issue_type):
-    page_title: str = "HP Forums"
+    page_title: str = "HP Issue"
 
     return render_template('hp_issue.html', pages_vars={'title': page_title,
                                                         'h2_text': "",
