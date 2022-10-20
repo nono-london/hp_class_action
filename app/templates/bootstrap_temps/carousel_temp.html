@@ -58,9 +58,7 @@
 
 <script  type="text/javascript">
 
-window.addEventListener("load", () => {
-    console.log("This function is executed once the page is fully loaded");
-  });
+
 const carousel = new bootstrap.Carousel("#{{ page_vars['carousel_id'] }}");
 console.log("bootstrap.Carousel" + carousel);
 const carousel_id = {{ page_vars['carousel_id']|tojson }};

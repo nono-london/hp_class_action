@@ -34,9 +34,15 @@ def home_view():
                                                     })
 
 
-@app.route("/hp_issue_<issue_type>")
+@app.route("/hp_issue<issue_type>")
 def hp_issue(issue_type):
-    return render_template()
+    page_title: str = "HP Forums"
+
+    return render_template('hp_issue.html', pages_vars={'title': page_title,
+                                                        'h2_text': "",
+                                                        'carousel_id': "",
+                                                        'carousel_slides': ""
+                                                        })
 
 
 if __name__ == '__main__':
