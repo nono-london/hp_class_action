@@ -42,6 +42,7 @@
                 <p>{{ slide['slide_p'] }}</p>
             </div>
         </div>
+
     {% endfor %}
     </div>
 
@@ -58,13 +59,20 @@
 </div>
 
 <script  type="text/javascript">
-
-
-const carousel = new bootstrap.Carousel("#{{ page_vars['carousel_id'] }}");
-console.log("bootstrap.Carousel" + carousel);
+// Not needed for now, and will cause problem is multiple carousels are used on same document
+// as they will have the same id: carousel_id
 const carousel_id = {{ page_vars['carousel_id']|tojson }};
+console.log("Carousel id:"+carousel_id);
 
-console.log(`Carousel id:${carousel_id}`);
+// bind a click event to each carousel item (needs Ajax import in header to use JQuery)
+{% for slide in page_vars['carousel_slides'] %}
+$(document.getElementById("{{ slide['slide_name'] }}")).on("click", 
+        document.getElementById("#{{ slide['slide_name'] }}") , 
+        function(event){
+                console.log("Carousel item:"+"{{ slide['slide_name'] }}"+" has been clicked");
+                $(location).attr('href', '../hp_issue_'+"{{ slide['slide_name'] }}");
+                        }); 
+{% endfor %}
 
 
 
