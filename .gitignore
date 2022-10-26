@@ -7,6 +7,4 @@ build
 dist
 .pytest_cache
 *.pyc
-downloads
-
-
+hp_class_action/downloads/
