@@ -34,12 +34,12 @@ def check_user_still_exists():
         page_source = get_web_page(url_to_open=row['user_profile_url'],
                                    check_response_url=False)
         web_soup = bs(page_source, 'lxml')
-        username_element = web_soup.find('div', attrs={'class': 'lia-user-names'})
+        username_element = web_soup.find('div', attrs={'class': 'lia-user-name'})
         if username_element is None:
             deleted_users.append(row)
 
     print(f'Found {len(deleted_users)} deleted users.')
-    if len(deleted_users) > 0:
+    if len(deleted_users) == 0:
         return
     deleted_user_df = pd.DataFrame(deleted_users)
     print(f"Found {len(deleted_users)} deleted users:\n"
