@@ -12,7 +12,9 @@
     </div>
 
     <div class="carousel-inner">
-        <div class="carousel-item active" data-bs-interval="{{ page_vars['carousel_slides'][0]['slide_wait_interval'] }}">
+
+
+        <div class="carousel-item active" id="{{ page_vars['carousel_slides'][0]['slide_name'] }}" data-bs-interval="{{ page_vars['carousel_slides'][0]['slide_wait_interval'] }}">
             <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400"
                  xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: First slide"
                  preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
@@ -27,18 +29,17 @@
         </div>
 
         {% for slide in page_vars['carousel_slides'][1:] %}
-        <div class="carousel-item" data-bs-interval="{{ slide['slide_wait_interval'] }}">
+        <div class="carousel-item" id="{{ slide['slide_name'] }}" data-bs-interval="{{ slide['slide_wait_interval'] }}">
             <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400"
                  xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Second slide"
                  preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
                 <rect width="100%" height="100%" fill="#eee"></rect>
                 <text x="50%" y="50%" fill="#bbb" dy=".3em">{{ slide['slide_title'] }}</text>
             </svg>
+
             <div class="carousel-caption d-none d-md-block">
                 <h5>{{ slide['slide_h5'] }}</h5>
                 <p>{{ slide['slide_p'] }}</p>
-
-
             </div>
         </div>
     {% endfor %}
@@ -63,7 +64,7 @@ const carousel = new bootstrap.Carousel("#{{ page_vars['carousel_id'] }}");
 console.log("bootstrap.Carousel" + carousel);
 const carousel_id = {{ page_vars['carousel_id']|tojson }};
 
-console.log("Carousel id:" + carousel_id );
+console.log(`Carousel id:${carousel_id}`);
 
 
 
