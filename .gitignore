@@ -8,3 +8,4 @@ dist
 .pytest_cache
 *.pyc
 hp_class_action/downloads/
+.env
