@@ -10,10 +10,10 @@ GSHEET_URL: str = "https://script.google.com/macros/s/AKfycbx42OuLPncwWnsiTwX447
 
 def get_hp_claims_from_api() -> dict:
     """Get hp claims from Google Sheet REST API and
-        Return {"download_datetime":datetime, "data": pd.DataFrame """
+        Return {"download_datetime":datetime, "data": pd.DataFrame} """
     start_time = time()
     download_datetime = datetime.utcnow()
-    print("retrieving data from gogle api")
+    print("retrieving data from google api")
     web_request = requests.get(url=GSHEET_URL)
     print(f"Data retrieved in: {round(time() - start_time, 1)} seconds")
 
@@ -26,7 +26,7 @@ def get_hp_claims_from_api() -> dict:
     me_too_col = []
     post_tags_col = []
 
-    # de-stringnify met_too and post_tags
+    # de-stringify met_too and post_tags
     for index, row in result_df.iterrows():
         if row['me_too'] is not None and row['me_too'] != "":
             # print(f"me_too is: {row['me_too']} and of type: {type(row['me_too'])}")
