@@ -133,12 +133,12 @@ def update_summary_metoo(force_update: bool = False,
 
             metoo_elements = get_metoos(page_source=page_source)
             if metoo_elements is None or len(metoo_elements) == 0:
-                print(f'No data found for post_id: {post_id}')
+                # print(f'No data found for post_id: {post_id}')
                 break
             for metoo_element in metoo_elements:
                 user_metoos = extract_metoo_data(metoo_element=metoo_element)
                 if len(user_metoos) == 0:
-                    print(f'No data found, for post_id: {post_id}')
+                    # print(f'No data found, for post_id: {post_id}')
                     break
                 metoos.append(user_metoos)
         if len(metoos) > 0:
