@@ -10,7 +10,7 @@ from hp_class_action.hinge_issue.scrap_data.web_requests import get_web_page
 from hp_class_action.hp_database.mdb_handlers import (fetch_query)
 
 
-def get_user_details_of_posters() -> Union[pd.DataFrame, None]:
+def _get_user_details_of_posters() -> Union[pd.DataFrame, None]:
     """Return list of users that have posted their claim on the forum"""
     sql_query = """
             SELECT * 
@@ -25,7 +25,7 @@ def get_user_details_of_posters() -> Union[pd.DataFrame, None]:
 
 
 def check_user_still_exists():
-    mdb_user_df = get_user_details_of_posters()
+    mdb_user_df = _get_user_details_of_posters()
     deleted_users: list = []
 
     # check user profile url still exist
@@ -55,4 +55,4 @@ def check_user_still_exists():
 if __name__ == '__main__':
     check_user_still_exists()
     exit(0)
-    print(get_user_details_of_posters())
+    print(_get_user_details_of_posters())
