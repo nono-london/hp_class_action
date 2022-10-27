@@ -110,7 +110,7 @@ def update_summary_metoo(force_update: bool = False,
     max_metoo_pages: int = 100
 
     for post_id in tqdm(post_ids,
-                        desc="Checking metoo progress",
+                        desc="Updating metoo, progress",
                         disable=(not show_progress), ):
         metoos: [dict] = []
         # print("_" * 100)
