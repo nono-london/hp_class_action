@@ -5,11 +5,13 @@ from hp_class_action.hinge_issue.scrap_data.scrap_metoo import update_summary_me
 from hp_class_action.hp_database.backup_mdb import backup_mdb_to_csv
 
 
-def launch_scrapper():
+def launch_scrapper(max_pages: int = 10,
+                    force_metoo_update: bool = False):
     backup_mdb_to_csv()
-    webscrap_query_search(max_pages=10)
-    update_summary_metoo(force_update=False)
+    webscrap_query_search(max_pages=max_pages)
+    update_summary_metoo(force_update=force_metoo_update)
 
 
 if __name__ == '__main__':
-    launch_scrapper()
+    launch_scrapper(max_pages=20,
+                    force_metoo_update=True)
