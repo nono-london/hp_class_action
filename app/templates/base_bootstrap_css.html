@@ -20,6 +20,9 @@
 
         <title>{{ page_vars['title'] }}</title>
     </head>
+{% block nav_bar %}
+    {% include 'bootstrap_temps/navbar_template.html' %}
+{% endblock %}
     <body>
             {% block body %}
 

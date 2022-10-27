@@ -5,18 +5,16 @@
 {% endblock %}
 
 {% block body %}
-<div class="container p-5 my-5 bg-primary text-white">
-    <div class="jumbotron text-center">
-        <h2> {{ page_vars['h2_text'] }}</h2>
+    <div class="container p-5 my-5 bg-primary text-white">
+        <div class="jumbotron text-center">
+            <h2> {{ page_vars['h2_text'] }}</h2>
+        </div>
     </div>
-</div>
-<div class="container p-5 my-5 bg-primary text-white">
-    {% include 'bootstrap_temps/carousel_temp.html' %}
+    <div class="container p-5 my-5 bg-primary text-white">
 
+        {% include 'bootstrap_temps/carousel_temp.html' %}
 
-</div>
-
-
+    </div>
 {% endblock %}
 
 {% block js_script_bottom %}

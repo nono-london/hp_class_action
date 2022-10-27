@@ -39,11 +39,10 @@ def hp_issue(issue_type):
     page_title: str = str(issue_type.replace('_', ' ')).title()
     print("in hp issue router")
     h2_text = "HP issue: " + page_title
-    
-    
+
     return render_template('hp_issue.html', page_vars={'title': page_title,
-                                                        'h2_text': h2_text,
-                                                        })
+                                                       'h2_text': h2_text,
+                                                       })
 
 
 if __name__ == '__main__':
