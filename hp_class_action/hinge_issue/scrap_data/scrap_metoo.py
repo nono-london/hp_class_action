@@ -9,6 +9,7 @@ from lxml.html import Element
 from hp_class_action.hinge_issue.scrap_data.web_requests import get_web_page
 from hp_class_action.hp_database.mdb_handlers import (execute_query,
                                                       fetch_query)
+from tqdm import tqdm
 
 BASE_URL: str = "https://h30434.www3.hp.com/t5/ratings/ratingdetailpage/message-uid/8499984/rating-system/forum_topic_metoo/page/1#userlist"
 
@@ -99,7 +100,8 @@ def update_mdb_with_full_post(full_post: str, post_id: int):
     execute_query(sql_query=sql_query, variables=(full_post, full_post, post_id))
 
 
-def update_summary_metoo(force_update: bool = False):
+def update_summary_metoo(force_update: bool = False,
+                         show_progress: bool = True):
     """Update mdb with full summary and me too users' s names"""
     post_ids: list = get_post_ids(force_update=force_update)
     if post_ids is None or len(post_ids) == 0:
@@ -107,14 +109,16 @@ def update_summary_metoo(force_update: bool = False):
         return
     max_metoo_pages: int = 100
 
-    for post_id in post_ids:
+    for post_id in tqdm(post_ids,
+                        desc="Checking metoo progress",
+                        disable=(not show_progress), ):
         metoos: [dict] = []
-        print("_" * 100)
+        # print("_" * 100)
         for i in range(1, max_metoo_pages):
             url_to_open: str = f"https://h30434.www3.hp.com/t5/ratings/ratingdetailpage/message-uid/{post_id}/rating-system/forum_topic_metoo/page/{i}#userlist"
             # url_to_open = "https://h30434.www3.hp.com/t5/ratings/ratingdetailpage/message-uid/8360940/rating-system/forum_topic_metoo/page/1#userlist"
 
-            print(f'URL to open: {url_to_open}')
+            # print(f'URL to open: {url_to_open}')
             page_source = get_web_page(url_to_open=url_to_open,
                                        max_tries=10,
                                        timeout=10,
@@ -129,12 +133,12 @@ def update_summary_metoo(force_update: bool = False):
 
             metoo_elements = get_metoos(page_source=page_source)
             if metoo_elements is None or len(metoo_elements) == 0:
-                print(f'No data found')
+                # print(f'No data found')
                 break
             for metoo_element in metoo_elements:
                 user_metoos = extract_metoo_data(metoo_element=metoo_element)
                 if len(user_metoos) == 0:
-                    print(f'No data found')
+                    # print(f'No data found')
                     break
                 metoos.append(user_metoos)
         if len(metoos) > 0:
@@ -143,4 +147,4 @@ def update_summary_metoo(force_update: bool = False):
 
 
 if __name__ == '__main__':
-    update_summary_metoo(force_update=False, )
+    update_summary_metoo(force_update=False, show_progress=True)
