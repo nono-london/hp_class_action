@@ -1,7 +1,7 @@
 import pandas as pd
 from bs4 import BeautifulSoup as bs
 from bs4.element import Tag
-
+from tqdm import tqdm
 from hp_class_action.hinge_issue.scrap_data.web_requests import get_web_page
 from hp_class_action.hp_database.hp_user_class import UserPost
 
@@ -23,8 +23,8 @@ def webscrap_query_search(max_pages: int = 50):
     offset_pages: int = min(int(2000 / results_per_page) + 10, max_pages)
 
     # https://h30434.www3.hp.com/t5/forums/searchpage/tab/message?filter=location&q=broken%20hinge&advanced=true&location=category:Notebook&page=4&sort_by=-topicPostDate&collapse_discussion=true&search_type=thread&search_page_size=50
-    for i in range(1, offset_pages):
-        print(f'Getting page: {i}')
+    for i in tqdm(range(1, offset_pages), desc=f"Updating mdb with first {offset_pages} pages"):
+        # print(f'Getting page: {i}')
         if i == 1:
             base_url = f"https://h30434.www3.hp.com/t5/forums/searchpage/tab/message?filter=location&q=broken%20hinge&advanced=true&location=category:Notebook&" \
                        f"sort_by=-topicPostDate&collapse_discussion=true&search_type=thread&search_page_size={results_per_page}"
@@ -46,8 +46,8 @@ def webscrap_query_search(max_pages: int = 50):
         for user_post_tag in user_post_tags:
             user_post = UserPost(user_post_element=user_post_tag)
             user_post.get_info_from_tag()
-            print("-" * 100)
-            print(user_post)
+            # print("-" * 100)
+            # print(user_post)
 
 
 if __name__ == '__main__':
