@@ -10,6 +10,11 @@ from random import randint
 
 def launch_scrapper(max_pages: int = 10,
                     force_metoo_update: bool = False):
+    # Backing up mdb
+    print(f'_' * 100)
+    print(f'Backing up locally the  mdb')
+    backup_mdb_to_csv()
+
     # Handle broken hinges
     print(f'_' * 100)
     print(f'Scrapping Broken Hinge Issues')
