@@ -32,7 +32,8 @@ def check_user_still_exists():
     # print('Checking deleted users:')
     for index, row in tqdm(mdb_user_df.iterrows(),
                            total=mdb_user_df.shape[0],
-                           desc="Updating deleted users"):
+                           desc="Updating deleted users",
+                           colour="blue"):
         page_source = get_web_page(url_to_open=row['user_profile_url'],
                                    check_response_url=False)
         web_soup = bs(page_source, 'lxml')
