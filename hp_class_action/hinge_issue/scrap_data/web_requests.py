@@ -1,8 +1,9 @@
 from typing import Union
-
+from random import randint
 import requests
-from requests.exceptions import ConnectionError
-
+from requests.exceptions import ConnectionError as RequestErrorConnectionError
+from requests.exceptions import Timeout as RequestErrorTimeout
+from time import sleep
 BASE_URL: str = "https://h30434.www3.hp.com/t5/ratings/ratingdetailpage/message-uid/8499984/rating-system/forum_topic_metoo/page/1#userlist"
 
 hp_cookies = None
@@ -30,8 +31,14 @@ def get_web_page(url_to_open: str,
             page_content = response.text
             hp_cookies = response.cookies
             break
-        except ConnectionError as ex:
-            print(f'Error while connecting:\n{ex}')
+        except RequestErrorConnectionError as ex:
+            print(f'Error while connecting with requests:\n{ex}')
+            max_tries -= 1
+        except RequestErrorTimeout as ex:
+            print(f'Error while connecting with requests:\n{ex}')
+            sleep_time = randint(3,10)
+            print(f'Waiting for {sleep_time} seconds')
+            sleep(sleep_time)
             max_tries -= 1
 
     return page_content
