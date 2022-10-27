@@ -66,7 +66,7 @@ def extract_metoo_data(metoo_element: element) -> dict:
     post_date = datetime.strptime(post_date.text.replace('\u200e', ''), '%m-%d-%Y').strftime('%Y-%m-%d')
 
     user_attrs: dict = {'hp_user_id': user_id, 'username': username, 'post_datetime': post_date}
-    print(user_attrs)
+    # print(user_attrs)
     return user_attrs
 
 
