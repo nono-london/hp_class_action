@@ -6,10 +6,13 @@ from hp_class_action.hp_database.backup_mdb import backup_mdb_to_csv
 from hp_class_action.deleted_users.deleted_usernames import check_user_still_exists
 from time import sleep
 from random import randint
+from time import time
+import platform
 
 
 def launch_scrapper(max_pages: int = 10,
                     force_metoo_update: bool = False):
+    start_time = time()
     # Backing up mdb
     print(f'_' * 100)
     print(f'Backing up locally the  mdb')
@@ -29,6 +32,11 @@ def launch_scrapper(max_pages: int = 10,
     print(f"Waiting for {round(sleep_time / 60, 1)} minutes")
     sleep(sleep_time)
     check_user_still_exists()
+
+    # Time program for
+    print(f'_' * 100)
+    print(f'Program ran for:{round((time() - start_time) / 60, 1)} minutes\n'
+          f'Using os: {platform.uname().system}')
 
 
 if __name__ == '__main__':
