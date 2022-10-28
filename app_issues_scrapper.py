@@ -1,13 +1,14 @@
 """Launch the scrappers """
 
-from hp_class_action.hinge_issue.scrap_data.scrap_search_query import webscrap_query_search
-from hp_class_action.hinge_issue.scrap_data.scrap_metoo import update_summary_metoo
-from hp_class_action.hp_database.backup_mdb import backup_mdb_to_csv
-from hp_class_action.deleted_users.deleted_usernames import check_user_still_exists
-from time import sleep
-from random import randint
-from time import time
 import platform
+from random import randint
+from time import sleep
+from time import time
+
+from hp_class_action.deleted_users.deleted_usernames import check_user_still_exists
+from hp_class_action.hinge_issue.scrap_data.scrap_metoo import update_summary_metoo
+from hp_class_action.hinge_issue.scrap_data.scrap_search_query import webscrap_query_search
+from hp_class_action.hp_database.backup_mdb import backup_mdb_to_csv
 
 
 def launch_scrapper(max_pages: int = 10,
@@ -35,7 +36,7 @@ def launch_scrapper(max_pages: int = 10,
 
     # Time program for
     print(f'_' * 100)
-    print(f'Program ran for:{round((time() - start_time) / 60, 1)} minutes\n'
+    print(f'Program ran for:{round((time() - start_time) / 60 / 60, 1)} hours\n'
           f'Using os: {platform.uname().system}')
 
 
