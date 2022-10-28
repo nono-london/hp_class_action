@@ -42,4 +42,4 @@ def launch_scrapper(max_pages: int = 10,
 
 if __name__ == '__main__':
     launch_scrapper(max_pages=20,
-                    force_metoo_update=True)
+                    force_metoo_update=False)
