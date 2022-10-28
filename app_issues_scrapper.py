@@ -5,6 +5,7 @@ from random import randint
 from time import sleep
 from time import time
 
+from hp_class_action.app_config import get_external_ip_address
 from hp_class_action.deleted_users.deleted_usernames import check_user_still_exists
 from hp_class_action.hinge_issue.scrap_data.scrap_metoo import update_summary_metoo
 from hp_class_action.hinge_issue.scrap_data.scrap_search_query import webscrap_query_search
@@ -14,6 +15,10 @@ from hp_class_action.hp_database.backup_mdb import backup_mdb_to_csv
 def launch_scrapper(max_pages: int = 10,
                     force_metoo_update: bool = False):
     start_time = time()
+    # Scrapping performed from IP address
+    print(f'_' * 100)
+    print(f'Scrapping performed from IP address: {get_external_ip_address()}')
+
     # Backing up mdb
     print(f'_' * 100)
     print(f'Backing up locally the  mdb')

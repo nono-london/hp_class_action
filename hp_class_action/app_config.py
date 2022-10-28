@@ -1,6 +1,16 @@
 import sys
 from pathlib import Path
 
+import requests
+
+
+def get_external_ip_address() -> str:
+    """get external ip address"""
+    base_url: str = 'https://jsonip.com/'
+    web_request = requests.get(url=base_url)
+    ip_address = web_request.json()['ip']
+    return ip_address
+
 
 def get_project_root_path() -> str:
     # https://stackoverflow.com/questions/5137497/find-the-current-directory-and-files-directory
@@ -43,6 +53,9 @@ def pack_python_libs_in_path():
 
 
 if __name__ == '__main__':
+    print(get_external_ip_address())
+
+
     print(get_project_root_path())
 
     print(get_project_download_path())
