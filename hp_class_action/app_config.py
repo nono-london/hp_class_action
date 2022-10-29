@@ -55,7 +55,6 @@ def pack_python_libs_in_path():
 if __name__ == '__main__':
     print(get_external_ip_address())
 
-
     print(get_project_root_path())
 
     print(get_project_download_path())
