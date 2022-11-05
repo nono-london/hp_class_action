@@ -5,7 +5,8 @@ from random import randint
 from time import sleep
 from time import time
 
-from hp_class_action.app_config import get_external_ip_address
+from hp_class_action.app_config import (get_external_ip_address, pack_python_libs_in_path)
+pack_python_libs_in_path()
 from hp_class_action.deleted_users.deleted_usernames import check_user_still_exists
 from hp_class_action.hinge_issue.scrap_data.scrap_metoo import update_summary_metoo
 from hp_class_action.hinge_issue.scrap_data.scrap_search_query import webscrap_query_search
@@ -46,5 +47,5 @@ def launch_scrapper(max_pages: int = 10,
 
 
 if __name__ == '__main__':
-    launch_scrapper(max_pages=20,
-                    force_metoo_update=False)
+    launch_scrapper(max_pages=500,
+                    force_metoo_update=True)
