@@ -34,6 +34,7 @@ def create_table_hp_users():
                 (
                 user_id  INT AUTO_INCREMENT PRIMARY KEY,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
                 hp_user_id  BIGINT NOT NULL,
                 username VARCHAR(50) NOT NULL,
@@ -57,6 +58,7 @@ def create_table_reported_issues():
                 (
                 post_id  INT AUTO_INCREMENT PRIMARY KEY,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 
                 user_id INT NOT NULL,
 
