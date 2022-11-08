@@ -16,7 +16,10 @@
         <div class="chart_title">
             <h5>Historic of complains</h5>
         </div>
-        <canvas id="chart_histo"  width="400" height="400"></canvas>
+        <div>
+            <canvas id="chart_histo"  width="100%" height="30%"></canvas>
+        </div>
+        
 
     </div>
 
@@ -36,7 +39,11 @@
     const json_dataset = {{ page_vars['json_dataset']|safe }};
 
 
-    
+    // Group incidents by day
+
+
+
+
     // function gets x_values and y_values
     let {x_values, y_values} = setChartDataset(json_dataset['data'], 'post_datetime', 'hp_post_id');
     console.log(x_values);
@@ -74,15 +81,16 @@
     }
 
         
-    createChart(chart_canvas_id, x_values, y_values);
+    createChart(chart_canvas_id, x_values, y_values, 'Title of the chart');
 
 
-    function createChart(canvas_id, x_values, y_values){
+    function createChart(canvas_id, x_values, y_values, chart_title){
         const chart_graph = new Chart(canvas_id, {
             type: 'bar',
             data: {
                 labels: x_values,
                 datasets: [{
+                    label: chart_title,
                     //barPercentage: 0.5,
                     //barThickness: 6,
                     //maxBarThickness: 8,
