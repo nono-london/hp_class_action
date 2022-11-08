@@ -36,14 +36,13 @@
     const json_dataset = {{ page_vars['json_dataset']|safe }};
 
 
-    createChartHisto(json_dataset['data']);
-
-
-
-    function createChartHisto(chart_data){
-        
-
-
+    
+    // function gets x_values and y_values
+    let {x_values, y_values} = setChartDataset(json_dataset['data'], 'post_datetime', 'hp_post_id');
+    console.log(x_values);
+    console.log(y_values);
+    
+    function setChartDataset(chart_data, x_key, y_keys){
         // delete if previous chart if any
         if (chart_histo!=undefined | chart_histo!=null) {
             chart_histo.destroy();
@@ -51,33 +50,63 @@
         
         // https://css-tricks.com/the-many-ways-of-getting-data-into-charts/
         // declare variables
-        var x_values = new Set();
-        var data_set_values = new Set();
-        let chart_values =  [];
+        let x_values = [];
+        let y_values = [];
+        
         // set values
         $.each(chart_data, function(index, data_rows) {
-            // Create an Array for each data object
-            // https://stackoverflow.com/questions/44396778/add-data-to-dynamically-created-chart-js-dataset
-
-            let row_dict = {};
+            // Loop through datset and find x and y
             $.each(data_rows, function(index, col) {
-                // console.log("index: "+ index+ ", data: "+data+", index type"+typeof index);
-                if (index=="hp_post_id"){
-                    data_set_values.add(col);
+                // set x values
+                if (index==x_key){
+                    x_values.push(timestamp_to_date(col));
                 }
-                if (index=="post_datetime"){
-                    x_values.add(timestamp_to_date(col));
-                }
-                row_dict[index] = col
-
+                // set y values, shoul devolved to a groupby=> list of y_keys
+                if (index==y_keys){
+                    y_values.push(col);
+                }               
             });
-            chart_values.push(row_dict);
+            
         });
-        console.log("chart_values:");
-        console.log(chart_values);
-      
+
+        return {x_values, y_values};
 
     }
+
+    // create chatr config
+    chart_config = createChatConfig(x_values, y_values, "Testing the chaty");
+    console.log("chart config:");
+    console.log(chart_config);
+
+    function createChatConfig(x_labels, dataset_values, chart_title){
+        const chart_config = {
+            labels: x_labels,
+            datasets: [{
+                label: chart_title,
+                data: dataset_values,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 205, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(201, 203, 207, 0.2)'
+                ],
+                borderColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(255, 159, 64)',
+                    'rgb(255, 205, 86)',
+                    'rgb(75, 192, 192)',
+                    'rgb(54, 162, 235)',
+                    'rgb(153, 102, 255)',
+                    'rgb(201, 203, 207)'
+                ],
+                borderWidth: 1
+            }]
+        };
+          return chart_config;
+    };
 
 
 </script>

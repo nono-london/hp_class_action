@@ -47,7 +47,7 @@ def hp_issue(issue_type):
     h2_text = "HP issue: " + page_title
     json_dataset = None
     if issue_type == 'broken_hinge':
-        broken_hinge_api_json['data']['data'] = broken_hinge_api_json['data']['data'][:10]
+        broken_hinge_api_json['data']['data'] = broken_hinge_api_json['data']['data'][:7]
         json_dataset = broken_hinge_api_json['data']
 
     return render_template('hp_issue.html', page_vars={'title': page_title,
