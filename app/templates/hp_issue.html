@@ -1,6 +1,8 @@
 {% extends 'base_bootstrap_css.html' %}
 
-
+{% block js_script_top %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.js" integrity="sha512-d6nObkPJgV791iTGuBoVC9Aa2iecqzJRE0Jiqvk85BhLHAPhWqkuBiQb1xz2jvuHNqHLYoN3ymPfpiB1o+Zgpw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}
 
 
 {% block body %}
@@ -26,46 +28,47 @@
 <script>
     var chart_canvas_id = document.getElementById("chart_histo");
     var chart_histo;
+    
     const json_dataset = {{ page_vars['json_dataset']|safe }};
     console.log(json_dataset);
 
-    console.log("It is working");
-    function createChartHisto(){
+    console.log('It is working');
+    
+    var x_values = new Set();
+    var data_set_values = new Set();
+    createChartHisto(json_dataset['data']);
+
+    
+
+    function createChartHisto(chart_data){
         // delete if previous chart if any
-        if (chart_graph!=undefined | chart_graph!=null) {
-            chart_graph.destroy();
+        if (chart_histo!=undefined | chart_histo!=null) {
+            chart_histo.destroy();
         }
         
         // https://css-tricks.com/the-many-ways-of-getting-data-into-charts/
-        let xLabels = new Set();
-        let arkDatasetLabels=new Set();
         let chart_values =  [];
-        $.each(chartData, function(index, keyword) {
+        $.each(chart_data, function(index, data_rows) {
             // Create an Array for each data object
             // https://stackoverflow.com/questions/44396778/add-data-to-dynamically-created-chart-js-dataset
 
-            console.log("index: "+ index+ ", keyword: "+keyword);
             let row_dict = {};
-            $.each(keyword, function(index, data) {
-
-                row_dict[index] = String(data);
-
+            $.each(data_rows, function(index, col) {
                 // console.log("index: "+ index+ ", data: "+data+", index type"+typeof index);
-                if (index=="etf_ticker"){
-                    arkDatasetLabels.add(data);
-
+                if (index=="hp_post_id"){
+                    data_set_values.add(col);
                 }
-                if (index=="trade_date"){
-                    xLabels.add(new Date(data));
-
+                if (index=="post_datetime"){
+                    x_values.add(new Date(col));
                 }
-
-
+                row_dict[index] = col
 
             });
             chart_values.push(row_dict);
         });
-
+        console.log("chart_values:");
+        console.log(chart_values);
+      
 
     }
 
