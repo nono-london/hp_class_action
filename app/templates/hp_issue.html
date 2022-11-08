@@ -25,29 +25,36 @@
 
 
 {% block js_script_bottom %}
+
+
+<script src="{{ url_for('static', filename='js/misc_libs/date_handlers.js') }}" type="text/javascript"></script>
+
 <script>
     var chart_canvas_id = document.getElementById("chart_histo");
     var chart_histo;
     
     const json_dataset = {{ page_vars['json_dataset']|safe }};
-    console.log(json_dataset);
 
-    console.log('It is working');
-    
-    var x_values = new Set();
-    var data_set_values = new Set();
+
     createChartHisto(json_dataset['data']);
 
-    
+
 
     function createChartHisto(chart_data){
+        
+
+
         // delete if previous chart if any
         if (chart_histo!=undefined | chart_histo!=null) {
             chart_histo.destroy();
         }
         
         // https://css-tricks.com/the-many-ways-of-getting-data-into-charts/
+        // declare variables
+        var x_values = new Set();
+        var data_set_values = new Set();
         let chart_values =  [];
+        // set values
         $.each(chart_data, function(index, data_rows) {
             // Create an Array for each data object
             // https://stackoverflow.com/questions/44396778/add-data-to-dynamically-created-chart-js-dataset
@@ -59,7 +66,7 @@
                     data_set_values.add(col);
                 }
                 if (index=="post_datetime"){
-                    x_values.add(new Date(col));
+                    x_values.add(timestamp_to_date(col));
                 }
                 row_dict[index] = col
 
