@@ -8,9 +8,9 @@ import requests
 GSHEET_URL: str = "https://script.google.com/macros/s/AKfycbx42OuLPncwWnsiTwX447DVCveMA_a-8GQuaxeB_h2TymNgcPL5G4-BpXG_4XapaBMruQ/exec"
 
 
-def get_hp_claims_from_api() -> dict:
+def get_hp_claims_from_api_df() -> dict:
     """Get hp claims from Google Sheet REST API and
-        Return {"download_datetime":datetime, "data": pd.DataFrame} """
+        Return {"download_datetime":datetime,"size":int, "data": pd.DataFrame} """
     start_time = time()
     download_datetime = datetime.utcnow()
     print("retrieving data from google api")
@@ -45,8 +45,26 @@ def get_hp_claims_from_api() -> dict:
 
     print(f'Data cleaned in {round(time() - start_clean_time, 1)} seconds')
     print(f'Program ran for {round(time() - start_time, 1)}')
-    return {"download_datetime": download_datetime, "data": result_df, "size": len(result_df)}
+    return {"download_datetime": download_datetime, "size": len(result_df), "data": result_df, }
+
+
+def get_hp_claims_from_api_json() -> {}:
+    """Get hp claims from Google Sheet REST API and
+        Return {"download_datetime":datetime, "data": pd.DataFrame} """
+    start_time = time()
+    download_datetime = datetime.utcnow()
+    print("retrieving data from google api")
+    web_request = requests.get(url=GSHEET_URL)
+    print(f"Data retrieved in: {round(time() - start_time, 1)} seconds")
+    web_request_json = web_request.json()
+
+    start_clean_time = time()
+
+    print(f'Data cleaned in {round(time() - start_clean_time, 1)} seconds')
+    print(f'Program ran for {round(time() - start_time, 1)}')
+    return {"download_datetime": download_datetime, "size": len(web_request_json['data']), "data": web_request_json}
 
 
 if __name__ == '__main__':
-    get_hp_claims_from_api()
+    print(get_hp_claims_from_api_df()['size'])
+    print(get_hp_claims_from_api_json()['size'])
