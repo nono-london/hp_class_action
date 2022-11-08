@@ -40,6 +40,7 @@ def launch_scrapper(max_pages: int = 10,
     sleep(sleep_time)
     check_user_still_exists()
 
+
     # Time program for
     print(f'_' * 100)
     print(f'Program ran for:{round((time() - start_time) / 60 / 60, 1)} hours\n'
@@ -48,4 +49,4 @@ def launch_scrapper(max_pages: int = 10,
 
 if __name__ == '__main__':
     launch_scrapper(max_pages=20,
-                    force_metoo_update=False)
+                    force_metoo_update=True)

@@ -52,11 +52,11 @@ def get_hp_claims_from_api_json() -> {}:
     """Get hp claims from Google Sheet REST API and
         Return {"download_datetime":datetime, "data": pd.DataFrame} """
     start_time = time()
-    download_datetime = datetime.utcnow()
+    download_datetime = datetime.utcnow().strftime("%Y-%m-%d")
     print("retrieving data from google api")
     web_request = requests.get(url=GSHEET_URL)
     print(f"Data retrieved in: {round(time() - start_time, 1)} seconds")
-    web_request_json = web_request.json()
+    web_request_json = json.loads(web_request.text.replace("'", "\'"))
 
     start_clean_time = time()
 

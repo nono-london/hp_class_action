@@ -1,3 +1,5 @@
+import json
+import ast
 from flask import Flask, render_template
 
 from app.data_analysis.gsheet_api import get_hp_claims_from_api_json
@@ -44,12 +46,13 @@ def hp_issue(issue_type):
     print("in hp issue router")
     h2_text = "HP issue: " + page_title
     json_dataset = None
-    if issue_type == 'broken-hinge':
-        json_dataset = broken_hinge_api_json
+    if issue_type == 'broken_hinge':
+        broken_hinge_api_json['data']['data'] = broken_hinge_api_json['data']['data'][:10]
+        json_dataset = broken_hinge_api_json['data']
 
     return render_template('hp_issue.html', page_vars={'title': page_title,
                                                        'h2_text': h2_text,
-                                                       'json_datset': json_dataset
+                                                       'json_dataset': json_dataset
                                                        })
 
 
