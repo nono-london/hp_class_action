@@ -1,8 +1,25 @@
 from flask import Flask, render_template
 
+from app.data_analysis.gsheet_api import get_hp_claims_from_api_json
+
 app = Flask(__name__,
             # template_folder=str(Path(Path(__file__).parent,'templates'))
             )
+
+broken_hinge_api_json: {} = get_hp_claims_from_api_json()
+home_carousel_slides: list = [{'slide_name': 'broken_hinge', 'slide_position': 0, "slide_wait_interval": 3000,
+                               'slide_title': 'Broken Hinges', 'slide_h5': 'HP Forum Support',
+                               'slide_p': 'Data gathered from HP users testimonies'
+                               },
+                              {'slide_name': 'broken_hinge_screen', 'slide_position': 1, "slide_wait_interval": 2000,
+                               'slide_title': 'Broken Hinges And Screens', 'slide_h5': 'HP Forum Support',
+                               'slide_p': 'Data gathered from HP users testimonies'
+                               },
+                              {'slide_name': 'battery_issue', 'slide_position': 2, "slide_wait_interval": 2000,
+                               'slide_title': 'Batteries', 'slide_h5': 'HP Forum Support',
+                               'slide_p': 'Data gathered from HP users testimonies'
+                               },
+                              ]
 
 
 @app.route("/")
@@ -13,24 +30,11 @@ def home_view():
                     defective HP laptops
         """
     carousel_id = "carouselHP"
-    carousel_slides: list = [{'slide_name': 'broken_hinge', 'slide_position': 0, "slide_wait_interval": 3000,
-                              'slide_title': 'Broken Hinges', 'slide_h5': 'HP Forum Support',
-                              'slide_p': 'Data gathered from HP users testimonies'
-                              },
-                             {'slide_name': 'broken_hinge_screen', 'slide_position': 1, "slide_wait_interval": 2000,
-                              'slide_title': 'Broken Hinges And Screens', 'slide_h5': 'HP Forum Support',
-                              'slide_p': 'Data gathered from HP users testimonies'
-                              },
-                             {'slide_name': 'battery_issue', 'slide_position': 2, "slide_wait_interval": 2000,
-                              'slide_title': 'Batteries', 'slide_h5': 'HP Forum Support',
-                              'slide_p': 'Data gathered from HP users testimonies'
-                              },
-                             ]
 
     return render_template('index.html', page_vars={'title': page_title,
                                                     'h2_text': h2_text,
                                                     'carousel_id': carousel_id,
-                                                    'carousel_slides': carousel_slides
+                                                    'carousel_slides': home_carousel_slides
                                                     })
 
 
@@ -39,9 +43,13 @@ def hp_issue(issue_type):
     page_title: str = str(issue_type.replace('_', ' ')).title()
     print("in hp issue router")
     h2_text = "HP issue: " + page_title
+    json_dataset = None
+    if issue_type == 'broken-hinge':
+        json_dataset = broken_hinge_api_json
 
     return render_template('hp_issue.html', page_vars={'title': page_title,
                                                        'h2_text': h2_text,
+                                                       'json_datset': json_dataset
                                                        })
 
 
