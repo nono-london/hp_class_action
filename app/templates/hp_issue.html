@@ -38,15 +38,20 @@
     
     const json_dataset = {{ page_vars['json_dataset']|safe }};
 
-
+    console.log("Start");
     // Group incidents by day
-    groupHistoPerPeriod(json_dataset['data'], 'post_date_time', 'post_id', 'd');
-    function groupHistoPerPeriod(json_data, x_key, y_key_to_count,periodOfTime){
+    
+    group_by_day(json_dataset['data'], 'hp_post_id');
 
-
-
+    function group_by_day(json_data_set, y_key){
+        console.log("I am in");
+        console.log(json_data_set.length);
+        for (let i=0; i<json_data_set.length; i++){
+            console.log(i);
+            //console.log(json_data_set[y_key]);
+        }
+        console.log("I am out");
     }
-
 
 
     // function gets x_values and y_values
