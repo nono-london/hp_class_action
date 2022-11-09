@@ -1,14 +1,14 @@
 import json
 import ast
 from flask import Flask, render_template
-
+from typing import Dict
 from app.data_analysis.gsheet_api import get_hp_claims_from_api_json
 
 app = Flask(__name__,
             # template_folder=str(Path(Path(__file__).parent,'templates'))
             )
 
-broken_hinge_api_json: {} = get_hp_claims_from_api_json()
+broken_hinge_api_json: Dict = get_hp_claims_from_api_json()
 home_carousel_slides: list = [{'slide_name': 'broken_hinge', 'slide_position': 0, "slide_wait_interval": 3000,
                                'slide_title': 'Broken Hinges', 'slide_h5': 'HP Forum Support',
                                'slide_p': 'Data gathered from HP users testimonies'
