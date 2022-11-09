@@ -66,5 +66,5 @@ def get_hp_claims_from_api_json() -> {}:
 
 
 if __name__ == '__main__':
-    print(get_hp_claims_from_api_df()['size'])
+    print(get_hp_claims_from_api_df()['data'])
     print(get_hp_claims_from_api_json()['size'])
