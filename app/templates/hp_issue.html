@@ -14,12 +14,21 @@
 
     <div class="container">
         <div class="chart_title">
-            <h5>Historic of complains</h5>
+            <h5>Historic of monthly posted complains:</h5>
     </div>
     <div class="container">
-        <canvas id="chart_histo"  width="100%" height="30%"></canvas>
+        <canvas id="chart_histo_monthly"  width="100%" height="30%"></canvas>
     </div>
-        
+    
+    <hr>
+    
+    <div class="container">
+        <div class="chart_title">
+            <h5>Historic of yearly posted complains:</h5>
+    </div>
+    <div class="container">
+        <canvas id="chart_histo_yearly"  width="100%" height="30%"></canvas>
+    </div>
 
     </div>
 
@@ -34,25 +43,27 @@
 
 
 <script>
-    var chart_canvas_id = document.getElementById("chart_histo");
-    var chart_histo;
-    
+    var histo_monthly_id = document.getElementById("chart_histo_monthly");
+    var histo_yearly_id = document.getElementById("chart_histo_yearly");
+    var chart_histo_monthly;
+    var chart_histo_yearly;
     const json_dataset = {{ page_vars['json_dataset']|safe }};
 
-    console.log(json_dataset['data']);
     const group_by_m_dataset = group_by_month(json_dataset['data']);
     console.log(group_by_m_dataset);
     let x_values=group_by_m_dataset.map(function(value,index) { return value['post_datetime']; });
     let y_values=group_by_m_dataset.map(function(value,index) { return value['count']; });
-    
+    createChart(histo_monthly_id, 'line', 2,3,x_values.reverse(), y_values.reverse(), 'Number of new claims on HP Forum');
 
+    const group_by_y_dataset = group_by_year(json_dataset['data']);
+    x_values=group_by_y_dataset.map(function(value,index) { return value['post_datetime']; });
+    y_values=group_by_y_dataset.map(function(value,index) { return value['count']; });
+    createChart(histo_yearly_id, 'bar', 0,1, x_values, y_values, 'Number of new claims on HP Forum');
 
-    createChart(chart_canvas_id, x_values.reverse(), y_values.reverse(), 'Title of the chart');
-
-
-    function createChart(canvas_id, x_values, y_values, chart_title){
+    function createChart(canvas_id, chart_type, color_slice_start, color_slice_end, 
+                            x_values, y_values, chart_title){
         const chart_graph = new Chart(canvas_id, {
-            type: 'line',
+            type: chart_type,
             data: {
                 labels: x_values,
                 datasets: [{
@@ -63,23 +74,23 @@
                     //minBarLength: 200,
                     data: y_values,
                     backgroundColor: [ // Specify custom colors
-                    // 'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
                     'rgba(255, 130, 132, 0.2)',
-                    // 'rgba(54, 162, 235, 0.2)',
-                    // 'rgba(255, 206, 86, 0.2)',
-                    // 'rgba(75, 192, 192, 0.2)',
-                    // 'rgba(153, 102, 255, 0.2)',
-                    // 'rgba(255, 159, 64, 0.2)'
-                  ],
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                  ].slice(color_slice_start, color_slice_end),
                   borderColor: [ // Add custom color borders
-                    // 'rgba(255,99,132,1)',
+                    'rgba(255,99,132,1)',
                     'rgba(255, 130, 132, 1)',
-                    // 'rgba(54, 162, 235, 1)',
-                    // 'rgba(255, 206, 86, 1)',
-                    // 'rgba(75, 192, 192, 1)',
-                    // 'rgba(153, 102, 255, 1)',
-                    // 'rgba(255, 159, 64, 1)'
-                  ],
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                  ].slice(color_slice_start, color_slice_end),
                   borderWidth: 1 // Specify bar border width
             
             
@@ -121,7 +132,25 @@
         );
     }
 
-
+    function group_by_year(arr) {
+        return Object.values(
+          arr.reduce((a, { post_datetime: date_as_date, claims: count }) => {
+            const { year } = get_year_month_parts(date_as_date) ;
+            const key = `${year}`;
+            // using logical nullish assignment
+            //(a[key] ??= { color: 'Blue?', value: 0, label: key }).value += value;
+      
+            // or written out long hand
+            if (a[key] === undefined) {
+              a[key] = {post_datetime: key, count: 0,  };
+            }
+      
+            a[key].count += 1;
+      
+            return a;
+          }, {}),
+        );
+    }
 
     </script>
 {% endblock %}
