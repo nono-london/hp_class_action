@@ -40,6 +40,7 @@
 
 
 <script src="{{ url_for('static', filename='js/misc_libs/date_handlers.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='js/chartjs_handlers/chart_builders.js') }}" type="text/javascript"></script>
 
 
 <script>
@@ -53,54 +54,13 @@
     console.log(group_by_m_dataset);
     let x_values=group_by_m_dataset.map(function(value,index) { return value['post_datetime']; });
     let y_values=group_by_m_dataset.map(function(value,index) { return value['count']; });
-    createChart(histo_monthly_id, 'line', 2,3,x_values.reverse(), y_values.reverse(), 'Number of new claims on HP Forum');
+    chartJsBuilder(histo_monthly_id, 'line', 2,3,x_values.reverse(), y_values.reverse(), 'Number of new claims on HP Forum');
 
     const group_by_y_dataset = group_by_year(json_dataset['data']);
     x_values=group_by_y_dataset.map(function(value,index) { return value['post_datetime']; });
     y_values=group_by_y_dataset.map(function(value,index) { return value['count']; });
-    createChart(histo_yearly_id, 'bar', 0,1, x_values, y_values, 'Number of new claims on HP Forum');
+    chartJsBuilder(histo_yearly_id, 'bar', 0,1, x_values, y_values, 'Number of new claims on HP Forum');
 
-    function createChart(canvas_id, chart_type, color_slice_start, color_slice_end, 
-                            x_values, y_values, chart_title){
-        const chart_graph = new Chart(canvas_id, {
-            type: chart_type,
-            data: {
-                labels: x_values,
-                datasets: [{
-                    label: chart_title,
-                    //barPercentage: 0.5,
-                    //barThickness: 6,
-                    //maxBarThickness: 8,
-                    //minBarLength: 200,
-                    data: y_values,
-                    backgroundColor: [ // Specify custom colors
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 130, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                  ].slice(color_slice_start, color_slice_end),
-                  borderColor: [ // Add custom color borders
-                    'rgba(255,99,132,1)',
-                    'rgba(255, 130, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                  ].slice(color_slice_start, color_slice_end),
-                  borderWidth: 1 // Specify bar border width
-            
-            
-                }]
-                },
-
-        }
-        )
-        
-    }
 
 
     function get_year_month_parts(date_as_date){
