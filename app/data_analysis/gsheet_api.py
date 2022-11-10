@@ -1,14 +1,14 @@
 import json
 from datetime import datetime
 from time import time
-
+from typing import Dict
 import pandas as pd
 import requests
 
 GSHEET_URL: str = "https://script.google.com/macros/s/AKfycbx42OuLPncwWnsiTwX447DVCveMA_a-8GQuaxeB_h2TymNgcPL5G4-BpXG_4XapaBMruQ/exec"
 
 
-def get_hp_claims_from_api_df() -> dict:
+def get_hp_claims_from_api_df() -> Dict:
     """Get hp claims from Google Sheet REST API and
         Return {"download_datetime":datetime,"size":int, "data": pd.DataFrame} """
     start_time = time()
@@ -48,7 +48,7 @@ def get_hp_claims_from_api_df() -> dict:
     return {"download_datetime": download_datetime, "size": len(result_df), "data": result_df, }
 
 
-def get_hp_claims_from_api_json() -> {}:
+def get_hp_claims_from_api_json() -> Dict:
     """Get hp claims from Google Sheet REST API and
         Return {"download_datetime":datetime, "data": pd.DataFrame} """
     start_time = time()
