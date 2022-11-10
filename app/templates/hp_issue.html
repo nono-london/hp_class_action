@@ -16,8 +16,8 @@
         Histo: All or since 2017
       </button>
       <ul class="dropdown-menu dropdown-menu-dark">
-        <li><a class="dropdown-item" onclick="dropbox_active_inactive(this, 'Histo')" href="#">Since 2017</a></li>
-        <li><a class="dropdown-item" onclick="dropbox_active_inactive(this)" href="#">All</a></li>
+        <li><a class="dropdown-item" onclick="setChartsWithDropdowns(this)" href="#">Since 2017</a></li>
+        <li><a class="dropdown-item" onclick="setChartsWithDropdowns(this)" href="#">All</a></li>
       </ul>
     </div>
 
@@ -63,16 +63,31 @@
     var chart_histo_yearly;
     const json_dataset = {{ page_vars['json_dataset']|safe }};
 
-    // monhtly chart
-    const group_by_m_dataset = group_by_month(json_dataset['data']);
-    let x_values=group_by_m_dataset.map(function(value,index) { return value['post_datetime']; });
-    let y_values=group_by_m_dataset.map(function(value,index) { return value['count']; });
-    chartJsBuilder(histo_monthly_id, 'line', 2,3,x_values.reverse(), y_values.reverse(), 'Number of new claims on HP Forum');
-    // yearly chart
-    const group_by_y_dataset = group_by_year(json_dataset['data']);
-    x_values=group_by_y_dataset.map(function(value,index) { return value['post_datetime']; });
-    y_values=group_by_y_dataset.map(function(value,index) { return value['count']; });
-    chartJsBuilder(histo_yearly_id, 'bar', 0,1, x_values, y_values, 'Number of new claims on HP Forum');
+
+    function set_chart_datasets(post_after_year){
+      // set dataset
+      let chart_dataset; 
+      if (Number.isInteger(post_after_year)){
+        chart_dataset = filter_post_after_date(json_dataset['data'],'post_datetime', post_after_year);
+      }else{
+        chart_dataset = json_dataset['data'];
+      }
+
+      // monhtly chart
+      const group_by_m_dataset = group_by_month(chart_dataset);
+      let x_values=group_by_m_dataset.map(function(value,index) { return value['post_datetime']; });
+      let y_values=group_by_m_dataset.map(function(value,index) { return value['count']; });
+      if (chart_histo_monthly) {    chart_histo_monthly.destroy();  }
+      chart_histo_monthly = chartJsBuilder(histo_monthly_id, 'line', 2,3,x_values.reverse(), y_values.reverse(), 'Number of new claims on HP Forum');
+      // yearly chart
+      const group_by_y_dataset = group_by_year(chart_dataset);
+      x_values=group_by_y_dataset.map(function(value,index) { return value['post_datetime']; });
+      y_values=group_by_y_dataset.map(function(value,index) { return value['count']; });
+      if (chart_histo_yearly) {    chart_histo_yearly.destroy();  }
+      chart_histo_yearly = chartJsBuilder(histo_yearly_id, 'bar', 0,1, x_values, y_values, 'Number of new claims on HP Forum');
+
+    }
+
 
     function get_year_month_parts(date_as_date){
         //console.log(`date is: ${date_as_date}`);
@@ -122,6 +137,30 @@
           }, {}),
         );
     }
+
+    function filter_post_after_date(arr,date_key, post_after_year, ){
+      result = arr.filter(row => {
+                                // console.log(row[date_key]);
+                                var year = new Date(row[date_key]).getFullYear();
+                                // console.log(year);
+                                return (post_after_year <= year);
+       });
+       return result;
+    }
+    // initiate charts
+    function setChartsWithDropdowns(button_clicked_element){
+      let result = dropdown_active_inactive(button_clicked_element, 'Histo');
+      if (result.innerHTML.includes(String(2017))){
+        set_chart_datasets(2017);
+      }else{
+        set_chart_datasets("All");
+      }
+    }
+
+    set_chart_datasets(2017);
+
+
+
 
     </script>
 {% endblock %}

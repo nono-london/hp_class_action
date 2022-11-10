@@ -53,5 +53,8 @@ function chartJsBuilder(canvas_id, chart_type, color_slice_start, color_slice_en
     }
   }
   )
+  // return chart so that it can be destroyed before calling this function if it already exists
+  // define the chart in a var golbal variable on document
+  return chart_graph;
 
 }
