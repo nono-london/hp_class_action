@@ -47,7 +47,7 @@ def hp_issue(issue_type):
     h2_text = "HP issue: " + page_title
 
     print("BROKEN HING DETECTED")
-    broken_hinge_api_json['data']['data'] = broken_hinge_api_json['data']['data'][:70]
+    broken_hinge_api_json['data']['data'] = broken_hinge_api_json['data']['data'][:5000]
     json_dataset = broken_hinge_api_json['data']
 
     return render_template('hp_issue.html', page_vars={'title': page_title,

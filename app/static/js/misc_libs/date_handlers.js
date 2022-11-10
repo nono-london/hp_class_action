@@ -30,4 +30,4 @@ function timestamp_to_year(timestamp_str){
     }
 
 
-console.log(timestamp_to_day("2022-01-30"));
+//console.log(timestamp_to_day("2022-01-30"));

@@ -32,71 +32,27 @@
 
 <script src="{{ url_for('static', filename='js/misc_libs/date_handlers.js') }}" type="text/javascript"></script>
 
+
 <script>
     var chart_canvas_id = document.getElementById("chart_histo");
     var chart_histo;
     
     const json_dataset = {{ page_vars['json_dataset']|safe }};
 
-    console.log("Start");
-    // Group incidents by day
+    console.log(json_dataset['data']);
+    const group_by_m_dataset = group_by_month(json_dataset['data']);
+    console.log(group_by_m_dataset);
+    let x_values=group_by_m_dataset.map(function(value,index) { return value['post_datetime']; });
+    let y_values=group_by_m_dataset.map(function(value,index) { return value['count']; });
     
-    group_by_day(json_dataset['data'], 'hp_post_id');
-
-    function group_by_day(json_data_set, y_key){
-        console.log("I am in");
-        console.log(json_data_set.length);
-        for (let i=0; i<json_data_set.length; i++){
-            console.log(i);
-            //console.log(json_data_set[y_key]);
-        }
-        console.log("I am out");
-    }
 
 
-    // function gets x_values and y_values
-    let {x_values, y_values} = setChartDataset(json_dataset['data'], 'post_datetime', 'hp_post_id');
-    console.log(x_values);
-    console.log(y_values);
-    
-    function setChartDataset(chart_data, x_key, y_keys){
-        // delete if previous chart if any
-        if (chart_histo!=undefined | chart_histo!=null) {
-            chart_histo.destroy();
-        }
-        
-        // https://css-tricks.com/the-many-ways-of-getting-data-into-charts/
-        // declare variables
-        let x_values = [];
-        let y_values = [];
-        
-        // set values
-        $.each(chart_data, function(index, data_rows) {
-            // Loop through datset and find x and y
-            $.each(data_rows, function(index, col) {
-                // set x values
-                if (index==x_key){
-                    x_values.push(timestamp_to_date(col));
-                }
-                // set y values, shoul devolved to a groupby=> list of y_keys
-                if (index==y_keys){
-                    y_values.push(col);
-                }               
-            });
-            
-        });
-
-        return {x_values, y_values};
-
-    }
-
-        
-    createChart(chart_canvas_id, x_values, y_values, 'Title of the chart');
+    createChart(chart_canvas_id, x_values.reverse(), y_values.reverse(), 'Title of the chart');
 
 
     function createChart(canvas_id, x_values, y_values, chart_title){
         const chart_graph = new Chart(canvas_id, {
-            type: 'bar',
+            type: 'line',
             data: {
                 labels: x_values,
                 datasets: [{
@@ -104,23 +60,25 @@
                     //barPercentage: 0.5,
                     //barThickness: 6,
                     //maxBarThickness: 8,
-                    minBarLength: 200,
+                    //minBarLength: 200,
                     data: y_values,
                     backgroundColor: [ // Specify custom colors
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
+                    // 'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 130, 132, 0.2)',
+                    // 'rgba(54, 162, 235, 0.2)',
+                    // 'rgba(255, 206, 86, 0.2)',
+                    // 'rgba(75, 192, 192, 0.2)',
+                    // 'rgba(153, 102, 255, 0.2)',
+                    // 'rgba(255, 159, 64, 0.2)'
                   ],
                   borderColor: [ // Add custom color borders
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
+                    // 'rgba(255,99,132,1)',
+                    'rgba(255, 130, 132, 1)',
+                    // 'rgba(54, 162, 235, 1)',
+                    // 'rgba(255, 206, 86, 1)',
+                    // 'rgba(75, 192, 192, 1)',
+                    // 'rgba(153, 102, 255, 1)',
+                    // 'rgba(255, 159, 64, 1)'
                   ],
                   borderWidth: 1 // Specify bar border width
             
@@ -133,28 +91,39 @@
         
     }
 
+
+    function get_year_month_parts(date_as_date){
+        //console.log(`date is: ${date_as_date}`);
+        month = timestamp_to_month(date_as_date);
+        year = timestamp_to_year(date_as_date);
+        //console.log(`year ${year}, month ${month}`);
+        return {year, month};
+    
+    }
+    
     function group_by_month(arr) {
         return Object.values(
-          arr.reduce((a, { x: date_string, y: value }) => {
-            const { year, month } = get_date_parts(date_string);
-            const key = `${year}/${month}`;
+          arr.reduce((a, { post_datetime: date_as_date, claims: count }) => {
+            const { year, month } = get_year_month_parts(date_as_date) ;
+            const key = `${year}-${('0'+month).slice(-2)}`;
             // using logical nullish assignment
             //(a[key] ??= { color: 'Blue?', value: 0, label: key }).value += value;
       
             // or written out long hand
             if (a[key] === undefined) {
-              a[key] = { color: 'Blue?', value: 0, label: key };
+              a[key] = {post_datetime: key, count: 0,  };
             }
       
-            a[key].value += value;
+            a[key].count += 1;
       
             return a;
           }, {}),
         );
-      }
-    
+    }
 
-</script>
+
+
+    </script>
 {% endblock %}
 
 
