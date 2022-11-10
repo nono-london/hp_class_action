@@ -16,8 +16,8 @@
         Histo: All or since 2017
       </button>
       <ul class="dropdown-menu dropdown-menu-dark">
-        <li><a class="dropdown-item" onclick="histo_lentgh_dropbox(this)" href="#">Since 2017</a></li>
-        <li><a class="dropdown-item" onclick="histo_lentgh_dropbox(this)" href="#">All</a></li>
+        <li><a class="dropdown-item" onclick="dropbox_active_inactive(this)" href="#">Since 2017</a></li>
+        <li><a class="dropdown-item" onclick="dropbox_active_inactive(this)" href="#">All</a></li>
       </ul>
     </div>
 
@@ -52,6 +52,7 @@
 
 <script src="{{ url_for('static', filename='js/misc_libs/date_handlers.js') }}" type="text/javascript"></script>
 <script src="{{ url_for('static', filename='js/chartjs_handlers/chart_builders.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='js/element_handlers/dropbox_handlers.js') }}" type="text/javascript"></script>
 
 
 <script type="text/javascript">
@@ -61,20 +62,6 @@
     var chart_histo_monthly;
     var chart_histo_yearly;
     const json_dataset = {{ page_vars['json_dataset']|safe }};
-
-    // dropdown hisot length handler
-    function histo_lentgh_dropbox(button_element){
-      const dropdowns =  document.querySelectorAll(".button-active-handler .dropdown-menu li a");
-      console.log(dropdowns);
-      [... dropdowns].forEach( function (element){
-        console.log("Element");
-        console.log(element);
-        element.className="dropdown-item";
-      });
-
-      button_element.className="dropdown-item active";
-
-    }
 
     // monhtly chart
     const group_by_m_dataset = group_by_month(json_dataset['data']);
