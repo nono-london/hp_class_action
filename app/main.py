@@ -1,8 +1,8 @@
-import json
-import ast
-from flask import Flask, render_template
+from flask import (Flask, render_template, 
+                   request)
 from typing import Dict
 from app.data_analysis.gsheet_api import get_hp_claims_from_api_json
+from app.visitor_information.ip_address import get_customer_ip_address
 from pathlib import Path
 app = Flask(__name__,
             template_folder=str(Path(Path(__file__).parent,'templates'))
@@ -26,6 +26,7 @@ home_carousel_slides: list = [{'slide_name': 'broken_hinge', 'slide_position': 0
 
 @app.route("/")
 def home_view():
+    get_customer_ip_address()
     page_title: str = "HP Forums"
     h2_text: str = """
                     This website aims at gathering information regarding 
@@ -33,6 +34,8 @@ def home_view():
         """
     carousel_id = "carouselHP"
 
+
+    
     return render_template('index.html', page_vars={'title': page_title,
                                                     'h2_text': h2_text,
                                                     'carousel_id': carousel_id,
@@ -42,6 +45,8 @@ def home_view():
 
 @app.route("/hp_issue_<issue_type>")
 def hp_issue(issue_type):
+    get_customer_ip_address()
+
     page_title: str = str(issue_type.replace('_', ' ')).title()
     print("in hp issue router")
     h2_text = "HP issue: " + page_title
