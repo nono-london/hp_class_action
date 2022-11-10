@@ -8,9 +8,20 @@
 {% block body %}
     <div class="container p-5 my-5 bg-primary text-white">
         <h5>{{ page_vars['h2_text'] }}</h5>
-
-
     </div>
+
+
+    <div class="container">
+      <button id="cbbx_histo_length" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Histo: All or since 2017
+      </button>
+      <ul class="dropdown-menu dropdown-menu-dark">
+        <li><a class="dropdown-item active" href="#">Since 2017</a></li>
+        <li><a class="dropdown-item" href="#">All</a></li>
+      </ul>
+    </div>
+
+    <hr class="container">
 
     <div class="container">
         <div class="chart_title">
@@ -20,7 +31,7 @@
         <canvas id="chart_histo_monthly"  width="100%" height="30%"></canvas>
     </div>
     
-    <hr>
+    <hr class="container">
     
     <div class="container">
         <div class="chart_title">
@@ -46,22 +57,21 @@
 <script>
     var histo_monthly_id = document.getElementById("chart_histo_monthly");
     var histo_yearly_id = document.getElementById("chart_histo_yearly");
+    var cbbx_histo_length_id = document.getElementById("cbbx_histo_length");
     var chart_histo_monthly;
     var chart_histo_yearly;
     const json_dataset = {{ page_vars['json_dataset']|safe }};
 
+    // monhtly chart
     const group_by_m_dataset = group_by_month(json_dataset['data']);
-    console.log(group_by_m_dataset);
     let x_values=group_by_m_dataset.map(function(value,index) { return value['post_datetime']; });
     let y_values=group_by_m_dataset.map(function(value,index) { return value['count']; });
     chartJsBuilder(histo_monthly_id, 'line', 2,3,x_values.reverse(), y_values.reverse(), 'Number of new claims on HP Forum');
-
+    // yearly chart
     const group_by_y_dataset = group_by_year(json_dataset['data']);
     x_values=group_by_y_dataset.map(function(value,index) { return value['post_datetime']; });
     y_values=group_by_y_dataset.map(function(value,index) { return value['count']; });
     chartJsBuilder(histo_yearly_id, 'bar', 0,1, x_values, y_values, 'Number of new claims on HP Forum');
-
-
 
     function get_year_month_parts(date_as_date){
         //console.log(`date is: ${date_as_date}`);
