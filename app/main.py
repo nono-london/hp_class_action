@@ -3,9 +3,9 @@ import ast
 from flask import Flask, render_template
 from typing import Dict
 from app.data_analysis.gsheet_api import get_hp_claims_from_api_json
-
+from pathlib import Path
 app = Flask(__name__,
-            # template_folder=str(Path(Path(__file__).parent,'templates'))
+            template_folder=str(Path(Path(__file__).parent,'templates'))
             )
 
 broken_hinge_api_json: Dict = get_hp_claims_from_api_json()
