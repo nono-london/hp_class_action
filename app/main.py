@@ -1,11 +1,13 @@
-from flask import (Flask, render_template, 
-                   request)
+from pathlib import Path
 from typing import Dict
+
+from flask import (Flask, render_template)
+
 from app.data_analysis.gsheet_api import get_hp_claims_from_api_json
 from app.visitor_information.ip_address import get_customer_ip_address
-from pathlib import Path
+
 app = Flask(__name__,
-            template_folder=str(Path(Path(__file__).parent,'templates'))
+            template_folder=str(Path(Path(__file__).parent, 'templates'))
             )
 
 broken_hinge_api_json: Dict = get_hp_claims_from_api_json()
@@ -34,8 +36,6 @@ def home_view():
         """
     carousel_id = "carouselHP"
 
-
-    
     return render_template('index.html', page_vars={'title': page_title,
                                                     'h2_text': h2_text,
                                                     'carousel_id': carousel_id,

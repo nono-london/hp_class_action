@@ -11,6 +11,7 @@ def get_customer_ip_address():
     http_x_real_ip = None
     remote_addr = None
     http_x_forwarded_for = None
+    visited_url = request.url
 
     try:
         http_x_real_ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
@@ -31,11 +32,15 @@ def get_customer_ip_address():
     print(f'http_x_real_ip: {http_x_real_ip}, '
           f'remote_addr:{remote_addr}, '
           f'http_x_forwarded_for:{http_x_forwarded_for}')
-    headers: List = ['visit_datetime', 'http_x_real_ip', 'remote_addr', 'http_x_forwarded_for']
+    headers: List = ['visit_datetime', 'http_x_real_ip',
+                     'remote_addr', 'http_x_forwarded_for',
+                     'visited_url']
     row: Dict = {'visit_datetime': datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'),
                  'http_x_real_ip': http_x_real_ip,
                  'remote_addr': remote_addr,
-                 'http_x_forwarded_for': http_x_forwarded_for}
+                 'http_x_forwarded_for': http_x_forwarded_for,
+                 'visited_url': visited_url
+                 }
 
     write_ips_to_csv(row, headers)
 
@@ -60,4 +65,5 @@ def write_ips_to_csv(ip_address_dict: Dict, headers):
         writer.writerow(ip_address_dict)
 
 
-print(Path().joinpath(Path().cwd().parent, 'data_visitors'))
+if __name__ == '__main__':
+    print(Path().joinpath(Path().cwd().parent, 'data_visitors'))
