@@ -62,7 +62,9 @@
     var chart_histo_monthly;
     var chart_histo_yearly;
     const json_dataset = {{ page_vars['json_dataset']|safe }};
-
+    
+    // initiate charts
+    set_chart_datasets(2017);
 
     function set_chart_datasets(post_after_year){
       // set dataset
@@ -147,7 +149,7 @@
        });
        return result;
     }
-    // initiate charts
+    
     function setChartsWithDropdowns(button_clicked_element){
       let result = dropdown_active_inactive(button_clicked_element, 'Histo');
       if (result.innerHTML.includes(String(2017))){
@@ -157,7 +159,7 @@
       }
     }
 
-    set_chart_datasets(2017);
+   
 
 
 
