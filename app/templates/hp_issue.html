@@ -72,7 +72,7 @@
             // get the list of all metoos
             //metoo[element['username']] = [...metoo[element['username']]??[] ,[element['post_datetime']] ]
             // will take only the first one
-            metoo[element['username']] = metoo[element['username']]??[element['post_datetime']]
+            metoo[element['username']] = metoo[element['username']]??{"post_datetime":element['post_datetime']}
           })
           }
     })
