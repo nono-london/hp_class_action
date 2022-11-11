@@ -112,7 +112,18 @@
       const post_by_month = group_by_month(dataset_post);
       const me_too_by_month = group_by_month(metoo);
       // canvas_id, chart_type, datasets, serie_names
-      chartJsBuilderMultipleDatasets(histo_monthly_id, 'bar', [post_by_month, me_too_by_month],['Post by Month','Me Too by month'], true );
+      chartJsBuilderMultipleDatasets(histo_monthly_id, 'line', [post_by_month, me_too_by_month],['Post by Month','Me Too by month'],  );
+
+      // yearly chart
+      const post_by_year = group_by_year(dataset_post);
+      console.log("post_by_year");
+      console.log(post_by_year);
+      const me_too_by_year = group_by_year(metoo);
+      console.log("me_too_by_year");
+      console.log(me_too_by_year);
+
+      // canvas_id, chart_type, datasets, serie_names
+      chartJsBuilderMultipleDatasets(histo_yearly_id, 'bar', [post_by_year, me_too_by_year],['Post by year','Me Too by year'], );
 
     }
     
@@ -131,10 +142,7 @@
           arr.reduce((a, { post_datetime: date_as_date, claims: count }) => {
             const { year, month } = get_year_month_parts(date_as_date) ;
             const key = `${year}-${('0'+month).slice(-2)}`;
-            // using logical nullish assignment
-            //(a[key] ??= { color: 'Blue?', value: 0, label: key }).value += value;
-      
-            // or written out long hand
+
             if (a[key] === undefined) {
               a[key] = {post_datetime: key, count: 0,  };
             }
@@ -149,12 +157,9 @@
     function group_by_year(arr) {
         return Object.values(
           arr.reduce((a, { post_datetime: date_as_date, claims: count }) => {
-            const { year } = get_year_month_parts(date_as_date) ;
+            const { year, month } = get_year_month_parts(date_as_date) ;
             const key = `${year}`;
-            // using logical nullish assignment
-            //(a[key] ??= { color: 'Blue?', value: 0, label: key }).value += value;
-      
-            // or written out long hand
+
             if (a[key] === undefined) {
               a[key] = {post_datetime: key, count: 0,  };
             }
@@ -169,7 +174,7 @@
     function filter_post_after_date(arr,date_key, post_after_year, ){
       result = arr.filter(row => {
                                 // console.log(row[date_key]);
-                                var year = new Date(row[date_key]).getFullYear();
+                                let year = new Date(row[date_key]).getFullYear();
                                 // console.log(year);
                                 return (post_after_year <= year);
        });

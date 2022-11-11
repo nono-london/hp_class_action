@@ -89,7 +89,6 @@ function chartJsBuilderMultipleDatasets(canvas_id, chart_type, datasets, serie_n
 }
 
 
-
 function create_chartjs_dataset(y_values, serie_name, color_slice_start, color_slice_end){
   let chart_dataset = {
     label: serie_name,
