@@ -117,33 +117,6 @@
     }
     
 
-    // set_chart_datasets(2017);
-
-    function set_chart_datasets(post_after_year){
-      // set dataset
-      let chart_dataset; 
-      if (Number.isInteger(post_after_year)){
-        chart_dataset = filter_post_after_date(json_dataset['data'],'post_datetime', post_after_year);
-      }else{
-        chart_dataset = json_dataset['data'];
-      }
-
-      // monhtly chart
-      const group_by_m_dataset = group_by_month(chart_dataset);
-      let x_values=group_by_m_dataset.map(function(value,index) { return value['post_datetime']; });
-      let y_values=group_by_m_dataset.map(function(value,index) { return value['count']; });
-      if (chart_histo_monthly) {    chart_histo_monthly.destroy();  }
-      chart_histo_monthly = chartJsBuilder(histo_monthly_id, 'line', 2,3,x_values.reverse(), y_values.reverse(), 'Number of new claims on HP Forum');
-      // yearly chart
-      const group_by_y_dataset = group_by_year(chart_dataset);
-      x_values=group_by_y_dataset.map(function(value,index) { return value['post_datetime']; });
-      y_values=group_by_y_dataset.map(function(value,index) { return value['count']; });
-      if (chart_histo_yearly) {    chart_histo_yearly.destroy();  }
-      chart_histo_yearly = chartJsBuilder(histo_yearly_id, 'bar', 0,1, x_values, y_values, 'Number of new claims on HP Forum');
-
-    }
-
-
     function get_year_month_parts(date_as_date){
         //console.log(`date is: ${date_as_date}`);
         month = timestamp_to_month(date_as_date);
