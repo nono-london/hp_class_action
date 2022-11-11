@@ -5,13 +5,13 @@ from flask import (Flask, render_template,
                    request, flash)
 
 from app.data_analysis.gsheet_api import get_hp_claims_from_api_json
-from app.visitor_information.ip_address import get_customer_ip_address
 from app.visitor_information.contact_form import save_contact_message
+from app.visitor_information.ip_address import get_customer_ip_address
 
 app = Flask(__name__,
             template_folder=str(Path(Path(__file__).parent, 'templates'))
             )
-app.secret_key="dssdnbvjhu(ç*$@@@@####"
+app.secret_key = "dssdnbvjhu(ç*$@@@@####"
 
 broken_hinge_api_json: Dict = get_hp_claims_from_api_json()
 home_carousel_slides: list = [{'slide_name': 'broken_hinge', 'slide_position': 0, "slide_wait_interval": 3000,
@@ -66,12 +66,12 @@ def hp_issue(issue_type):
 
 @app.route("/contact_form", methods=['GET', 'POST'])
 def contact_form():
+    get_customer_ip_address()
     page_title = "Contact Form"
+
     if request.method == 'POST':
         save_contact_message(form_request=request.form)
         flash('Message sent successfully. Thank you!')
-    else:
-        get_customer_ip_address()
 
     return render_template('contact_form.html', page_vars={'title': page_title, })
 
