@@ -62,20 +62,34 @@
     var chart_histo_yearly;
     const json_dataset = {{ page_vars['json_dataset']|safe }};
 
-    var metoo = {};
+    
+    var metoo =getMeTooUsers(json_dataset['data']);
     // Find metoo users
-    json_dataset['data'].forEach(function (element){
-      let clean_metoo = element['me_too'].replace(/(^"|"$)/g, '');
-      if (clean_metoo){
-          clean_metoo_parsed = JSON.parse(clean_metoo);
-          clean_metoo_parsed.forEach(function(element) {
-            // get the list of all metoos
-            //metoo[element['username']] = [...metoo[element['username']]??[] ,[element['post_datetime']] ]
-            // will take only the first one
-            metoo[element['username']] = metoo[element['username']]??{"post_datetime":element['post_datetime']}
-          })
-          }
-    })
+    function getMeTooUsers(arr){
+      let temp_username = {};
+      let temp_metoo = [];
+
+      arr.forEach(function (element){
+        let clean_metoo = element['me_too'].replace(/(^"|"$)/g, '');
+        if (clean_metoo){
+            clean_metoo_parsed = JSON.parse(clean_metoo);
+            clean_metoo_parsed.forEach(function(element) {
+              // get the list of all metoos
+              //metoo[element['username']] = [...metoo[element['username']]??[] ,[element['post_datetime']] ]
+              // will take only the first one
+              // temp_username[element['username']] = temp_username[element['username']]??{"post_datetime":element['post_datetime']}
+              // building correct dataset
+              if (temp_username[element['username']]===undefined){
+                temp_username[element['username']] = element['username'];
+                temp_metoo.push({"username":element['username'], "post_datetime":element['post_datetime']});
+              }
+            })
+            }
+      })
+
+      return temp_metoo;
+    }
+
 
     // initiate charts
     set_chart_datasets(2017);
