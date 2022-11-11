@@ -61,7 +61,22 @@
     var chart_histo_monthly;
     var chart_histo_yearly;
     const json_dataset = {{ page_vars['json_dataset']|safe }};
-    
+
+    var metoo = {}
+    // Find metoo users
+    json_dataset['data'].forEach(function (element){
+      let clean_metoo = element['me_too'].replace(/(^"|"$)/g, '');
+      if (clean_metoo){
+          clean_metoo_parsed = JSON.parse(clean_metoo);
+          
+          clean_metoo_parsed.forEach(function(element) {
+            metoo[element['username']] = [...metoo[element['username']]??[] ,[element['post_datetime']] ]
+          })
+
+          }
+
+    })
+
     // initiate charts
     set_chart_datasets(2017);
 
