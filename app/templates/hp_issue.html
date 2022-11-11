@@ -63,7 +63,8 @@
     const json_dataset = {{ page_vars['json_dataset']|safe }};
 
     
-    var metoo =getMeTooUsers(json_dataset['data']);
+    var metoo = getMeTooUsers(json_dataset['data']);
+    
     // Find metoo users
     function getMeTooUsers(arr){
       let temp_username = {};
@@ -89,10 +90,34 @@
 
       return temp_metoo;
     }
-
-
+    setChartWithDatasets(2017);
     // initiate charts
-    set_chart_datasets(2017);
+    // try chart with ,multiple set_chart_datasets
+    function setChartWithDatasets(post_after_year){
+      // destroy charts
+      if (chart_histo_monthly) {    chart_histo_monthly.destroy();  }
+
+      // create datasets
+      let dataset_post; 
+      let dataset_metoo;
+      if (Number.isInteger(post_after_year)){
+        dataset_post = filter_post_after_date(json_dataset['data'],'post_datetime', post_after_year);
+        dataset_metoo = filter_post_after_date(metoo,'post_datetime', post_after_year);
+      }else{
+        dataset_post = json_dataset['data'];
+        dataset_metoo = metoo;
+      }
+
+      // monhtly chart
+      const post_by_month = group_by_month(dataset_post);
+      const me_too_by_month = group_by_month(metoo);
+      // canvas_id, chart_type, datasets, serie_names
+      chartJsBuilderMultipleDatasets(histo_monthly_id, 'bar', [post_by_month, me_too_by_month],['Post by Month','Me Too by month'], true );
+
+    }
+    
+
+    // set_chart_datasets(2017);
 
     function set_chart_datasets(post_after_year){
       // set dataset
