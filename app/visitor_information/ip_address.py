@@ -1,9 +1,10 @@
-import csv
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List
 
 from flask import (request)
+
+from app.visitor_information.csv_handler import write_csv_file
 
 
 def get_customer_ip_address():
@@ -42,27 +43,7 @@ def get_customer_ip_address():
                  'visited_url': visited_url
                  }
 
-    write_ips_to_csv(row, headers)
-
-
-def write_ips_to_csv(ip_address_dict: Dict, headers):
-    folder_path = Path(Path(__file__).parent.parent, 'data_visitors')
-    if not folder_path.exists():
-        folder_path.mkdir(parents=True)
-    file_full_path = Path(folder_path, 'visitor_ips.csv')
-
-    if file_full_path.exists():
-        write_type = 'a'
-    else:
-        write_type = 'w'
-
-    with open(file_full_path, write_type, newline='') as file:
-        # Create a CSV dictionary writer and add the student header as field names
-        writer = csv.DictWriter(file, fieldnames=headers)
-        # Use writerows() not writerow()
-        if write_type == 'w':
-            writer.writeheader()
-        writer.writerow(ip_address_dict)
+    write_csv_file(csv_file_name='visitor_ips.csv', headers=headers, ip_address_dict=row, )
 
 
 if __name__ == '__main__':

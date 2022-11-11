@@ -22,7 +22,17 @@
     </head>
     <!-- navbar -->
     {% include 'bootstrap_templates/navbar_template.html' %}
-
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+    <div class="alert alert-success flashes" role="alert">
+        <ul>
+        {% for message in messages %}
+          <p>{{ message }}</p>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    </div>
     <body>
             {% block body %}
 
