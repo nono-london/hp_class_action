@@ -69,7 +69,10 @@
       if (clean_metoo){
           clean_metoo_parsed = JSON.parse(clean_metoo);
           clean_metoo_parsed.forEach(function(element) {
-            metoo[element['username']] = [...metoo[element['username']]??[] ,[element['post_datetime']] ]
+            // get the list of all metoos
+            //metoo[element['username']] = [...metoo[element['username']]??[] ,[element['post_datetime']] ]
+            // will take only the first one
+            metoo[element['username']] = metoo[element['username']]??[element['post_datetime']]
           })
           }
     })
