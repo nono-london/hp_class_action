@@ -61,6 +61,12 @@ def hp_issue(issue_type):
                                                        })
 
 
+@app.route("/contact_form")
+def contact_form():
+    get_customer_ip_address()
+    page_title = "Contact Form"
+    return render_template('contact_form.html', page_vars={'title': page_title,})
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5001,
             debug=True)
