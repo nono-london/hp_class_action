@@ -61,10 +61,10 @@ function chartJsBuilderMultipleDatasets(canvas_id, chart_type, datasets, serie_n
   let chart_datasets=[];
   for (let i=0;i<serie_names.length;i++){
     let y_values = [];
-    let temp_dataset = datasets[i];
-    temp_dataset = addMissingDataToYaxis(x_values, temp_dataset);
-    datasets[i].forEach(function(row_dict){
-      //select y_values 2nd list
+    let temp_dataset = addMissingDataToYaxis(x_values, datasets[i]);
+    // fills up y_values
+    temp_dataset.forEach(function(row_dict){
+      //select y_values: 2nd list
       y_values.push(Object.values(row_dict)[1]);
     })
     const chart_dataset = create_chartjs_dataset(y_values,serie_names[i], i, i+1);
@@ -111,9 +111,9 @@ function chartJsBuilderMultipleDatasets(canvas_id, chart_type, datasets, serie_n
 function addMissingDataToYaxis(x_values, dataset){
   // take 1st row of dataset inorder to have their dict names
   // will add data using this Object.values(row_1)[0]);
-  console.log("x_values");
-  console.log(x_values);
-  console.log("x_values");
+  // console.log("x_values");
+  // console.log(x_values);
+  // console.log("x_values");
   let dict_template  = dataset[0];
   // console.log("dict_template");
   const x_key = Object.keys(dict_template)[0];
@@ -121,35 +121,40 @@ function addMissingDataToYaxis(x_values, dataset){
   // console.log("x_key");
   // console.log(x_key);
   
-  console.log("dataset");
-  console.log(dataset);
+  // console.log("dataset");
+  // console.log(dataset);
   missing_data = [];
   
   for (let i=0;i<x_values.length;i++ ){
     // console.log('xvalues            '+i);
     // console.log(dataset);
     j=0;
+    let x_value_found=false;
     while (j<dataset.length){
-
       if (x_values[i]==dataset[j][x_key] ){
-        console.log("Equal values:");
-        console.log(x_values[i]);
-        console.log(dataset[j][x_key]);
+        //console.log("Equal values:");
+        // console.log(x_values[i]);
+        // console.log(dataset[j][x_key]);
+        x_value_found=true;
         break;
-
        }
+      j++;
       }
-    
-    
+    if (!x_value_found){
+      missing_data.push(x_values[i]);
+      dataset.splice(i, 0, {[x_key]:x_values[i], [y_key]:0});
+
+    }
   }
-  console.log("Missing values");
-  console.log(missing_data);
+  // if (missing_data.length>0){
+  //   console.log("Missing values");
+  //   console.log(missing_data);
+  //   console.log("New dataset");
+  //   console.log(dataset);
+    
+  // }
 
 
-
-
-
-  
   return dataset;
 }
 
