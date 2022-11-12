@@ -32,9 +32,12 @@ home_carousel_slides: list = [{'slide_name': 'broken_hinge', 'slide_position': 0
                               ]
 
 
-def set_dataset():
+def refresh_dataset(force_update: bool = False):
     global broken_hinge_api_json
     global broken_hinge_api_json_last_update
+    if (datetime.utcnow() - broken_hinge_api_json_last_update).days == 0 or not force_update:
+        return
+
     broken_hinge_api_json = get_hp_claims_from_api_json()
     broken_hinge_api_json_last_update = datetime.utcnow()
 
@@ -42,8 +45,8 @@ def set_dataset():
 @app.route("/")
 def home_view():
     get_customer_ip_address()
-    if (datetime.utcnow() - broken_hinge_api_json_last_update).days >= 1:
-        set_dataset()
+
+    refresh_dataset()
 
     page_title: str = "HP Forums"
     h2_text: str = """
