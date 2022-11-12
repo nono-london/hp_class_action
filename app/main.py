@@ -1,3 +1,4 @@
+from datetime import datetime
 from pathlib import Path
 from typing import Dict
 
@@ -14,6 +15,8 @@ app = Flask(__name__,
 app.secret_key = "dssdnbvjhu(ç*$@@@@####"
 
 broken_hinge_api_json: Dict = get_hp_claims_from_api_json()
+broken_hinge_api_json_last_update: datetime = datetime.utcnow()
+
 home_carousel_slides: list = [{'slide_name': 'broken_hinge', 'slide_position': 0, "slide_wait_interval": 3000,
                                'slide_title': 'Broken Hinges', 'slide_h5': 'HP Forum Support',
                                'slide_p': 'Data gathered from HP users testimonies'
@@ -29,9 +32,19 @@ home_carousel_slides: list = [{'slide_name': 'broken_hinge', 'slide_position': 0
                               ]
 
 
+def set_dataset():
+    global broken_hinge_api_json
+    global broken_hinge_api_json_last_update
+    broken_hinge_api_json = get_hp_claims_from_api_json()
+    broken_hinge_api_json_last_update = datetime.utcnow()
+
+
 @app.route("/")
 def home_view():
     get_customer_ip_address()
+    if (datetime.utcnow() - broken_hinge_api_json_last_update).days >= 1:
+        set_dataset()
+
     page_title: str = "HP Forums"
     h2_text: str = """
                     This website aims at gathering information regarding 
