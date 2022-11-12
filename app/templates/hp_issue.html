@@ -108,11 +108,7 @@
         dataset_metoo = metoo;
       }
 
-      // monhtly chart
-      const post_by_month = group_by_month(dataset_post);
-      const me_too_by_month = group_by_month(metoo);
-      // canvas_id, chart_type, datasets, serie_names
-      chartJsBuilderMultipleDatasets(histo_monthly_id, 'line', [post_by_month, me_too_by_month],['Post by Month','Me Too by month'],  );
+
 
       // yearly chart
       const post_by_year = group_by_year(dataset_post);
@@ -157,7 +153,7 @@
     function group_by_year(arr) {
         return Object.values(
           arr.reduce((a, { post_datetime: date_as_date, claims: count }) => {
-            const { year, month } = get_year_month_parts(date_as_date) ;
+            const year = timestamp_to_year(date_as_date) ;
             const key = `${year}`;
 
             if (a[key] === undefined) {
