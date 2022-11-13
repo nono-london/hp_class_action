@@ -95,6 +95,7 @@
     // try chart with ,multiple set_chart_datasets
     function setChartWithDatasets(post_after_year){
       // destroy charts
+      if (chart_histo_yearly) {    chart_histo_yearly.destroy();  }
       if (chart_histo_monthly) {    chart_histo_monthly.destroy();  }
 
       // create datasets
@@ -117,7 +118,7 @@
       // console.log(me_too_by_year);
 
       // canvas_id, chart_type, datasets, serie_names
-      chartJsBuilderMultipleDatasets(histo_yearly_id, 'bar', [post_by_year, me_too_by_year],['Post by year','Me Too by year'], );
+      chart_histo_yearly = chartJsBuilderMultipleDatasets(histo_yearly_id, 'bar', [post_by_year, me_too_by_year],['Post by year','Me Too by year'], true);
 
       // monthly chart
       const post_by_month = group_by_month(dataset_post);
@@ -128,7 +129,7 @@
       console.log(me_too_by_month);
 
       // canvas_id, chart_type, datasets, serie_names
-      chartJsBuilderMultipleDatasets(histo_monthly_id, 'bar', [post_by_month, me_too_by_month],['Post by month','Me Too by month'], );
+      chart_histo_monthly = chartJsBuilderMultipleDatasets(histo_monthly_id, 'bar', [post_by_month, me_too_by_month],['Post by month','Me Too by month'], true);
 
 
 
@@ -192,9 +193,9 @@
     function setChartsWithDropdowns(button_clicked_element){
       let result = dropdown_active_inactive(button_clicked_element, 'Histo');
       if (result.innerHTML.includes(String(2017))){
-        set_chart_datasets(2017);
+        setChartWithDatasets(2017);
       }else{
-        set_chart_datasets("All");
+        setChartWithDatasets("All");
       }
     }
 
