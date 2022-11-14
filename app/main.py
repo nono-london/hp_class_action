@@ -96,7 +96,7 @@ def hp_issue(issue_type):
     h2_text = "HP issue: " + page_title
 
     print("BROKEN HING DETECTED")
-    broken_hinge_api_json['data']['data'] = broken_hinge_api_json['data']['data'][:5000]
+    # broken_hinge_api_json['data']['data'] = broken_hinge_api_json['data']['data'][:5000]
     json_dataset = broken_hinge_api_json['data']
 
     return render_template('hp_issue.html', page_vars={'title': page_title,
@@ -123,9 +123,10 @@ def data_table():
     get_customer_ip_address()
     page_title = "Data"
     h2_text = """Data available"""
+    json_dataset = broken_hinge_api_json['data']['data']
     page_vars = {'title': page_title,
                  'h2_text': h2_text,
-
+                 'json_dataset':json_dataset
                  }
     return render_template('data_table.html', page_vars=page_vars)
 
