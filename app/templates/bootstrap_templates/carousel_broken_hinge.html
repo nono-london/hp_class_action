@@ -1,0 +1,79 @@
+<div id="{{ page_vars['carousel_id'] }}" class="carousel carousel-dark slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#{{ page_vars['carousel_id'] }}"
+                data-bs-slide-to="{{ page_vars['carousel_slides'][0]['slide_position'] }}" class="active"
+                aria-label="{{ page_vars['carousel_slides'][0]['slide_name'] }}" aria-current="true"></button>
+    {% for slide in page_vars['carousel_slides'][1:] %}
+        <button type="button" data-bs-target="#{{ page_vars['carousel_id'] }}"
+                data-bs-slide-to="{{ slide['slide_position'] }}" aria-label="{{ slide['slide_name'] }}"
+                class="">
+        </button>
+    {% endfor %}
+    </div>
+
+    <div class="carousel-inner">
+
+
+        <div class="carousel-item active" id="{{ page_vars['carousel_slides'][0]['slide_name'] }}" data-bs-interval="{{ page_vars['carousel_slides'][0]['slide_wait_interval'] }}">
+            <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400"
+                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: First slide"
+                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
+                <rect width="100%" height="100%" fill="#f5f5f5"></rect>
+                <text x="50%" y="50%" fill="#aaa" dy=".3em">{{ page_vars['carousel_slides'][0]['slide_title'] }}</text>
+            </svg>
+
+            <div class="carousel-caption d-none d-md-block">
+                <h5>{{ page_vars['carousel_slides'][0]['slide_h5'] }}</h5>
+                <p>{{ page_vars['carousel_slides'][0]['slide_p'] }}</p>
+            </div>
+        </div>
+
+        {% for slide in page_vars['carousel_slides'][1:] %}
+        <div class="carousel-item" id="{{ slide['slide_name'] }}" data-bs-interval="{{ slide['slide_wait_interval'] }}">
+            <svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400"
+                 xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Second slide"
+                 preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
+                <rect width="100%" height="100%" fill="#eee"></rect>
+                <text x="50%" y="50%" fill="#bbb" dy=".3em">{{ slide['slide_title'] }}</text>
+            </svg>
+
+            <div class="carousel-caption d-none d-md-block">
+                <h5>{{ slide['slide_h5'] }}</h5>
+                <p>{{ slide['slide_p'] }}</p>
+            </div>
+        </div>
+
+    {% endfor %}
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#{{ page_vars['carousel_id'] }}"
+            data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#{{ page_vars['carousel_id'] }}"
+            data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<script  type="text/javascript">
+// Not needed for now, and will cause problem is multiple carousels are used on same document
+// as they will have the same id: carousel_id
+const carousel_id = {{ page_vars['carousel_id']|tojson }};
+console.log("Carousel id:"+carousel_id);
+
+// bind a click event to each carousel item (needs Ajax import in header to use JQuery)
+{% for slide in page_vars['carousel_slides'] %}
+$(document.getElementById("{{ slide['slide_name'] }}")).on("click", 
+        document.getElementById("#{{ slide['slide_name'] }}") , 
+        function(event){
+                console.log("Carousel item:"+"{{ slide['slide_name'] }}"+" has been clicked");
+                $(location).attr('href', '../hp_issue_'+"{{ slide['slide_name'] }}");
+                        }); 
+{% endfor %}
+
+
+
+</script>
