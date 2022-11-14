@@ -83,7 +83,7 @@ def home_view():
                                                            'h2_text': h2_text,
                                                            'carousel_id': carousel_id,
                                                            'image_paths': image_paths,
-                                                           'slide_interval': 2500
+                                                           'slide_interval': 2000
                                                            })
 
 
