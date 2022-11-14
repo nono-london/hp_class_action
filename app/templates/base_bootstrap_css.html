@@ -19,6 +19,9 @@
         <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
 
         <title>{{ page_vars['title'] }}</title>
+        {% block css_import %}
+          
+        {% endblock %}
     </head>
     <!-- navbar -->
     {% include 'bootstrap_templates/navbar_template.html' %}
