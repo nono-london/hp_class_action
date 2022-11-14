@@ -7,19 +7,20 @@
   {% endfor %}
   </div>
   <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img src="{{ url_for('static', filename=page_vars['image_paths'][0]) }}" class="d-block w-40" height="400" alt="...">
+    <div class="carousel-item active" data-bs-interval="{{ page_vars['slide_interval'] }}">
+      <img src="{{ url_for('static', filename=page_vars['image_paths'][0]) }}" class="rounded mx-auto d-block" height="300" alt="...">
       <div class="carousel-caption d-none d-md-block">
-        <h5>Image 1</h5>
-        <p>Click to access to statistics</p>
+        <h5></h5>
+        <p></p>
       </div>
     </div>
     {% for image_path in page_vars['image_paths'][1:] %}
-    <div class="carousel-item">
-      <img src="{{ url_for('static', filename=image_path) }}" class="d-block w-40" height="400" alt="...">
+    <div class="carousel-item" data-bs-interval="{{ page_vars['slide_interval'] }}">
+      <img src="{{ url_for('static', filename=image_path) }}" class="rounded mx-auto d-block" height="300" alt="...">
       <div class="carousel-caption d-none d-md-block">
-        <h5>Image {{ loop.index+1 }}</h5>
-        <p>Click to access to statistics</p>
+        <h5></h5>
+
+        <p></p>
       </div>
 
     </div>
@@ -34,7 +35,14 @@
     <span class="carousel-control-next-icon" aria-hidden="true"></span>
     <span class="visually-hidden">Next</span>
   </button>
+
 </div>
+<div class="container py-4">
+  <div class="d-grid">
+      <a href="{{ url_for('hp_issue', issue_type='broken_hinge') }}" class="btn btn-primary">Access to statistics</a>
+  </div>
+</div>
+
 
 <script  type="text/javascript">
 // Not needed for now, and will cause problem is multiple carousels are used on same document
