@@ -116,6 +116,13 @@ def contact_form():
 
     return render_template('contact_form.html', page_vars={'title': page_title, })
 
+@app.route("/rest_api", methods=['GET'])
+def rest_api():
+    get_customer_ip_address()
+    page_title = "REST API"
+
+    return render_template('rest_api.html', page_vars={'title': page_title, })
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5001,
