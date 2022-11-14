@@ -8,44 +8,44 @@
 
 {% block body %}
 <!-- Wrapper container -->
-
+<div class="container">
 <div class="container jumbotron text-center">
       <h1>{{ page_vars['h2_text'] }}</h1>
 </div>
 <hr>
-<div class="container">
-<h5>Note that the REST API is updated daily from a MySQL database</h5>
 
-<ul>
-    
-    <li>To access the REST API, go to the following URL:</li>
-    <p><a href="https://script.google.com/macros/s/AKfycbx42OuLPncwWnsiTwX447DVCveMA_a-8GQuaxeB_h2TymNgcPL5G4-BpXG_4XapaBMruQ/exec">G-Sheet API</a></p>
-    <li>Datas are delivered in the following JSON format:</li>
-        <ul>
-            <li>{ "headers": [...], "size": int, "data": [...] }</li>
-        </ul>
-    <li>Where:</li>
-        <ul>
-            <li>"headers" is a list of available columns</li>
-            <li>"size" is the size of the dataset</li>
-            <li>"data" is a list of dictionaries containing columns and data</li>
-        </ul>
-    
-    <li>Sample data:
-        <p>{</p>
-        <p>"headers":["user_id","hp_user_id","username","user_profile_url","user_blocked","hp_post_id","post_datetime","post_url","post_summary","me_too","post_tags"],</p>
+    <h5>Note that the REST API is updated daily from a MySQL database</h5>
 
-        <p>"size":2241,</p>
-        <p>"data":[</p>
-        <p></p>
-        <p>{"user_id":21208,"hp_user_id":5743929,"username":"foxandcat","user_profile_url":"https://h30434.www3.hp.com/t5/user/viewprofilepage/user-id/5743929","user_blocked":0,"hp_post_id":8536286,"post_datetime":"2022-11-12 07:09:00","post_url":"https://h30434.www3.hp.com/t5/Notebook-Hardware-and-Upgrade-Questions/HP-Envy-x-360-left-hinge-and-lower-left-screen-broken/m-p/8536286?search-action-id=584319424711&search-result-uid=8536286","post_summary":"Today, I opened up my laptop and was upset to find that the left hinge had caused the screen to pop off and crack. I do not take this laptop anywhere with me, it sits on my desk. My warranty is e...","me_too":"","post_tags":""},</p>
-        <p> {"user_id":19308,"hp_user_id":5740829,"username":"Maxhonec","user_profile_url":"https://h30434.www3.hp.com/t5/user/viewprofilepage/user-id/5740829","user_blocked":0,"hp_post_id":8535981,"post_datetime":"2022-11-11 22:26:00","post_url":"https://h30434.www3.hp.com/t5/Notebook-Hardware-and-Upgrade-Questions/HP-17-BS0xx-Screen-Hinge-Failure/m-p/8535981?search-action-id=584178959738&search-result-uid=8535981","post_summary":"...uddenly come apart and open/closing the laptop is not possible.  Out of warranty.  Laptops MUST BE designed for Lid-Screen  hingle movement, so the ubiquity of the broken hinge problem i...","me_too":"","post_tags":"\"[\"HP Notebook - 17-bs024cy\",\"Microsoft Windows 10 (64-bit)\"]\""},</p>
-        <p>]</p>
-            
-        <p>}</p>
-    </li>
+    <ul>
+        
+        <li>To access the REST API, go to the following URL:</li>
+        <p><a href="https://script.google.com/macros/s/AKfycbx42OuLPncwWnsiTwX447DVCveMA_a-8GQuaxeB_h2TymNgcPL5G4-BpXG_4XapaBMruQ/exec">G-Sheet API</a></p>
+        <li>Datas are delivered in the following JSON format:</li>
+            <ul>
+                <li>{ "headers": [...], "size": int, "data": [...] }</li>
+            </ul>
+        <li>Where:</li>
+            <ul>
+                <li>"headers" is a list of available columns</li>
+                <li>"size" is the size of the dataset</li>
+                <li>"data" is a list of dictionaries containing columns and data</li>
+            </ul>
+        
+        <li>Sample data:
+            <p>{</p>
+            <p>"headers":["user_id","hp_user_id","username","user_profile_url","user_blocked","hp_post_id","post_datetime","post_url","post_summary","me_too","post_tags"],</p>
 
-</ul>
+            <p>"size":2241,</p>
+            <p>"data":[</p>
+            <p></p>
+            <p>{"user_id":21208,"hp_user_id":5743929,"username":"foxandcat","user_profile_url":"https://h30434.www3.hp.com/t5/user/viewprofilepage/user-id/5743929","user_blocked":0,"hp_post_id":8536286,"post_datetime":"2022-11-12 07:09:00","post_url":"https://h30434.www3.hp.com/t5/Notebook-Hardware-and-Upgrade-Questions/HP-Envy-x-360-left-hinge-and-lower-left-screen-broken/m-p/8536286?search-action-id=584319424711&search-result-uid=8536286","post_summary":"Today, I opened up my laptop and was upset to find that the left hinge had caused the screen to pop off and crack. I do not take this laptop anywhere with me, it sits on my desk. My warranty is e...","me_too":"","post_tags":""},</p>
+            <p> {"user_id":19308,"hp_user_id":5740829,"username":"Maxhonec","user_profile_url":"https://h30434.www3.hp.com/t5/user/viewprofilepage/user-id/5740829","user_blocked":0,"hp_post_id":8535981,"post_datetime":"2022-11-11 22:26:00","post_url":"https://h30434.www3.hp.com/t5/Notebook-Hardware-and-Upgrade-Questions/HP-17-BS0xx-Screen-Hinge-Failure/m-p/8535981?search-action-id=584178959738&search-result-uid=8535981","post_summary":"...uddenly come apart and open/closing the laptop is not possible.  Out of warranty.  Laptops MUST BE designed for Lid-Screen  hingle movement, so the ubiquity of the broken hinge problem i...","me_too":"","post_tags":"\"[\"HP Notebook - 17-bs024cy\",\"Microsoft Windows 10 (64-bit)\"]\""},</p>
+            <p>]</p>
+                
+            <p>}</p>
+        </li>
+
+    </ul>
 
 </div>
 
