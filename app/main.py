@@ -108,13 +108,17 @@ def hp_issue(issue_type):
 @app.route("/contact_form", methods=['GET', 'POST'])
 def contact_form():
     get_customer_ip_address()
-    page_title = "Contact Form"
-
+    page_title = "Contact us"
+    h2_text = """For more information about the class action"""
     if request.method == 'POST':
         save_contact_message(form_request=request.form)
         flash('Message sent successfully. Thank you!')
 
-    return render_template('contact_form.html', page_vars={'title': page_title, })
+    page_vars = {'title': page_title,
+                 'h2_text': h2_text,
+
+                 }
+    return render_template('contact_form.html', page_vars=page_vars)
 
 @app.route("/rest_api", methods=['GET'])
 def rest_api():
