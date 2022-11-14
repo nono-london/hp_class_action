@@ -72,8 +72,7 @@ def home_view():
 
     page_title: str = "HP Hinge Broken"
     h2_text: str = """
-                    This website aims at gathering information regarding 
-                    HP laptops that have defective hinges
+                    Defective hinge laptops
         """
     carousel_id = "carouselHP"
     image_paths = ['images/broken_hinge/' + path.name for path in

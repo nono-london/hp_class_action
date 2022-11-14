@@ -1,4 +1,4 @@
-<div id="{{ page_vars['carousel_id'] }}" class="carousel slide" data-bs-ride="carousel">
+<div id="{{ page_vars['carousel_id'] }}" class="container carousel slide" data-bs-ride="carousel">
     <div class="carousel-indicators">
 
         <button type="button" data-bs-target="#{{ page_vars['carousel_id'] }}" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 0"></button>
@@ -8,7 +8,7 @@
     </div>
     <div class="carousel-inner">
         <div class="carousel-item active" data-bs-interval="{{ page_vars['slide_interval'] }}">
-            <img src="{{ url_for('static', filename=page_vars['image_paths'][0]) }}" class="rounded mx-auto d-block" height="300" alt="...">
+            <img src="{{ url_for('static', filename=page_vars['image_paths'][0]) }}" class="carousel-image rounded mx-auto d-block" height="400" alt="...">
             <div class="carousel-caption d-none d-md-block">
                 <h5></h5>
                 <p></p>
@@ -16,7 +16,7 @@
         </div>
         {% for image_path in page_vars['image_paths'][1:] %}
             <div class="carousel-item" data-bs-interval="{{ page_vars['slide_interval'] }}">
-                <img src="{{ url_for('static', filename=image_path) }}" class="rounded mx-auto d-block" height="300" alt="...">
+                <img src="{{ url_for('static', filename=image_path) }}" class="carousel-image rounded mx-auto d-block" height="400" alt="...">
                 <div class="carousel-caption d-none d-md-block">
                     <h5></h5>
                     <p></p>
@@ -34,8 +34,8 @@
     </button>
 
 </div>
-<div class="container py-4">
-  <div class="d-grid">
+
+  <div class="container bg-primary d-grid">
       <a href="{{ url_for('hp_issue', issue_type='broken_hinge') }}" class="btn btn-primary">Access to statistics</a>
   </div>
-</div>
+

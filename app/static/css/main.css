@@ -1,9 +1,36 @@
+.jumbotron{
+  margin-top: 20px;
+  border-radius: 5px;
+  background-color: rgba(51, 186, 196, 0.925);
+  color: white;
+  padding-top:30px;
+  padding-bottom:30px;
+  
+
+}
+
+.container-fluid{display: inline-block;}
 .container{
-  background-color: rgb(253, 255, 1);
-  color: rgb(253, 255, 1);
+  margin-bottom: 20px;
+
+}
+.container.bg-primary{
+  border-radius: 5px;
+  }
+
+
+.carousel.slide{
+  border-radius: 5px;
+  background-color: rgb(255, 250, 245);
+  color: black;
+  
 }
 
 body{
-  color:blue
+  background-color: rgb(248, 246, 240);
+}
 
+.carousel-image{
+  margin-top: 10px;
+  margin-bottom: 10px;
 }

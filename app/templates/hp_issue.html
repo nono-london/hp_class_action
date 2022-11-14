@@ -1,4 +1,7 @@
 {% extends 'base_bootstrap_css.html' %}
+{% block css_import %}
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">          
+{% endblock %}
 
 {% block js_script_top %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.js" integrity="sha512-d6nObkPJgV791iTGuBoVC9Aa2iecqzJRE0Jiqvk85BhLHAPhWqkuBiQb1xz2jvuHNqHLYoN3ymPfpiB1o+Zgpw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -6,9 +9,9 @@
 
 
 {% block body %}
-<div class="container py-4">
-    <div class="container p-5 my-5 bg-primary text-white">
-        <h5>{{ page_vars['h2_text'] }}</h5>
+<div class="container">
+    <div class="container jumbotron text-center">
+        <h1>{{ page_vars['h2_text'] }}</h1>
     </div>
 
 
