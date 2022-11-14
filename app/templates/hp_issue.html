@@ -6,6 +6,7 @@
 
 
 {% block body %}
+<div class="container py-4">
     <div class="container p-5 my-5 bg-primary text-white">
         <h5>{{ page_vars['h2_text'] }}</h5>
     </div>
@@ -26,24 +27,26 @@
     <div class="container">
         <div class="chart_title">
             <h5>Historic of monthly posted complains:</h5>
-    </div>
-    <div class="container">
-        <canvas id="chart_histo_monthly"  width="100%" height="30%"></canvas>
-    </div>
+        </div>
+        <div class="container">
+            <canvas id="chart_histo_monthly"  width="100%" height="30%"></canvas>
+        </div>
+      </div>
     
     <hr class="container">
     
     <div class="container">
         <div class="chart_title">
             <h5>Historic of yearly posted complains:</h5>
+        </div>
     </div>
     <div class="container">
         <canvas id="chart_histo_yearly"  width="100%" height="30%"></canvas>
     </div>
 
-    </div>
 
 
+  </div>
 {% endblock %}
 
 
