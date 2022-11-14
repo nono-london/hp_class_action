@@ -104,7 +104,7 @@
         dataset_post = filter_post_after_date(json_dataset['data'],'post_datetime', post_after_year).reverse();
         dataset_metoo = filter_post_after_date(metoo,'post_datetime', post_after_year);
       }else{
-        dataset_post = json_dataset['data'].reverse();
+        dataset_post = [...json_dataset['data']].reverse();
         dataset_metoo = metoo;
       }
 
