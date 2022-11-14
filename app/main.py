@@ -1,5 +1,5 @@
 from datetime import datetime
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from typing import Dict
 
 from flask import (Flask, render_template,
@@ -42,7 +42,8 @@ def refresh_dataset(force_update: bool = False):
     broken_hinge_api_json_last_update = datetime.utcnow()
 
 
-@app.route("/")
+# multiple issues home index
+# @app.route("/")
 def home_view():
     get_customer_ip_address()
 
@@ -60,6 +61,30 @@ def home_view():
                                                     'carousel_id': carousel_id,
                                                     'carousel_slides': home_carousel_slides
                                                     })
+
+# image carousel home index
+@app.route("/")
+def home_view():
+    get_customer_ip_address()
+
+    refresh_dataset()
+
+    page_title: str = "HP Hinge Broken"
+    h2_text: str = """
+                    This website aims at gathering information regarding 
+                    HP laptops that have defective hinges
+        """
+    carousel_id = "carouselHP"
+    image_paths = ['images/broken_hinge/' + path.name for path in Path(Path(__file__).parent, 'static', 'images', 'broken_hinge').glob('*.jpg')]
+    print(f"Carousel image paths: {image_paths}")
+    
+    return render_template('index_images.html', page_vars={'title': page_title,
+                                                    'h2_text': h2_text,
+                                                    'carousel_id': carousel_id,
+                                                    'image_paths': image_paths
+                                                    })
+
+
 
 
 @app.route("/hp_issue_<issue_type>")
