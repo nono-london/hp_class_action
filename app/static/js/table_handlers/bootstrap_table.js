@@ -1,20 +1,31 @@
 
 
-function table_populator(data_for_table, table_to_populate, dataSetHasBeenJONed=false) {
+function table_populator(table_dataset, table_to_populate, dataSetHasBeenJONed=false) {
     //table_to_populate.bootstrapTable('destroy');
     // console.log('inner table populator');
-    // console.log(data_for_table);
+    // console.log(table_dataset);
+    table_dataset.forEach(element => {
+        console.log(element);
+        
+    });
+
+    // table_to_populate.bootstrapTable({
+    //     data: table_dataset
+    //   });
 
 
-        if (data_for_table !=null) {
+
+
+
+        if (table_dataset !=null) {
             if (dataSetHasBeenJONed==true){
                 console.log("boostrap-table function DO NOt need to be parsed");
-                table_to_populate.bootstrapTable({data:data_for_table});    
+                table_to_populate.bootstrapTable({data:table_dataset});    
             }
             else{
                 console.log("boostrap-table data need to be parsed");
-                data_for_table = JSON.parse(data_for_table);
-                table_to_populate.bootstrapTable({data: data_for_table});    
+                table_dataset = JSON.parse(table_dataset);
+                table_to_populate.bootstrapTable({data: table_dataset});    
             }
             
         } else {
