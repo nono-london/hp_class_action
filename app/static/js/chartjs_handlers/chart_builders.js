@@ -76,7 +76,7 @@ function chartJsBuilderMultipleDatasets(canvas_id, chart_type, datasets, serie_n
   let scale_option = {}
   // scale/stack bars
   if (stacked === true) {
-    console.log("stacked is True with ===")
+    
     scale_option = {
       x: {
         stacked: true,
@@ -86,9 +86,7 @@ function chartJsBuilderMultipleDatasets(canvas_id, chart_type, datasets, serie_n
       }
     };
   }
-  // console.log(scale_option);
-
-
+  
   // Bulding data in Chart
   const chart_graph = new Chart(canvas_id, {
     type: chart_type,
@@ -96,9 +94,10 @@ function chartJsBuilderMultipleDatasets(canvas_id, chart_type, datasets, serie_n
       labels: x_values,
       datasets: chart_datasets
     },
-
-    responsive: true,
-    scales: scale_option
+    options:{
+      responsive: true,
+      scales: scale_option
+    }
   }
   )
   // return chart so that it can be destroyed before calling this function if it already exists
