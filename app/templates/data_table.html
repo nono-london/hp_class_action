@@ -1,0 +1,178 @@
+{% extends 'base_bootstrap_css.html' %}
+{% block css_import %}
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">          
+{% endblock %}
+
+{% block js_script_top %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.js" integrity="sha512-d6nObkPJgV791iTGuBoVC9Aa2iecqzJRE0Jiqvk85BhLHAPhWqkuBiQb1xz2jvuHNqHLYoN3ymPfpiB1o+Zgpw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}
+
+
+{% block body %}
+<div class="container">
+    <div class="container jumbotron text-center">
+        <h2>{{ page_vars['h2_text'] }}</h2>
+    </div>
+
+
+
+
+  </div>
+{% endblock %}
+
+
+{% block js_script_bottom %}
+
+
+<script src="{{ url_for('static', filename='js/misc_libs/date_handlers.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='js/chartjs_handlers/chart_builders.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='js/element_handlers/dropbox_handlers.js') }}" type="text/javascript"></script>
+
+
+<script type="text/javascript">
+    var histo_monthly_id = document.getElementById("chart_histo_monthly");
+    var histo_yearly_id = document.getElementById("chart_histo_yearly");
+    var chart_histo_monthly;
+    var chart_histo_yearly;
+    var json_dataset = {{ page_vars['json_dataset']|safe }};
+
+    var metoo = getMeTooUsers(json_dataset['data']);
+    // Find metoo users
+    function getMeTooUsers(arr){
+      let temp_username = {};
+      let temp_metoo = [];
+
+      arr.forEach(function (element){
+        let clean_metoo = element['me_too'].replace(/(^"|"$)/g, '');
+        if (clean_metoo){
+            clean_metoo_parsed = JSON.parse(clean_metoo);
+            clean_metoo_parsed.forEach(function(element) {
+              // get the list of all metoos
+              //metoo[element['username']] = [...metoo[element['username']]??[] ,[element['post_datetime']] ]
+              // will take only the first one
+              // temp_username[element['username']] = temp_username[element['username']]??{"post_datetime":element['post_datetime']}
+              // building correct dataset
+              if (temp_username[element['username']]===undefined){
+                temp_username[element['username']] = element['username'];
+                temp_metoo.push({"username":element['username'], "post_datetime":element['post_datetime']});
+              }
+            })
+            }
+      })
+
+      return temp_metoo;
+    }
+    
+    // initiate charts
+    setChartWithDatasets(2017);
+
+    function setChartWithDatasets(post_after_year){
+      // destroy charts
+      if (chart_histo_yearly) {    chart_histo_yearly.destroy();  }
+      if (chart_histo_monthly) {    chart_histo_monthly.destroy();  }
+
+      // create datasets
+      let dataset_post; 
+      let dataset_metoo;
+      if (Number.isInteger(post_after_year)){
+        dataset_post = filter_post_after_date(json_dataset['data'],'post_datetime', post_after_year).reverse();
+        dataset_metoo = filter_post_after_date(metoo,'post_datetime', post_after_year);
+      }else{
+        dataset_post = [...json_dataset['data']].reverse();
+        dataset_metoo = metoo;
+      }
+
+      // yearly chart
+      const post_by_year = group_by_year(dataset_post);
+      // console.log("post_by_year");
+      // console.log(post_by_year);
+      const me_too_by_year = group_by_year(dataset_metoo);
+      // console.log("me_too_by_year");
+      // console.log(me_too_by_year);
+      // canvas_id, chart_type, datasets, serie_names
+      chart_histo_yearly = chartJsBuilderMultipleDatasets(histo_yearly_id, 'bar', [post_by_year, me_too_by_year],['Post by year','Me Too by year'], true);
+
+      // monthly chart
+      const post_by_month = group_by_month(dataset_post);
+      // console.log("post_by_month");
+      // console.log(post_by_month);
+      const me_too_by_month = group_by_month(dataset_metoo);
+      // console.log("me_too_by_month");
+      // console.log(me_too_by_month);
+      // canvas_id, chart_type, datasets, serie_names
+      chart_histo_monthly = chartJsBuilderMultipleDatasets(histo_monthly_id, 'bar', [post_by_month, me_too_by_month],['Post by month','Me Too by month'], true);
+
+    }
+    
+
+    function get_year_month_parts(date_as_date){
+        //console.log(`date is: ${date_as_date}`);
+        month = timestamp_to_month(date_as_date);
+        year = timestamp_to_year(date_as_date);
+        //console.log(`year ${year}, month ${month}`);
+        return {year, month};
+    
+    }
+    
+    function group_by_month(arr) {
+        return Object.values(
+          arr.reduce((a, { post_datetime: date_as_date, claims: count }) => {
+            const { year, month } = get_year_month_parts(date_as_date) ;
+            const key = `${year}-${('0'+month).slice(-2)}`;
+
+            if (a[key] === undefined) {
+              a[key] = {post_datetime: key, count: 0,  };
+            }
+      
+            a[key].count += 1;
+      
+            return a;
+          }, {}),
+        );
+    }
+
+    function group_by_year(arr) {
+        return Object.values(
+          arr.reduce((a, { post_datetime: date_as_date, claims: count }) => {
+            const year = timestamp_to_year(date_as_date) ;
+            const key = `${year}`;
+
+            if (a[key] === undefined) {
+              a[key] = {post_datetime: key, count: 0,  };
+            }
+      
+            a[key].count += 1;
+      
+            return a;
+          }, {}),
+        );
+    }
+
+    function filter_post_after_date(arr,date_key, post_after_year, ){
+      result = arr.filter(row => {
+                                // console.log(row[date_key]);
+                                let year = new Date(row[date_key]).getFullYear();
+                                // console.log(year);
+                                return (post_after_year <= year);
+       });
+       return result;
+    }
+    
+    function setChartsWithDropdowns(button_clicked_element){
+      let result = dropdown_active_inactive(button_clicked_element, 'Histo');
+      if (result.innerHTML.includes(String(2017))){
+        setChartWithDatasets(2017);
+      }else{
+        setChartWithDatasets("All");
+      }
+    }
+
+   
+
+
+
+
+</script>
+{% endblock %}
+
+

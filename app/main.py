@@ -105,6 +105,31 @@ def hp_issue(issue_type):
                                                        })
 
 
+
+
+@app.route("/rest_api", methods=['GET'])
+def rest_api():
+    get_customer_ip_address()
+    page_title = "REST API"
+    h2_text = """How to use the REST API"""
+    page_vars = {'title': page_title,
+                 'h2_text': h2_text,
+
+                 }
+    return render_template('rest_api.html', page_vars=page_vars)
+
+@app.route("/data_table", methods=['GET'])
+def data_table():
+    get_customer_ip_address()
+    page_title = "Data"
+    h2_text = """Data available"""
+    page_vars = {'title': page_title,
+                 'h2_text': h2_text,
+
+                 }
+    return render_template('data_table.html', page_vars=page_vars)
+
+
 @app.route("/contact_form", methods=['GET', 'POST'])
 def contact_form():
     get_customer_ip_address()
@@ -120,17 +145,6 @@ def contact_form():
                  }
     return render_template('contact_form.html', page_vars=page_vars)
 
-
-@app.route("/rest_api", methods=['GET'])
-def rest_api():
-    get_customer_ip_address()
-    page_title = "REST API"
-    h2_text = """How to use the REST API"""
-    page_vars = {'title': page_title,
-                 'h2_text': h2_text,
-
-                 }
-    return render_template('rest_api.html', page_vars=page_vars)
 
 
 if __name__ == '__main__':
