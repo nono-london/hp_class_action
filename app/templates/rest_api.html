@@ -19,9 +19,16 @@
     <li>To access the REST API, go to the following URL:</li>
     <p><a href="https://script.google.com/macros/s/AKfycbx42OuLPncwWnsiTwX447DVCveMA_a-8GQuaxeB_h2TymNgcPL5G4-BpXG_4XapaBMruQ/exec">G-Sheet API</a></p>
     <li>Datas are delivered in the following JSON format:</li>
-    <ul>
-        <li>{headers: [...], size: int, data: [...]}</li>
-    </ul>
+        <ul>
+            <li>{ "headers": [...], "size": int, "data": [...] }</li>
+        </ul>
+    <li>Where:</li>
+        <ul>
+            <li>"headers" is a list of available columns</li>
+            <li>"size" is the size of the dataset</li>
+            <li>"data" is a list of dictionaries containing columns and data</li>
+        </ul>
+    
     <li>Sample data:
         <p>{</p>
         <p>"headers":["user_id","hp_user_id","username","user_profile_url","user_blocked","hp_post_id","post_datetime","post_url","post_summary","me_too","post_tags"],</p>
