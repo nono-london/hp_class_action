@@ -41,19 +41,19 @@
 
       <div class="row">
         <div class="col">
-          <h5>Me toos per day:</h5>
+          <h5>Me toos today:</h5>
         </div>
         <div class="col" id="metoos_per_day_id">
           <h5>fsfsdf</h5>
         </div>
         <div class="col">
-          <h5>Me toos per month:</h5>
+          <h5>Me toos this month:</h5>
         </div>
         <div class="col" id="metoos_per_month_id">
           <h5>fsfsdf</h5>
         </div>
         <div class="col">
-          <h5>Me toos per year:</h5>
+          <h5>Me toos this year:</h5>
         </div>
         <div class="col" id="metoos_per_year_id">
           <h5>fsfsdf</h5>
@@ -153,7 +153,7 @@
     document.getElementById("posts_per_year_id").innerText = group_by_year(json_dataset['data'], 'post_datetime').at(-1)['count'];
     
     document.getElementById("metoos_per_day_id").innerText = group_by_day(metoo, 'post_datetime').at(-1)['count'];
-    document.getElementById("metoos_per_month_id").innerText = group_by_month(metoo, 'post_datetime')[0]['count'];
+    document.getElementById("metoos_per_month_id").innerText = group_by_month(metoo, 'post_datetime').at(-1)['count'];
     document.getElementById("metoos_per_year_id").innerText = group_by_year(metoo, 'post_datetime').at(-1)['count'];
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
