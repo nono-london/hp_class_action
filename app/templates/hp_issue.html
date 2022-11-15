@@ -149,7 +149,7 @@
     // needs to check sorting order etc
     var post_per_day = getPostPerDay(json_dataset['data'], "post_datetime");
     document.getElementById("posts_per_day_id").innerText = post_per_day[0]['count'];
-    document.getElementById("posts_per_month_id").innerText = group_by_month(json_dataset['data'], 'post_datetime')[0]['count']+ "&#8627";
+    document.getElementById("posts_per_month_id").innerText = group_by_month(json_dataset['data'], 'post_datetime')[0]['count'];
     document.getElementById("posts_per_year_id").innerText = group_by_year(json_dataset['data'], 'post_datetime').at(-1)['count'];
     
     document.getElementById("metoos_per_day_id").innerText = group_by_day(metoo, 'post_datetime').at(-1)['count'];
