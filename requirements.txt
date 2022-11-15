@@ -7,13 +7,7 @@ bs4
 lxml
 tqdm
 
-# Selenium Libs
-#selenium
-#pywin32; sys_platform == 'win32'
-#webdriver_manager; sys_platform != 'win32'
-
-#Heroku
-streamlit
+# pythonanywhere.com
 flask
 gunicorn; sys_platform == 'linux'
 
