@@ -1,0 +1,13 @@
+
+
+function simpleAverage(arr, item_key, window, round_decimal){
+    let total = 0;
+    let count = 0;
+
+    for (let i=0; i<window.lenght; i++){
+        total+=arr[item_key];
+        count++;
+    }
+    result = Math.round(total / count, round_decimal)
+    return result;
+}
