@@ -9,9 +9,9 @@ function get_year_month_day_parts(date_as_date){
 
 }
 
-function group_by_year(arr) {
+function group_by_year(arr, date_key) {
   return Object.values(
-    arr.reduce((a, { post_datetime: date_as_date, claims: count }) => {
+    arr.reduce((a, { [date_key]: date_as_date, claims: count }) => {
       // console.log("a");
       // console.log(a);
       // console.log("date_as_date");
@@ -21,7 +21,7 @@ function group_by_year(arr) {
       const key = `${year}`;
 
       if (a[key] === undefined) {
-        a[key] = {post_datetime: key, count: 0,  };
+        a[key] = {[date_key]: key, count: 0,  };
       }
 
       a[key].count += 1;
@@ -31,14 +31,14 @@ function group_by_year(arr) {
   );
 }
 
-function group_by_month(arr) {
+function group_by_month(arr, date_key) {
   return Object.values(
-    arr.reduce((a, { post_datetime: date_as_date, claims: count }) => {
+    arr.reduce((a, { [date_key]: date_as_date, claims: count }) => {
       const { year, month } = get_year_month_day_parts(date_as_date) ;
       const key = `${year}-${('0'+month).slice(-2)}`;
 
       if (a[key] === undefined) {
-        a[key] = {post_datetime: key, count: 0,  };
+        a[key] = {[date_key]: key, count: 0,  };
       }
 
       a[key].count += 1;

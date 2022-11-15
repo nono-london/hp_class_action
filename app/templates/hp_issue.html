@@ -131,20 +131,20 @@
       }
 
       // yearly chart
-      const post_by_year = group_by_year(dataset_post);
+      const post_by_year = group_by_year(dataset_post, 'post_datetime');
       // console.log("post_by_year");
       // console.log(post_by_year);
-      const me_too_by_year = group_by_year(dataset_metoo);
+      const me_too_by_year = group_by_year(dataset_metoo, 'post_datetime');
       // console.log("me_too_by_year");
       // console.log(me_too_by_year);
       // canvas_id, chart_type, datasets, serie_names
       chart_histo_yearly = chartJsBuilderMultipleDatasets(histo_yearly_id, 'bar', [post_by_year, me_too_by_year],['Post by year','Me Too by year'], true);
 
       // monthly chart
-      const post_by_month = group_by_month(dataset_post);
+      const post_by_month = group_by_month(dataset_post, 'post_datetime');
       // console.log("post_by_month");
       // console.log(post_by_month);
-      const me_too_by_month = group_by_month(dataset_metoo);
+      const me_too_by_month = group_by_month(dataset_metoo, 'post_datetime');
       // console.log("me_too_by_month");
       // console.log(me_too_by_month);
       // canvas_id, chart_type, datasets, serie_names
