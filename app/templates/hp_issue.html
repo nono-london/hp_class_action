@@ -18,22 +18,24 @@
       
       <div class="row">
         <div class="col">
-          <h5>Posts per day:</h5>
-        </div>
-        <div class="col" id="posts_per_day_id">
-          <h5>sdfsdf</h5>
-        </div>
+          <div class="row">
+            <div class="col">
+              <h5>Posts today:</h5>
+            </div>
+            <div class="col" id="posts_per_day_id">
+              <h5></h5>
+            </div>
         <div class="col">
-          <h5>Posts per month:</h5>
+          <h5>Posts this month:</h5>
         </div>
         <div class="col" id="posts_per_month_id">
-          <h5>dsfsdf</h5>
+          <h5></h5>
         </div>
         <div class="col">
-          <h5>Posts per year:</h5>
+          <h5>Posts this year:</h5>
         </div>
         <div class="col" id="posts_per_year_id">
-          <h5>fsfsdf</h5>
+          <h5></h5>
         </div>
       </div>
 
@@ -57,7 +59,7 @@
           <h5>fsfsdf</h5>
         </div>
       </div>
-      (in average over last year)
+      
     </div>
     <hr>
     <div class="container button-active-handler">
@@ -142,21 +144,27 @@
 
       return temp_metoo;
     }
-    // console.log("json_dataset['data']");
-    // console.log(json_dataset['data']);
-    var post_per_days = post_per_day(json_dataset['data'], "post_datetime");
 
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // needs to check sorting order etc
+    var post_per_day = getPostPerDay(json_dataset['data'], "post_datetime");
+    document.getElementById("posts_per_day_id").innerText = post_per_day[0]['count'];
+    document.getElementById("posts_per_month_id").innerText = group_by_month(json_dataset['data'], 'post_datetime')[0]['count'];
+    document.getElementById("posts_per_year_id").innerText = group_by_year(json_dataset['data'], 'post_datetime').at(-1)['count'];
+    
+    document.getElementById("metoos_per_day_id").innerText = group_by_day(metoo, 'post_datetime').at(-1)['count'];
+    document.getElementById("metoos_per_month_id").innerText = group_by_month(metoo, 'post_datetime')[0]['count'];
+    document.getElementById("metoos_per_year_id").innerText = group_by_year(metoo, 'post_datetime').at(-1)['count'];
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     
 
-    function post_per_day(dataset, post_datetime){
-      const post_by_day = group_by_day(json_dataset['data'], post_datetime);
+    function getPostPerDay(dataset, post_datetime){
+      const result = group_by_day(json_dataset['data'], post_datetime);
       console.log("post_by_day");
-      console.log(post_by_day);
-      return post_by_day;
+      console.log(result);
+      return result;
 
     }
-    
-    console.log(simpleAverage(post_per_days,'count', 30, 0));
 
     // initiate charts
     setChartWithDatasets(2017);
