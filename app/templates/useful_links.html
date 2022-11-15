@@ -1,0 +1,45 @@
+{% extends 'base_bootstrap_css.html' %}
+{% block css_import %}
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">          
+{% endblock %}
+
+{% block js_script_top %}
+{% endblock %}
+
+{% block body %}
+<!-- Wrapper container -->
+<div class="container">
+<div class="container jumbotron text-center">
+      <h1>{{ page_vars['h2_text'] }}</h1>
+</div>
+<hr>
+
+    <h5>If your laptop is broken:</h5>
+    <ul>
+        <li><a href="https://h30434.www3.hp.com/">Create a new post on the HP support webpage</a></li>
+    </ul>
+    <h5>If you are based in USA, you may want to join the class action</h5>
+    <ul>
+        <li><a href="https://classlawdc.com/2021/12/10/hp-laptop-hinge-defect-class-action-lawsuit/">Join the class action</a></li>
+    </ul>
+    <h5>You can always contact us to share your experience</h5>
+    <ul>
+        <li><a href="{{url_for('contact_form')}}">Contact us</a></li>
+    </ul>
+    
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+
+</div>
+
+
+{% endblock %}
+
+{% block js_script_bottom %}
+<script type="text/javascript">
+
+</script>
+{% endblock %}

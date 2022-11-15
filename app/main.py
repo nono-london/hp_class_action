@@ -105,8 +105,6 @@ def hp_issue(issue_type):
                                                        })
 
 
-
-
 @app.route("/rest_api", methods=['GET'])
 def rest_api():
     get_customer_ip_address()
@@ -118,6 +116,7 @@ def rest_api():
                  }
     return render_template('rest_api.html', page_vars=page_vars)
 
+
 @app.route("/data_table", methods=['GET'])
 def data_table():
     get_customer_ip_address()
@@ -126,9 +125,21 @@ def data_table():
     json_dataset = broken_hinge_api_json['data']['data']
     page_vars = {'title': page_title,
                  'h2_text': h2_text,
-                 'json_dataset':json_dataset
+                 'json_dataset': json_dataset
                  }
     return render_template('data_table.html', page_vars=page_vars)
+
+
+@app.route("/useful_links", methods=['GET'])
+def useful_links():
+    get_customer_ip_address()
+    page_title = "Useful links"
+    h2_text = "Useful links"
+
+    page_vars = {'title': page_title,
+                 'h2_text': h2_text,
+                 }
+    return render_template('useful_links.html', page_vars=page_vars)
 
 
 @app.route("/contact_form", methods=['GET', 'POST'])
@@ -145,7 +156,6 @@ def contact_form():
 
                  }
     return render_template('contact_form.html', page_vars=page_vars)
-
 
 
 if __name__ == '__main__':
