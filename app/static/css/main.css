@@ -9,6 +9,10 @@
 
 }
 
+h5{
+  font-weight: bold;
+  font-size: 15px;
+}
 .container-fluid{display: inline-block;}
 .container{
   margin-bottom: 20px;
