@@ -1,5 +1,6 @@
 import sys
 from pathlib import Path
+from typing import List
 
 import requests
 
@@ -10,6 +11,15 @@ def get_external_ip_address() -> str:
     web_request = requests.get(url=base_url)
     ip_address = web_request.json()['ip']
     return ip_address
+
+
+def get_hp_website_visitors_file_path() -> List[Path]:
+    """will return a list of files Path (csv or txt) that contains the file_name_basis """
+    file_name_basis = "pythonanywhere_visitors"
+    website_data_folder_path = Path(get_project_root_path(), "hp_class_action", "hp_website", "website_data")
+    visitors_file_paths = list(website_data_folder_path.glob(file_name_basis + ".*"))
+
+    return visitors_file_paths
 
 
 def get_project_root_path() -> str:
@@ -53,6 +63,8 @@ def pack_python_libs_in_path():
 
 
 if __name__ == '__main__':
+    print(get_hp_website_visitors_file_path())
+
     print(get_external_ip_address())
 
     print(get_project_root_path())
