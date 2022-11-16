@@ -1,25 +1,17 @@
-# This library allow to webscrap data in order to substantiate the case against HP
-
+# This library allow to webscrap data in order to substantiate the case against HP and disply results on a Flask website
 ## HP.com forum
 ### search for "broken hinge"
 * https://h30434.www3.hp.com/t5/forums/searchpage/tab/message?q=broken%20hinge&collapse_discussion=true
 
-# Heroku setup
+# Pythonanywhere setup
 ## basic setup
-* create runtime.txt file in root folder
-find all supported Python version on:https://devcenter.heroku.com/articles/python-support
-  * put python version: python-3.9
-
-## Background tasks
-### using RQ
-### Using Celery
 
 
-# useful liknks
+# Useful liknks
+## About the class action in the US
+* https://classlawdc.com/2021/12/10/hp-laptop-hinge-defect-class-action-lawsuit/
+  
 
-## python free host
-* https://dev.to/yash_makan/4-best-python-web-app-hosting-services-for-freewith-complete-process-57nb
-* 
 
 # Flask Tutorial
 # Run the app
@@ -33,13 +25,13 @@ addd this code in the header (in one of the bases that are included in main page
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 ```
 source: https://flask.palletsprojects.com/en/1.1.x/patterns/favicon/
-## flask apps on Heroku
-* https://www.geeksforgeeks.org/deploy-python-flask-app-on-heroku/#:~:text=Deploy%20Python%20Flask%20App%20on%20Heroku%201%20STEP,and%20enter%20the%20sample%20code.%20...%20%C3%89l%C3%A9ments%20suppl%C3%A9mentaires
+## flask apps on PythonAnywhere
+* 
 
 # Jinja Tutorial
 ## useful links
 * https://jinja.palletsprojects.com/en/3.0.x/templates/#include
-* 
+  
 
 # Bootstrap Tutorial
 https://getbootstrap.com/docs/5.2/getting-started/introduction/
@@ -78,10 +70,3 @@ https://getbootstrap.com/docs/5.2/getting-started/introduction/
 
 ```
 https://www.getbootstrap.info/#:~:text=Bundle%20Include%20every%20Bootstrap%20JavaScript%20plugin%20and%20dependency,included%20in%20Bootstrap%2C%20please%20see%20our%20contents%20section.
-
-# Streamlit Tutorial
-## Notes
-Needed to point to the root folder in the PYTHONPATH in order to gain access to all libs
-## Run the app
-* locally in development mode:
-  *  streamlit run app_streamlit/main.py --server.port 8096
