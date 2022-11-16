@@ -1,4 +1,8 @@
 # This library allow to webscrap data in order to substantiate the case against HP and disply results on a Flask website
+website summarysing results can be acceed at:
+https://hptrial.pythonanywhere.com/
+
+
 ## HP.com forum
 ### search for "broken hinge"
 * https://h30434.www3.hp.com/t5/forums/searchpage/tab/message?q=broken%20hinge&collapse_discussion=true
