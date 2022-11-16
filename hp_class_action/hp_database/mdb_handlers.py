@@ -104,7 +104,7 @@ def create_table_website_visitors_ip():
                 region VARCHAR(50),
                 country_code VARCHAR(5),
                 country_code_iso3 VARCHAR(3),
-                country_name VARCHAR(3),
+                country_name VARCHAR(75),
                 coordinate POINT,
                 timezone VARCHAR(50),
                 utc_offset VARCHAR(5),
