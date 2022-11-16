@@ -88,7 +88,7 @@ def create_table_reported_issues():
     execute_query(sql_query=sql_query)
 
 
-def create_website_visitors_ip():
+def create_table_website_visitors_ip():
     sql_query: str = f"""
             CREATE TABLE IF NOT EXISTS {_TABLE_WEBSITE_VISITORS_INFO} 
                 (
@@ -176,7 +176,6 @@ def fetch_query(sql_query: str, variables: tuple = None) -> Union[list, None]:
 
 
 if __name__ == '__main__':
-    create_website_visitors_ip()
-    exit()
     create_table_hp_users()
     create_table_reported_issues()
+    create_table_website_visitors_ip()
