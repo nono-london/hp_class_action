@@ -5,7 +5,7 @@ from urllib.error import URLError
 from urllib.request import Request, urlopen
 
 from hp_class_action.app_config import (get_hp_website_visitors_file_path)
-from hp_class_action.hp_database.mdb_handlers import execute_query
+from hp_class_action.hp_database.mdb_handlers import (execute_query, fetch_query)
 
 
 def read_visitors_file(file_has_header: bool = True) -> tuple:
@@ -23,7 +23,26 @@ def read_visitors_file(file_has_header: bool = True) -> tuple:
             csv_rows = csv_table[1:]
         else:
             csv_rows = csv_table
-    return csv_headers, csv_rows
+    result_row = []
+    # only considers rows that haven't been uploaded to mdb
+    for row in csv_rows:
+        if not check_if_already_in_mdb(csv_row=row, row_headers=csv_headers):
+            result_row.append(row)
+
+    return csv_headers, result_row
+
+
+def check_if_already_in_mdb(csv_row, row_headers) -> bool:
+    """Returns True if csv row has already been uploaded to mdb"""
+    sql_query = """
+        SELECT *
+        FROM website_visitors_info
+        WHERE ip_address = %s AND visit_datetime = %s    
+    """
+    parameters = (csv_row[row_headers.index("http_x_real_ip")], csv_row[row_headers.index("visit_datetime")])
+    results = fetch_query(sql_query=sql_query, variables=parameters)
+
+    return not (results is None or len(results) == 0)
 
 
 def get_ip_info(ip_address: str) -> Union[None, Dict]:
@@ -78,10 +97,14 @@ def upload_to_database(csv_row: List, row_headers: List, ip_info: Dict) -> bool:
 
 def upload_data():
     headers, rows = read_visitors_file(file_has_header=True)
+    if len(rows) == 0:
+        print(f"All records are already in database")
+        return
     for row in rows:
         ip_address = row[headers.index("http_x_real_ip")]
         ip_info = get_ip_info(ip_address)
         upload_to_database(csv_row=row, row_headers=headers, ip_info=ip_info)
+        print(f"All records have been added to database")
 
 
 if __name__ == '__main__':
