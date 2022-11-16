@@ -54,7 +54,7 @@ def get_ip_info(ip_address: str) -> Union[None, Dict]:
 
 def upload_to_database(csv_row: List, row_headers: List, ip_info: Dict) -> bool:
     sql_query = """
-                INSERT INTO `hp_trial`.`website_visitors_info`
+                INSERT IGNORE INTO `hp_trial`.`website_visitors_info`
                     (`visit_datetime`, `visit_url`, `ip_address`, `city`, `region`,
                     `country_code`, `country_code_iso3`, `country_name`, `coordinate`, `timezone`,
                     `utc_offset`, `org`
