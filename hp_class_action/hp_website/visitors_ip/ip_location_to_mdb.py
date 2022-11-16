@@ -25,6 +25,7 @@ def read_visitors_file(file_has_header: bool = True) -> tuple:
             csv_rows = csv_table
     return csv_headers, csv_rows
 
+
 def get_ip_info(ip_address: str) -> Union[None, Dict]:
     # https://ipapi.co/#pricing
     # 1000 call per month, 30k calls per month
@@ -50,7 +51,8 @@ def get_ip_info(ip_address: str) -> Union[None, Dict]:
     json_data = loads(data.decode(encoding))
     return json_data
 
-def upload_to_database(csv_row:List, row_headers:List, ip_info:Dict)->bool:
+
+def upload_to_database(csv_row: List, row_headers: List, ip_info: Dict) -> bool:
     sql_query = """
                 INSERT INTO `hp_trial`.`website_visitors_info`
                     (`visit_datetime`, `visit_url`, `ip_address`, `city`, `region`,
@@ -64,26 +66,23 @@ def upload_to_database(csv_row:List, row_headers:List, ip_info:Dict)->bool:
                     );
                 """
 
-    parameters:Tuple = (
+    parameters: Tuple = (
         csv_row[row_headers.index("visit_datetime")], csv_row[row_headers.index("visited_url")],
-                ip_info['ip'], ip_info['city'], ip_info['region'],
+        ip_info['ip'], ip_info['city'], ip_info['region'],
         ip_info['country_code'], ip_info['country_code_iso3'], ip_info['country_name'],
-                ip_info['latitude'], ip_info['longitude'], ip_info['country_code'],
+        ip_info['latitude'], ip_info['longitude'], ip_info['country_code'],
         ip_info['utc_offset'], ip_info['org']
     )
     execute_query(sql_query=sql_query, variables=parameters)
+
 
 def upload_data():
     headers, rows = read_visitors_file(file_has_header=True)
     for row in rows:
         ip_address = row[headers.index("http_x_real_ip")]
         ip_info = get_ip_info(ip_address)
-        upload_to_database(csv_row=row,row_headers=headers, ip_info=ip_info)
-        return
+        upload_to_database(csv_row=row, row_headers=headers, ip_info=ip_info)
 
 
 if __name__ == '__main__':
     upload_data()
-    exit(0)
-    print(read_visitors_file())
-    # get_ip_info("104.47.70.126")
