@@ -15,8 +15,6 @@ https://hptrial.pythonanywhere.com/
 ## About the class action in the US
 * https://classlawdc.com/2021/12/10/hp-laptop-hinge-defect-class-action-lawsuit/
   
-
-
 # Flask Tutorial
 # Run the app
 * locally in development mode:
