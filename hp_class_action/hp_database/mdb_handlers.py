@@ -26,6 +26,7 @@ else:
 
 _TABLE_HP_USERS: str = "hp_users"
 _TABLE_REPORTED_ISSUES: str = "forum_posts"
+_TABLE_WEBSITE_VISITORS_INFO: str = "website_visitors_info"
 
 
 def create_table_hp_users():
@@ -87,6 +88,38 @@ def create_table_reported_issues():
     execute_query(sql_query=sql_query)
 
 
+def create_website_visitors_ip():
+    sql_query: str = f"""
+            CREATE TABLE IF NOT EXISTS {_TABLE_WEBSITE_VISITORS_INFO} 
+                (
+                ip_id  INT AUTO_INCREMENT PRIMARY KEY,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+                visit_datetime TIMESTAMP NOT NULL,
+                visit_url VARCHAR(150) NOT NULL,
+                
+                ip_address  VARCHAR(50) NOT NULL,
+                city VARCHAR(50),
+                region VARCHAR(50),
+                country_code VARCHAR(5),
+                country_code_iso3 VARCHAR(3),
+                country_name VARCHAR(3),
+                coordinate POINT,
+                timezone VARCHAR(50),
+                utc_offset VARCHAR(5),
+                org VARCHAR(50),
+
+                UNIQUE KEY ip_address_visit_datetime (ip_address, visit_datetime)
+                )
+            ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+                ;
+
+            """
+
+    execute_query(sql_query=sql_query)
+
+
 def get_connection():
     # https://dev.mysql.com/doc/connector-python/en/connector-python-connectargs.html
     db_conn = mysql.connector.connect(
@@ -143,5 +176,7 @@ def fetch_query(sql_query: str, variables: tuple = None) -> Union[list, None]:
 
 
 if __name__ == '__main__':
+    create_website_visitors_ip()
+    exit()
     create_table_hp_users()
     create_table_reported_issues()
