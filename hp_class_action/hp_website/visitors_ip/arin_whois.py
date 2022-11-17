@@ -9,10 +9,11 @@ from hp_class_action.hp_database.mdb_handlers import (fetch_query)
 def get_visitors_info() -> List[Dict]:
     """Returns True if csv row has already been uploaded to mdb"""
     sql_query = """
-        SELECT ip_address, country_name, city, org, COUNt(*) "visits"
+        SELECT visit_datetime "last_visit_datetime", ip_address, 
+                country_name, city, org, user_agent, COUNT(*) "visits"
         FROM hp_trial.website_visitors_info
         GROUP BY ip_address, country_name, city, org
-        ORDER BY visit_datetime ASC   
+        ORDER BY visit_datetime ASC
     """
     parameters = None
     results = fetch_query(sql_query=sql_query, variables=parameters)

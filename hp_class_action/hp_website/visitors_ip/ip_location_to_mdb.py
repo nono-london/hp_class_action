@@ -76,12 +76,12 @@ def upload_to_database(csv_row: List, row_headers: List, ip_info: Dict) -> bool:
                 INSERT IGNORE INTO `hp_trial`.`website_visitors_info`
                     (`visit_datetime`, `visit_url`, `ip_address`, `city`, `region`,
                     `country_code`, `country_code_iso3`, `country_name`, `coordinate`, `timezone`,
-                    `utc_offset`, `org`
+                    `utc_offset`, `org`, `user_agent` 
                     )
                 VALUES( %s,  %s, %s, %s, %s,
                          %s, %s, %s, 
                             POINT(%s,%s), %s,
-                          %s, %s
+                          %s, %s, %s
                     );
                 """
 
@@ -90,7 +90,7 @@ def upload_to_database(csv_row: List, row_headers: List, ip_info: Dict) -> bool:
         ip_info['ip'], ip_info['city'], ip_info['region'],
         ip_info['country_code'], ip_info['country_code_iso3'], ip_info['country_name'],
         ip_info['latitude'], ip_info['longitude'], ip_info['country_code'],
-        ip_info['utc_offset'], ip_info['org']
+        ip_info['utc_offset'], ip_info['org'], csv_row[row_headers.index("user_agent")]
     )
     execute_query(sql_query=sql_query, variables=parameters)
 
@@ -104,7 +104,7 @@ def upload_data():
         ip_address = row[headers.index("http_x_real_ip")]
         ip_info = get_ip_info(ip_address)
         upload_to_database(csv_row=row, row_headers=headers, ip_info=ip_info)
-        print(f"All records have been added to database")
+    print(f"All records have been added to database")
 
 
 if __name__ == '__main__':
