@@ -13,6 +13,9 @@ def get_customer_ip_address():
     remote_addr = None
     http_x_forwarded_for = None
     visited_url = request.url
+    print(f"request.headers:\n"
+          f"{request.headers}")
+    header_agent = request.headers.get('User-Agent')
 
     try:
         http_x_real_ip = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
@@ -35,12 +38,13 @@ def get_customer_ip_address():
           f'http_x_forwarded_for:{http_x_forwarded_for}')
     headers: List = ['visit_datetime', 'http_x_real_ip',
                      'remote_addr', 'http_x_forwarded_for',
-                     'visited_url']
+                     'visited_url', 'user_agent']
     row: Dict = {'visit_datetime': datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'),
                  'http_x_real_ip': http_x_real_ip,
                  'remote_addr': remote_addr,
                  'http_x_forwarded_for': http_x_forwarded_for,
-                 'visited_url': visited_url
+                 'visited_url': visited_url,
+                 'user_agent': header_agent
                  }
 
     write_csv_file(csv_file_name='visitor_ips.csv', headers=headers, ip_address_dict=row, )

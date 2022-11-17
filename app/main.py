@@ -77,7 +77,6 @@ def home_view():
     carousel_id = "carouselHP"
     image_paths = ['images/broken_hinge/' + path.name for path in
                    Path(Path(__file__).parent, 'static', 'images', 'broken_hinge').glob('*')]
-    print(f"Carousel image paths: {image_paths}")
 
     return render_template('index_images.html', page_vars={'title': page_title,
                                                            'h2_text': h2_text,

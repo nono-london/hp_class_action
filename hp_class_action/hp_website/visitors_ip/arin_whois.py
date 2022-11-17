@@ -51,7 +51,7 @@ def print_arin_info(mdb_row: dict) -> bool:
 
     print("#" * 50, "ARIN Information", "#" * 50)
     print(f"getting info for ip: {mdb_row['ip_address']} "
-          f"in country: {mdb_row['country_name']} "
+          f"in country: {mdb_row['country_name']}/{mdb_row['city']} "
           f"for org: {mdb_row['org']}")
     ip_response = get_json_request(url=url)
 
@@ -162,8 +162,8 @@ def print_all_visitors_info():
             errors.append(visitor)
     if errors:
         print("-" * 100)
-        print(f"ARIN couldn't find information for the followings IPs:\n"
-              f"{errors}")
+        print(f"ARIN couldn't find information for the followings IPs:")
+        [print(f"  {index + 1:02d}-", error) for index, error in enumerate(errors)]
 
 
 if __name__ == '__main__':
