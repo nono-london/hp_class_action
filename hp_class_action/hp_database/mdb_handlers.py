@@ -109,7 +109,8 @@ def create_table_website_visitors_ip():
                 timezone VARCHAR(50),
                 utc_offset VARCHAR(5),
                 org VARCHAR(50),
-
+                user_agent TEXT,
+                
                 UNIQUE KEY ip_address_visit_datetime (ip_address, visit_datetime)
                 )
             ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
