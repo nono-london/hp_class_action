@@ -9,12 +9,13 @@ from lxml.html import Element
 from hp_class_action.hinge_issue.scrap_data.web_requests import get_web_page
 from hp_class_action.hp_database.mdb_handlers import (execute_query,
                                                       fetch_query)
+from hp_class_action.hp_database.mdb_handler import MySqlHelper
 from tqdm import tqdm
 
 BASE_URL: str = "https://h30434.www3.hp.com/t5/ratings/ratingdetailpage/message-uid/8499984/rating-system/forum_topic_metoo/page/1#userlist"
 
 hp_cookies = None
-
+mysql_helper = MySqlHelper()
 
 def get_post_ids(force_update: bool = False) -> Union[list, None]:
     if force_update:
@@ -72,32 +73,39 @@ def extract_metoo_data(metoo_element: element) -> dict:
 
 def update_mdb_with_me_too(metoo_json: str, post_id: int):
     """Update me_too column if a bigger size is found: ie more users complained"""
+    # JSON_LENGTH gets the number of items, was using JSON_STORAGE_SIZE, which was getting the size...
+    # print(f"value of metoo_json is: {metoo_json}")
+    # print(f"type of metoo_json is: {type(metoo_json)}")
     sql_query = """UPDATE forum_posts
     SET me_too= CASE
-                        WHEN me_too IS NULL OR JSON_STORAGE_SIZE(%s) > JSON_STORAGE_SIZE(me_too)
-                        THEN %s
+                        WHEN me_too IS NULL OR JSON_LENGTH(%s) > JSON_LENGTH(me_too)
+                            THEN %s
                         ELSE me_too
                     END
 
     WHERE hp_post_id=%s
 
     """
-    execute_query(sql_query=sql_query, variables=(metoo_json, metoo_json, post_id))
+    mysql_helper.execute_query(sql_query=sql_query,
+                               variables=(metoo_json, metoo_json, post_id),
+                               keep_conn_alive=True)
 
 
 def update_mdb_with_full_post(full_post: str, post_id: int):
+    #  OR LENGTH(%s) > LENGTH(post_full)
     """"""
     sql_query = """
     UPDATE forum_posts
     SET post_full= CASE 
-                        WHEN post_full is NULL OR LENGTH(%s) > LENGTH(post_full) 
-                            THEN %s
+                        WHEN post_full is NULL THEN %s
                         ELSE post_full
                     END
     WHERE hp_post_id=%s
 
     """
-    execute_query(sql_query=sql_query, variables=(full_post, full_post, post_id))
+    mysql_helper.execute_query(sql_query=sql_query,
+                               variables=(full_post, post_id),
+                               keep_conn_alive=True)
 
 
 def update_summary_metoo(force_update: bool = False,
@@ -146,6 +154,8 @@ def update_summary_metoo(force_update: bool = False,
             update_mdb_with_me_too(metoo_json=json.dumps(metoos),
                                    post_id=post_id)
 
+    mysql_helper.close_connection()
+
 
 if __name__ == '__main__':
-    update_summary_metoo(force_update=False, show_progress=True)
+    update_summary_metoo(force_update=True, show_progress=True)
