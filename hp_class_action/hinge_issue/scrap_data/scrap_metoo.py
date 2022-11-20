@@ -5,17 +5,16 @@ from typing import Union
 from bs4 import BeautifulSoup as bs
 from bs4 import element
 from lxml.html import Element
+from tqdm import tqdm
 
 from hp_class_action.hinge_issue.scrap_data.web_requests import get_web_page
-from hp_class_action.hp_database.mdb_handlers import (execute_query,
-                                                      fetch_query)
 from hp_class_action.hp_database.mdb_handler import MySqlHelper
-from tqdm import tqdm
 
 BASE_URL: str = "https://h30434.www3.hp.com/t5/ratings/ratingdetailpage/message-uid/8499984/rating-system/forum_topic_metoo/page/1#userlist"
 
 hp_cookies = None
 mysql_helper = MySqlHelper()
+
 
 def get_post_ids(force_update: bool = False) -> Union[list, None]:
     if force_update:
@@ -28,7 +27,7 @@ def get_post_ids(force_update: bool = False) -> Union[list, None]:
                     ORDER BY post_datetime DESC
 
                 """
-    results = fetch_query(sql_query=sql_str)
+    results = mysql_helper.fetch_query(sql_query=sql_str)
     if results is None or len(results) == 0:
         return None
     results = [x['hp_post_id'] for x in results]
@@ -120,7 +119,7 @@ def update_summary_metoo(force_update: bool = False,
     for post_id in tqdm(post_ids,
                         desc="Updating metoo, progress",
                         disable=(not show_progress),
-                        colour="blue",):
+                        colour="blue", ):
         metoos: [dict] = []
         # print("_" * 100)
         for i in range(1, max_metoo_pages):
