@@ -35,14 +35,6 @@
                     <th data-field="post_url" class="text-center" data-sortable="true" data-formatter="LinkFormatter">
                         <span class="text-success">Post URL</span>
                     </th>
-                    <th data-field="me_too" class="text-center">
-                        <span class="text-success">Me too</span>
-                    </th>
-                    <th data-field="post_tags" class="text-center" >
-                        <span class="text-success">Post tags</span>
-                    </th>
-
-
                   </tr>
         </thead>
 
@@ -67,11 +59,14 @@
 
 <script type="text/javascript">
   var json_dataset = {{ page_vars['json_dataset']|safe }};
+
+
   var $ark_trades = $("#hp_table_id");
   $( document ).ready(table_populator(json_dataset, $ark_trades, true));
   
 
 </script>
 {% endblock %}
+
 
 
