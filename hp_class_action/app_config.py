@@ -1,16 +1,34 @@
 import sys
+from json import loads
 from pathlib import Path
-from typing import List
+from typing import List, Union
+from urllib.error import URLError
+from urllib.request import Request, urlopen
 
-import requests
 
-
-def get_external_ip_address() -> str:
+def get_external_ip_address() -> Union[str, None]:
     """get external ip address"""
-    base_url: str = 'https://jsonip.com/'
-    web_request = requests.get(url=base_url)
-    ip_address = web_request.json()['ip']
-    return ip_address
+
+    url: str = 'https://jsonip.com/'
+
+    req = Request(url)
+    try:
+        response = urlopen(req)
+    except URLError as e:
+        if hasattr(e, 'reason'):
+            print('We failed to reach a server.')
+            print('Reason: ', e.reason)
+        elif hasattr(e, 'code'):
+            print("The server couldn't fulfill the request.")
+            print('Error code: ', e.code)
+        return None
+
+    # read JSOn data
+    # https://stackoverflow.com/questions/32795460/loading-json-object-in-python-using-urllib-request-and-json-modules
+    encoding = response.info().get_content_charset('utf-8')
+    data = response.read()
+    json_data = loads(data.decode(encoding))
+    return json_data['ip']
 
 
 def get_hp_website_visitors_file_path() -> List[Path]:
