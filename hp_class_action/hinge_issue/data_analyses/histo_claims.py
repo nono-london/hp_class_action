@@ -171,10 +171,11 @@ def chart_claim_hidden_claims(from_year: int = 2018,
 
 
 if __name__ == '__main__':
+    chart_claim_hidden_claims(from_year=2017,
+                              show_chart=True)
+    exit(0)
+
     chart_claim_hidden_claims_as_percent(from_year=2017,
                                          show_chart=False)
     exit(0)
 
-    chart_claim_hidden_claims(from_year=2017,
-                              show_chart=True)
-    exit(0)

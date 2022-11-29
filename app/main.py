@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 from pathlib import Path
 from typing import Dict
@@ -115,6 +116,11 @@ def rest_api():
                  }
     return render_template('rest_api.html', page_vars=page_vars)
 
+@app.route("/rest_api_data", methods=['GET'])
+def rest_api_data():
+    get_customer_ip_address()
+    return_json = broken_hinge_api_json['data']['data']
+    return json.dumps(return_json)
 
 @app.route("/data_table", methods=['GET'])
 def data_table():
