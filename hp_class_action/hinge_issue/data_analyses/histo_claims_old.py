@@ -1,9 +1,7 @@
 import json
-from datetime import datetime, date
+
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
-import matplotlib.dates as mdates
-import  numpy as np
 import pandas as pd
 
 from hp_class_action.hp_database.mdb_handlers import (fetch_query)
@@ -133,65 +131,34 @@ def chart_claim_hidden_claims(from_year: int = 2018,
     result_df: pd.DataFrame = all_claims(from_year=from_year)
 
     # count record by True/False
-    year_claim_df = result_df.groupby([
+    year_claim_df = result_df['username'].groupby([
         result_df['post_datetime'].dt.year,
-        result_df['post_datetime'].dt.month,
         result_df['claimed'],
-    ],
-        as_index=True,
-        dropna=True
+    ]
 
+    ).agg('count')
 
+    year_claim_df = year_claim_df.reset_index(drop=False, )
 
-    )['username'].agg('count')
-
-    year_claim_df = year_claim_df.reset_index(drop=False,level=0 )
-    year_claim_df.rename(columns={'post_datetime': 'Year', 'username': 'Claims'},
-                         inplace=True)
-
-    year_claim_df = year_claim_df.reset_index(drop=False, level=0)
-    year_claim_df.rename(columns={'post_datetime': 'Month'},
-                         inplace=True)
-    year_claim_df = year_claim_df.reset_index(drop=False, level=0)
-    year_claim_df.rename(columns={'post_datetime': 'Month'},
-                         inplace=True)
-    year_claim_df['post_date'] = year_claim_df.apply(lambda x: datetime(year=x['Year'],
-                                                                        month=x['Month'],
-                                                                        day=1),
-                                                     axis=1)
     year_claim_df.fillna(0, inplace=True)
 
-    # year_claim_df['post_date'] = pd.to_datetime(year_claim_df['post_date'])
+    year_claim_df.rename(columns={'claimed': 'Yearly Claims'},
+                         inplace=True)
 
-    temp_df = year_claim_df.pivot(index='post_date',
-                                  columns='claimed',
-                                  values='Claims').rename(columns={True: 'public forum',
+    temp_df = year_claim_df.pivot('post_datetime',
+                                  'Yearly Claims',
+                                  'username').rename(columns={True: 'public forum',
                                                               False: 'private message'}
                                                      )
-    temp_df.fillna(0, inplace=True)
-
     fig, axes = plt.subplots(1, 1,
                              # figsize=(9, 9)
                              )
-    temp_df.plot.bar(stacked=True,
+    temp_df.plot.bar(stacked=False,
                      color=['orange', 'turquoise'],
                      ax=axes
                      )
-    temp_df.dtypes
-    temp_df.index.dtype
+
     axes.yaxis.set_major_formatter(mtick.StrMethodFormatter('{x:,.0f}'))
-    # set monthly locator
-    axes.xaxis.set_major_locator(mdates.YearLocator(1, month=1, day=1))
-    # set formatter
-    # axes.xaxis.set_major_formatter(mdates.DateFormatter('%b\n%Y'))
-    # Set major date tick formatter
-    # zfmts = ['', '%b\n%Y', '%b', '%b-%d', '%H:%M', '%H:%M']
-    # maj_loc = mdates.MonthLocator(bymonth=1)
-    #
-    # maj_fmt = mdates.ConciseDateFormatter(maj_loc, zero_formats=zfmts, show_offset=False)
-    # axes.xaxis.set_major_formatter(maj_fmt)
-    # set font and rotation for date tick labels
-    plt.gcf().autofmt_xdate()
 
     # ax.legend(
     # loc='upper center', ncol=2,
@@ -204,12 +171,11 @@ def chart_claim_hidden_claims(from_year: int = 2018,
 
 
 if __name__ == '__main__':
-    chart_claim_hidden_claims(from_year=2018,
+    chart_claim_hidden_claims(from_year=2017,
                               show_chart=True)
     exit(0)
-
     chart_claim_hidden_claims_as_percent(from_year=2017,
-                                         show_chart=False)
+                                         show_chart=True)
     exit(0)
 
 
