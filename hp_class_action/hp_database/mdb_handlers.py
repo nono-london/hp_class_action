@@ -11,7 +11,7 @@ from hp_class_action.app_config_secret import (MYSQL_USERNAME, MYSQL_DATABASE_NA
                                                PA_MYSQL_USERNAME, PA_MYSQL_PASSWORD,
                                                PA_MYSQL_HOST_URL, PA_MYSQL_DATABASE_NAME)
 
-if sys.platform == 'win32' or platform.node() == "wings":
+if sys.platform == 'win32' or platform.node() == "HP-ELITE":
     HOST_URL = MYSQL_HOST_URL
     PORT = MYSQL_PORT
     DATABASE_NAME = MYSQL_DATABASE_NAME
@@ -177,6 +177,9 @@ def fetch_query(sql_query: str, variables: tuple = None) -> Union[list, None]:
 
 
 if __name__ == '__main__':
+    print(platform.node())
+    exit(0)
+
     create_table_hp_users()
     create_table_reported_issues()
     create_table_website_visitors_ip()
