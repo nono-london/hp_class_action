@@ -15,7 +15,7 @@ from hp_class_action.app_config_secret import (MYSQL_USERNAME, MYSQL_DATABASE_NA
 class MySqlHelper:
     def __init__(self):
         self.mysql_conn:Union[None, MySQLConnection] = None
-        if sys.platform == 'win32' or platform.node() == "wings":
+        if sys.platform == 'win32' or platform.node() == "HP-ELITE":
             self.HOST_URL = MYSQL_HOST_URL
             self.PORT = MYSQL_PORT
             self.DATABASE_NAME = MYSQL_DATABASE_NAME
