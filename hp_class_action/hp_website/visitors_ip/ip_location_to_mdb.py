@@ -13,6 +13,7 @@ def read_visitors_file(file_has_header: bool = True) -> tuple:
     # https://www.programiz.com/python-programming/file-operation
     # https://stackoverflow.com/questions/24662571/python-import-csv-to-list
     file_path = get_hp_website_visitors_file_path()[0]
+    print(f'Visitor file path is: {file_path}')
 
     with open(file_path, 'r', encoding='utf-8') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
