@@ -1,9 +1,9 @@
 import json
-from datetime import datetime, date
+from datetime import datetime
+
+import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
-import matplotlib.dates as mdates
-import  numpy as np
 import pandas as pd
 
 from hp_class_action.hp_database.mdb_handlers import (fetch_query)
@@ -108,9 +108,11 @@ def chart_claim_hidden_claims_as_percent(from_year: int = 2018,
     year_claim_df['unclaimed_pct'] = year_claim_df.loc[year_claim_df['claimed'] == False, 'percent']
     year_claim_df.fillna(0, inplace=True)
 
-    year_claim_df = year_claim_df.pivot('post_datetime',
-                                        'claimed',
-                                        'percent')
+    # year_claim_df = year_claim_df.pivot('post_datetime',
+    #                                     'claimed',
+    #                                     'percent')
+    year_claim_df = year_claim_df.pivot(index='post_datetime', columns='claimed', values='percent')
+
     temp_df = year_claim_df.rename(columns={True: 'public forum',
                                             False: 'private message'}
                                    )
@@ -140,12 +142,9 @@ def chart_claim_hidden_claims(from_year: int = 2018,
     ],
         as_index=True,
         dropna=True
-
-
-
     )['username'].agg('count')
 
-    year_claim_df = year_claim_df.reset_index(drop=False,level=0 )
+    year_claim_df = year_claim_df.reset_index(drop=False, level=0)
     year_claim_df.rename(columns={'post_datetime': 'Year', 'username': 'Claims'},
                          inplace=True)
 
@@ -166,8 +165,8 @@ def chart_claim_hidden_claims(from_year: int = 2018,
     temp_df = year_claim_df.pivot(index='post_date',
                                   columns='claimed',
                                   values='Claims').rename(columns={True: 'public forum',
-                                                              False: 'private message'}
-                                                     )
+                                                                   False: 'private message'}
+                                                          )
     temp_df.fillna(0, inplace=True)
 
     fig, axes = plt.subplots(1, 1,
@@ -177,8 +176,7 @@ def chart_claim_hidden_claims(from_year: int = 2018,
                      color=['orange', 'turquoise'],
                      ax=axes
                      )
-    temp_df.dtypes
-    temp_df.index.dtype
+
     axes.yaxis.set_major_formatter(mtick.StrMethodFormatter('{x:,.0f}'))
     # set monthly locator
     axes.xaxis.set_major_locator(mdates.YearLocator(1, month=1, day=1))
@@ -204,12 +202,10 @@ def chart_claim_hidden_claims(from_year: int = 2018,
 
 
 if __name__ == '__main__':
+    chart_claim_hidden_claims_as_percent(from_year=2017,
+                                         show_chart=False)
     chart_claim_hidden_claims(from_year=2018,
                               show_chart=True)
-    exit(0)
 
     chart_claim_hidden_claims_as_percent(from_year=2017,
                                          show_chart=False)
-    exit(0)
-
-
