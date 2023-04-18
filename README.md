@@ -1,5 +1,8 @@
-# This library allow to webscrap data in order to substantiate the case against HP and disply results on a Flask website
-website summarysing results can be acceed at:
+hp_class_action
+==
+This library allow to webscrap data in order to substantiate the case against HP.
+Broken hinges complains from the HP forum are displayed results on a Flask website:
+
 https://hptrial.pythonanywhere.com/
 
 
