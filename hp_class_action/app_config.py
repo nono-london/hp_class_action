@@ -9,7 +9,7 @@ from urllib.request import Request, urlopen
 def get_external_ip_address() -> Union[str, None]:
     """get external ip address"""
 
-    url: str = 'https://jsonip.com/'
+    url: str = 'https://ipapi.co/json/'
 
     req = Request(url)
     try:
@@ -81,12 +81,14 @@ def pack_python_libs_in_path():
 
 
 if __name__ == '__main__':
-    print(get_hp_website_visitors_file_path())
+
 
     print(get_external_ip_address())
+    exit(0)
 
     print(get_project_root_path())
 
     print(get_project_download_path())
 
     pack_python_libs_in_path()
+    print(get_hp_website_visitors_file_path())
