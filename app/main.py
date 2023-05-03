@@ -6,9 +6,9 @@ from typing import Dict
 from flask import (Flask, render_template,
                    request, flash)
 
-from app.data_analysis.gsheet_api import get_hp_claims_from_api_json
-from app.visitor_information.contact_form import save_contact_message
-from app.visitor_information.ip_address import get_customer_ip_address
+from .data_analysis.gsheet_api import get_hp_claims_from_api_json
+from .visitor_information.contact_form import save_contact_message
+from .visitor_information.ip_address import get_customer_ip_address
 
 app = Flask(__name__,
             template_folder=str(Path(Path(__file__).parent, 'templates'))
