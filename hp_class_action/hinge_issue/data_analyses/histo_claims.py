@@ -1,20 +1,22 @@
 import json
-from datetime import datetime
-
-import matplotlib.dates as mdates
+from datetime import datetime, date
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
+import matplotlib.dates as mdates
+from pathlib import Path
 import pandas as pd
 
 from hp_class_action.hp_database.mdb_handlers import (fetch_query)
-
+from hp_class_action.app_config import get_project_download_path
 pd.set_option('display.max_columns', None)
 
 
 # pd.set_option('display.max_rows', None)
+MDB_DATASET_FILE_NAME:str = "mdb_post_metoo.csv"
+DATASET_POST_METOO:str = "post_metoo.csv"
 
 
-def get_mdb_dataset(from_year: int = 2018) -> list:
+def get_mdb_dataset(from_year: int = 2018, save_locally:bool=True) -> list:
     """Get relevant data from mdb"""
     sql_query: str = """
             SELECT a.hp_post_id, a.post_datetime, b.username, a.me_too, a.post_url
@@ -22,7 +24,7 @@ def get_mdb_dataset(from_year: int = 2018) -> list:
                     ON a.user_id=b.user_id
             WHERE a.post_datetime >= MAKEDATE(%s, 1)
             ORDER BY a.post_datetime DESC
-            
+
         """
     results: list = fetch_query(sql_query=sql_query,
                                 variables=(from_year,))
@@ -30,10 +32,15 @@ def get_mdb_dataset(from_year: int = 2018) -> list:
         if row_dict['me_too'] is not None:
             row_dict['me_too'] = json.loads(row_dict['me_too'])
 
+    if save_locally:
+        pd.DataFrame(results).to_csv(path_or_buf=Path(get_project_download_path(), MDB_DATASET_FILE_NAME),
+                                     sep=',',
+                                     index=False
+                                     )
     return results
 
 
-def clean_metoo_user_details(me_to_user_details: list) -> pd.DataFrame:
+def _clean_metoo_user_details(me_to_user_details: list) -> pd.DataFrame:
     """Select the oldest time a user has claimed on another chat that he had the same issue"""
     user_details: list = []
     for row_dicts in me_to_user_details:
@@ -59,7 +66,7 @@ def all_claims(from_year: int = 2018):
 
     metoo_user_details: [dict] = [x['me_too'] for x in mdb_results if x['me_too'] is not None]
 
-    meeto_df = clean_metoo_user_details(me_to_user_details=metoo_user_details)
+    meeto_df = _clean_metoo_user_details(me_to_user_details=metoo_user_details)
 
     # add claimed
     mdb_df['claimed'] = True
@@ -108,11 +115,9 @@ def chart_claim_hidden_claims_as_percent(from_year: int = 2018,
     year_claim_df['unclaimed_pct'] = year_claim_df.loc[year_claim_df['claimed'] == False, 'percent']
     year_claim_df.fillna(0, inplace=True)
 
-    # year_claim_df = year_claim_df.pivot('post_datetime',
-    #                                     'claimed',
-    #                                     'percent')
-    year_claim_df = year_claim_df.pivot(index='post_datetime', columns='claimed', values='percent')
-
+    year_claim_df = year_claim_df.pivot('post_datetime',
+                                        'claimed',
+                                        'percent')
     temp_df = year_claim_df.rename(columns={True: 'public forum',
                                             False: 'private message'}
                                    )
@@ -134,6 +139,7 @@ def chart_claim_hidden_claims(from_year: int = 2018,
                               show_chart: bool = True):
     result_df: pd.DataFrame = all_claims(from_year=from_year)
 
+
     # count record by True/False
     year_claim_df = result_df.groupby([
         result_df['post_datetime'].dt.year,
@@ -142,7 +148,9 @@ def chart_claim_hidden_claims(from_year: int = 2018,
     ],
         as_index=True,
         dropna=True
+
     )['username'].agg('count')
+
 
     year_claim_df = year_claim_df.reset_index(drop=False, level=0)
     year_claim_df.rename(columns={'post_datetime': 'Year', 'username': 'Claims'},
@@ -167,7 +175,16 @@ def chart_claim_hidden_claims(from_year: int = 2018,
                                   values='Claims').rename(columns={True: 'public forum',
                                                                    False: 'private message'}
                                                           )
+
+
+
     temp_df.fillna(0, inplace=True)
+
+    temp_df.to_csv(path_or_buf=Path(get_project_download_path(), DATASET_POST_METOO),
+                                   sep=',',
+                   index=True
+                                   )
+
 
     fig, axes = plt.subplots(1, 1,
                              # figsize=(9, 9)
@@ -180,21 +197,9 @@ def chart_claim_hidden_claims(from_year: int = 2018,
     axes.yaxis.set_major_formatter(mtick.StrMethodFormatter('{x:,.0f}'))
     # set monthly locator
     axes.xaxis.set_major_locator(mdates.YearLocator(1, month=1, day=1))
-    # set formatter
-    # axes.xaxis.set_major_formatter(mdates.DateFormatter('%b\n%Y'))
-    # Set major date tick formatter
-    # zfmts = ['', '%b\n%Y', '%b', '%b-%d', '%H:%M', '%H:%M']
-    # maj_loc = mdates.MonthLocator(bymonth=1)
-    #
-    # maj_fmt = mdates.ConciseDateFormatter(maj_loc, zero_formats=zfmts, show_offset=False)
-    # axes.xaxis.set_major_formatter(maj_fmt)
-    # set font and rotation for date tick labels
+
     plt.gcf().autofmt_xdate()
 
-    # ax.legend(
-    # loc='upper center', ncol=2,
-    # #    title="Year of Eating"
-    # )
     if show_chart:
         plt.show()
 
@@ -202,10 +207,13 @@ def chart_claim_hidden_claims(from_year: int = 2018,
 
 
 if __name__ == '__main__':
-    chart_claim_hidden_claims_as_percent(from_year=2017,
-                                         show_chart=False)
     chart_claim_hidden_claims(from_year=2018,
                               show_chart=True)
+    exit(0)
 
     chart_claim_hidden_claims_as_percent(from_year=2017,
                                          show_chart=False)
+    exit(0)
+
+
+
