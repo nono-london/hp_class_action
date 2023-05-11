@@ -1,12 +1,15 @@
 {% extends 'base_bootstrap_css.html' %}
 {% block css_import %}
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">          
+{{ super()}}
+
 {% endblock %}
 
 {% block js_script_top %}
+{{ super()}}
 {% endblock %}
 
 {% block body %}
+{{ super()}}
 <!-- Wrapper container -->
 <div class="container">
 <div class="container jumbotron text-center">
@@ -39,6 +42,7 @@
 {% endblock %}
 
 {% block js_script_bottom %}
+{{ super()}}
 <script type="text/javascript">
 
 </script>

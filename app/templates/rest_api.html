@@ -1,13 +1,15 @@
 {% extends 'base_bootstrap_css.html' %}
 {% block css_import %}
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">          
+{{ super()}}
 {% endblock %}
 
 {% block js_script_top %}
+{{ super()}}
 <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
 {% endblock %}
 
 {% block body %}
+{{ super()}}
 <!-- Wrapper container -->
 <div class="container">
 <div class="container jumbotron text-center">
@@ -32,6 +34,7 @@
 {% endblock %}
 
 {% block js_script_bottom %}
+{{ super()}}
 <script type="text/javascript">
     var json_example_id = document.getElementById("json_example_id");
     var json_example = [
