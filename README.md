@@ -5,6 +5,11 @@ Broken hinges complains from the HP forum are displayed results on a Flask websi
 
 https://hptrial.pythonanywhere.com/
 
+## Launch app from command line
+```
+/mnt/linux_data/python_projects/hp_class_action/venv/bin/python /mnt/linux_data/python_projects/hp_class_action/app_issues_scrapper.py 
+
+```
 
 ## HP.com forum
 ### search for "broken hinge"
